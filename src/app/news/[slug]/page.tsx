@@ -121,7 +121,7 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
   return (
     <div className="bg-white">
       {/* ── Hero ── */}
-      <section className="hero-bg py-14">
+      <section className="hero-bg pt-36 pb-14">
         <div className="wrap relative z-10">
           {/* Breadcrumb */}
           <nav aria-label="Breadcrumb"

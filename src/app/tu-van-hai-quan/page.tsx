@@ -57,7 +57,7 @@ export default function TuVanHaiQuanPage() {
     <div className="bg-white">
 
       {/* ── Hero với ảnh thật ── */}
-      <section className="relative min-h-[60vh] flex items-end overflow-hidden">
+      <section className="relative min-h-[60vh] flex items-end overflow-hidden pt-[116px]">
         {/* Background image */}
         <div className="absolute inset-0">
           <Image

@@ -13,7 +13,7 @@ export default function AboutPage() {
     <div className="bg-white">
 
       {/* ── Hero với ảnh thật ── */}
-      <section className="relative min-h-[55vh] flex items-end overflow-hidden">
+      <section className="relative min-h-[55vh] flex items-end overflow-hidden pt-[116px]">
         <div className="absolute inset-0">
           <Image
             src="/images/hero/hero-port.jpg"

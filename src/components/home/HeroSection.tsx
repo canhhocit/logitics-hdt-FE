@@ -46,7 +46,7 @@ export default function HeroSection() {
   const s = slides[cur];
 
   return (
-    <section className="relative min-h-[92vh] flex flex-col overflow-hidden">
+    <section className="relative min-h-[92vh] flex flex-col overflow-hidden pt-[116px]">
 
       {/* ── Background image ── */}
       <div className="absolute inset-0 z-0">

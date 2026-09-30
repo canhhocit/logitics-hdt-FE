@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="vi">
       <body className="antialiased bg-white">
         <Header />
-        <main className="pt-[125px] md:pt-[125px]">{children}</main>
+        <main>{children}</main>
         <Footer />
         <FloatingButtons />
       </body>

@@ -19,7 +19,7 @@ export default function PrivacyPage() {
 
   return (
     <div className="bg-white">
-      <section className="hero-bg py-16">
+      <section className="hero-bg pt-36 pb-16">
         <div className="wrap relative z-10">
           <div className="flex items-center gap-2 text-white/40 text-xs mb-6">
             <Link href="/" className="hover:text-white">Trang Chủ</Link>

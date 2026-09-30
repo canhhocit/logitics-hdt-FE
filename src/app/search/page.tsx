@@ -176,7 +176,7 @@ export default function SearchPage() {
   return (
     <div className="bg-white">
       {/* Hero */}
-      <section className="hero-bg py-14">
+      <section className="hero-bg pt-36 pb-14">
         <div className="wrap relative z-10">
           <div className="flex items-center gap-2 text-white/40 text-xs mb-5">
             <Link href="/" className="hover:text-white">Trang Chủ</Link>
