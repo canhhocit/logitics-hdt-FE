@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, CheckCircle } from "lucide-react";
 
 export default function AboutSection() {
@@ -9,7 +10,45 @@ export default function AboutSection() {
       <div className="wrap">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-          {/* Left */}
+          {/* Left: ảnh thật */}
+          <div className="relative">
+            {/* Ảnh chính */}
+            <div className="relative w-full h-[460px] rounded-2xl overflow-hidden shadow-xl">
+              <Image
+                src="/images/hero/hero-port.jpg"
+                alt="Cảng container quốc tế – HD Logistics vận hành"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                quality={85}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-900/40 to-transparent" />
+            </div>
+
+            {/* Badge thống kê nổi */}
+            <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl p-5 border border-gray-100">
+              <div className="grid grid-cols-2 gap-4 text-center">
+                {[
+                  { n: "1,500+", l: "Chuyến hàng" },
+                  { n: "5",      l: "Văn phòng" },
+                ].map((s) => (
+                  <div key={s.l}>
+                    <div className="text-2xl font-extrabold text-navy-700">{s.n}</div>
+                    <div className="text-xs text-navy-400 mt-0.5">{s.l}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Badge kinh nghiệm */}
+            <div className="absolute -top-5 -left-5 bg-orange-500 text-white rounded-2xl
+                            shadow-lg px-5 py-3 text-center">
+              <div className="text-3xl font-black leading-none">10+</div>
+              <div className="text-orange-100 text-xs mt-0.5 font-medium">Năm kinh nghiệm</div>
+            </div>
+          </div>
+
+          {/* Right: content */}
           <div>
             <p className="eyebrow mb-5">Về Chúng Tôi</p>
             <h2 className="h2 text-navy-800 mb-6">
@@ -19,8 +58,9 @@ export default function AboutSection() {
 
             <div className="flex flex-wrap gap-2 mb-7">
               {["High Delivery", "High Discipline", "High Reliability"].map((p) => (
-                <span key={p} className="text-xs font-bold tracking-wider uppercase
-                  px-3 py-1.5 bg-navy-50 border border-navy-200 text-navy-700 rounded-full">
+                <span key={p}
+                  className="text-xs font-bold tracking-wider uppercase px-3 py-1.5
+                             bg-navy-50 border border-navy-200 text-navy-700 rounded-full">
                   {p}
                 </span>
               ))}
@@ -29,27 +69,22 @@ export default function AboutSection() {
             <div className="space-y-4 text-navy-600 text-[0.95rem] leading-[1.85] mb-8">
               <p>
                 HD Logistics là đơn vị cung cấp giải pháp logistics tổng thể cho doanh nghiệp,
-                chuyên về <strong className="text-navy-800">vận chuyển quốc tế</strong>,
-                {" "}<strong className="text-navy-800">vận tải nội địa</strong>,
-                {" "}<strong className="text-navy-800">khai thuê hải quan</strong> và
-                {" "}<strong className="text-navy-800">kho bãi phân phối</strong>.
+                chuyên về <strong className="text-navy-800">vận chuyển quốc tế</strong>,{" "}
+                <strong className="text-navy-800">vận tải nội địa</strong>,{" "}
+                <strong className="text-navy-800">khai thuê hải quan</strong> và{" "}
+                <strong className="text-navy-800">kho bãi phân phối</strong>.
               </p>
               <p>
-                Chúng tôi xây dựng mô hình vận hành dựa trên tốc độ xử lý, độ chính xác
-                chứng từ và khả năng kiểm soát chuỗi vận chuyển — mỗi lô hàng được quản lý
-                theo quy trình rõ ràng, minh bạch và có khả năng truy vết.
-              </p>
-              <p>
-                Đội ngũ chuyên môn am hiểu nghiệp vụ xuất nhập khẩu, quy định hải quan và
-                đặc thù vận chuyển đa phương thức. HD Logistics ưu tiên phục vụ doanh nghiệp
-                sản xuất, công ty thương mại và khối FDI.
+                Mỗi lô hàng được quản lý theo quy trình rõ ràng, minh bạch và có khả năng
+                truy vết — đội ngũ chuyên môn am hiểu nghiệp vụ XNK, quy định hải quan và
+                đặc thù vận chuyển đa phương thức.
               </p>
             </div>
 
             <div className="space-y-3 mb-8">
               {[
                 "Phủ sóng 63 tỉnh thành, kết nối hơn 100 cảng biển quốc tế",
-                "Hệ thống kho bãi WMS chuẩn, tổng diện tích 50.000 m²",
+                "Booking trực tiếp Yang Ming, SITC, CMA CGM và 50+ hãng hàng không",
                 "Khai báo hải quan điện tử – tỷ lệ thông quan lần đầu >95%",
                 "Phản hồi yêu cầu và báo giá trong vòng 2 giờ làm việc",
               ].map((pt) => (
@@ -63,31 +98,6 @@ export default function AboutSection() {
             <Link href="/about" className="btn-navy inline-flex">
               Tìm Hiểu Thêm <ArrowRight size={15} />
             </Link>
-          </div>
-
-          {/* Right: numbered list */}
-          <div className="space-y-4">
-            {[
-              { no: "01", title: "Vận chuyển đa phương thức", desc: "Đường biển, hàng không và đường bộ xuyên biên giới — tư vấn tuyến tối ưu theo từng loại hàng và thị trường đích." },
-              { no: "02", title: "Hải quan chuyên nghiệp", desc: "Hồ sơ rà soát 2 cấp trước khi nộp, giảm tối đa tỷ lệ bổ sung chứng từ. Thông quan nhanh, đúng quy định pháp luật." },
-              { no: "03", title: "Theo dõi xuyên suốt", desc: "Trạng thái lô hàng được cập nhật từng chặng. Báo cáo chi phí minh bạch, dễ kiểm soát kế hoạch giao nhận." },
-              { no: "04", title: "Đối tác doanh nghiệp dài hạn", desc: "Nhà máy sản xuất, thương mại XNK, FDI công nghiệp — đối tác logistics ổn định, linh hoạt và tin cậy." },
-            ].map((item) => (
-              <div key={item.no}
-                className="flex gap-5 p-6 rounded-2xl bg-white border border-gray-100
-                           shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all group">
-                <span className="text-3xl font-black text-navy-100 group-hover:text-orange-200
-                                 transition-colors flex-shrink-0 leading-none mt-0.5 select-none">
-                  {item.no}
-                </span>
-                <div>
-                  <h4 className="font-bold text-navy-800 mb-1.5 text-sm group-hover:text-orange-500 transition-colors">
-                    {item.title}
-                  </h4>
-                  <p className="text-navy-500 text-sm leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </div>

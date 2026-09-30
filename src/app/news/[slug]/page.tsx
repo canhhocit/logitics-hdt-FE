@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ChevronRight, Calendar, Clock, ArrowLeft } from "lucide-react";
+import { ChevronRight, Calendar, Clock, ArrowLeft, BookOpen } from "lucide-react";
 import { newsItems } from "@/data";
+import { articleContent, type ArticleSection } from "@/data/articles";
 import ShareButtons from "@/components/ui/ShareButtons";
 
 export async function generateStaticParams() {
@@ -21,119 +23,190 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       type: "article",
       publishedTime: item.dateISO,
       locale: "vi_VN",
+      images: item.image ? [{ url: item.image, alt: item.imageAlt }] : [],
     },
-    twitter: { card: "summary_large_image", title: item.title, description: item.excerpt },
+    twitter: {
+      card: "summary_large_image",
+      title: item.title,
+      description: item.excerpt,
+    },
   };
 }
 
-const articleBodies: Record<string, string[]> = {
-  "chinh-sach-thu-tuc-xuat-nhap-khau": [
-    "Năm 2026, Bộ Tài chính ban hành nhiều thông tư cập nhật biểu thuế xuất nhập khẩu ưu đãi, đặc biệt theo các hiệp định FTA thế hệ mới như CPTPP, EVFTA và RCEP. Doanh nghiệp cần rà soát lại mã HS và mức thuế suất áp dụng cho từng mặt hàng để tận dụng ưu đãi và tránh rủi ro truy thu thuế.",
-    "Về chính sách quản lý chuyên ngành, một số nhóm hàng công nghệ, thực phẩm và hóa chất tiếp tục yêu cầu giấy phép nhập khẩu từ các bộ chuyên ngành. Doanh nghiệp cần xác nhận danh mục hàng của mình có thuộc diện quản lý hay không trước khi ký hợp đồng.",
-    "Về quy trình khai báo hải quan điện tử, hệ thống VNACCS/VCIS tiếp tục được nâng cấp. Tỷ lệ luồng xanh đang chiếm hơn 70% tổng số tờ khai, giúp rút ngắn thời gian thông quan xuống còn vài giờ thay vì vài ngày như trước.",
-  ],
-  "thu-tuc-nhap-khau-hang-hoa-quy-trinh-ho-so": [
-    "Quy trình nhập khẩu hàng hóa vào Việt Nam gồm các bước chính: ký hợp đồng ngoại thương, mở L/C hoặc thanh toán T/T, vận chuyển hàng về cảng đến, khai báo hải quan điện tử và nhận hàng tại kho.",
-    "Bộ hồ sơ hải quan nhập khẩu cơ bản bao gồm: Tờ khai hải quan điện tử (VNACCS), Invoice, Packing List, Bill of Lading hoặc Airwaybill, Hợp đồng mua bán, C/O nếu hưởng ưu đãi FTA, và các giấy phép chuyên ngành nếu có.",
-    "Về thời gian thông quan: luồng xanh thông thường 1–4 giờ làm việc; luồng vàng (kiểm tra hồ sơ) 1–2 ngày; luồng đỏ (kiểm tra thực tế hàng hóa) 2–5 ngày tùy mặt hàng. HD Logistics có đội chuyên viên hải quan giúp chuẩn bị hồ sơ đúng để tối đa hóa tỷ lệ luồng xanh.",
-  ],
-  "thu-tuc-xuat-khau-hang-hoa-quy-trinh-ho-so": [
-    "Xuất khẩu hàng hóa từ Việt Nam đòi hỏi doanh nghiệp chuẩn bị tốt từ khâu đàm phán hợp đồng ngoại thương, xác định điều kiện giao hàng Incoterms phù hợp, đến khâu chuẩn bị bộ chứng từ xuất khẩu hoàn chỉnh.",
-    "Bộ chứng từ xuất khẩu tiêu chuẩn: Commercial Invoice, Packing List, Bill of Lading (đường biển) hoặc Airwaybill (hàng không), Certificate of Origin (C/O) để hưởng ưu đãi thuế FTA tại thị trường đích, và Tờ khai hải quan xuất khẩu đã thông quan.",
-    "Lưu ý: Một số thị trường (EU, Mỹ, Nhật Bản) có yêu cầu đặc biệt về nhãn mác, kiểm tra chất lượng và chứng nhận hợp quy. Doanh nghiệp cần tìm hiểu kỹ quy định của thị trường đích trước khi sản xuất và đóng gói hàng.",
-  ],
-  "cap-nhat-van-tai-chuoi-cung-ung-2026": [
-    "Năm 2026, thị trường vận tải biển toàn cầu tiếp tục chứng kiến biến động mạnh. Cước container FCL tuyến châu Á – châu Âu tăng mạnh do căng thẳng địa chính trị tại Trung Đông ảnh hưởng đến tuyến Biển Đỏ, buộc nhiều hãng tàu phải đi đường vòng qua mũi Hảo Vọng.",
-    "Về xu hướng chuỗi cung ứng, nhiều tập đoàn đa quốc gia đang đẩy mạnh chiến lược đa dạng hóa sản xuất sang các nước Đông Nam Á, trong đó Việt Nam là điểm đến hàng đầu. Điều này tạo ra cơ hội lớn cho ngành logistics Việt Nam.",
-    "HD Logistics đang tích cực mở rộng năng lực phục vụ khách hàng FDI và xuất khẩu, với các tuyến vận tải biển trực tiếp đến Nhật Bản, Hàn Quốc, EU và Bắc Mỹ, cùng dịch vụ khai báo hải quan xuất khẩu chuyên nghiệp.",
-  ],
-  "huong-dan-thu-tuc-xnk-tai-lieu-logistics-dn": [
-    "Bộ tài liệu hướng dẫn thực hành xuất nhập khẩu dành cho doanh nghiệp bao gồm các nội dung cốt lõi: phân loại mã HS, tính thuế nhập khẩu, xin giấy chứng nhận xuất xứ C/O và quản lý rủi ro vận chuyển.",
-    "Về phân loại mã HS: đây là bước quan trọng nhất trong quy trình hải quan. Mã HS sai có thể dẫn đến truy thu thuế và phạt vi phạm. HD Logistics cung cấp dịch vụ tư vấn phân loại mã HS cho tất cả các nhóm hàng.",
-    "Về quản lý rủi ro: doanh nghiệp nên mua bảo hiểm hàng hóa cho mọi lô hàng xuất nhập khẩu. Điều kiện bảo hiểm theo Institute Cargo Clauses (A/B/C) tùy theo yêu cầu và loại hàng.",
-  ],
-  "hd-logistics-giai-phap-van-chuyen-hai-quan-dn": [
-    "HD Logistics cung cấp giải pháp logistics tổng thể cho doanh nghiệp xuất nhập khẩu, tập trung vào ba dịch vụ cốt lõi: vận chuyển đa phương thức, khai thuê hải quan và tối ưu chuỗi cung ứng.",
-    "Với định hướng High Delivery – High Discipline – High Reliability, chúng tôi xây dựng mô hình vận hành dựa trên tốc độ xử lý, độ chính xác chứng từ và khả năng kiểm soát chuỗi vận chuyển. Mỗi lô hàng được quản lý theo quy trình rõ ràng, minh bạch và có khả năng truy vết.",
-    "HD Logistics ưu tiên phục vụ doanh nghiệp sản xuất, công ty thương mại xuất nhập khẩu và khối FDI cần đối tác logistics ổn định, linh hoạt và lâu dài. Liên hệ ngay để nhận tư vấn miễn phí.",
-  ],
-};
+/** Render một section của bài viết */
+function Section({ section }: { section: ArticleSection }) {
+  switch (section.type) {
+    case "heading":
+      return (
+        <h2 className="text-xl font-bold text-navy-800 mt-8 mb-4 pb-2 border-b-2 border-orange-100">
+          {section.content}
+        </h2>
+      );
+    case "subheading":
+      return (
+        <h3 className="text-lg font-semibold text-navy-700 mt-6 mb-3">
+          {section.content}
+        </h3>
+      );
+    case "paragraph":
+      return (
+        <p className="text-navy-600 leading-[1.9] text-[0.97rem]">
+          {section.content}
+        </p>
+      );
+    case "list":
+      return (
+        <ul className="space-y-2.5 my-1">
+          {section.items?.map((item, i) => (
+            <li key={i} className="flex items-start gap-3 text-navy-600 text-sm">
+              <span className="w-5 h-5 rounded-full bg-orange-100 text-orange-600 font-bold text-[10px]
+                               flex items-center justify-center flex-shrink-0 mt-0.5">
+                {i + 1}
+              </span>
+              <span className="leading-relaxed">{item}</span>
+            </li>
+          ))}
+        </ul>
+      );
+    case "table":
+      return (
+        <div className="overflow-x-auto rounded-2xl border border-gray-200 my-2">
+          <table className="w-full text-sm">
+            <tbody>
+              {section.rows?.map((row, i) => (
+                <tr key={i} className={i % 2 === 0 ? "bg-slate-50" : "bg-white"}>
+                  <td className="px-5 py-3 font-semibold text-navy-700 border-r border-gray-200
+                                 w-1/3 whitespace-nowrap align-top">
+                    {row.label}
+                  </td>
+                  <td className="px-5 py-3 text-navy-600 leading-relaxed">
+                    {row.value}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    case "note":
+      return (
+        <div className="bg-orange-50 border-l-4 border-orange-400 rounded-r-xl p-5 my-2">
+          <p className="text-orange-800 text-sm leading-relaxed">{section.content}</p>
+        </div>
+      );
+    default:
+      return null;
+  }
+}
 
 export default function NewsDetailPage({ params }: { params: { slug: string } }) {
   const item = newsItems.find((n) => n.slug === params.slug);
   if (!item) notFound();
 
   const related = newsItems.filter((n) => n.slug !== params.slug).slice(0, 3);
-  const body = articleBodies[params.slug] ?? [
-    item.excerpt,
-    "Nội dung bài viết đang được cập nhật. Vui lòng quay lại sau hoặc liên hệ HD Logistics để được tư vấn trực tiếp.",
+  const sections = articleContent[params.slug] ?? [
+    {
+      type: "paragraph" as const,
+      content: item.excerpt,
+    },
+    {
+      type: "paragraph" as const,
+      content:
+        "Nội dung bài viết đang được cập nhật. Vui lòng quay lại sau hoặc liên hệ HD Logistics để được tư vấn trực tiếp.",
+    },
   ];
+
   const pageUrl = `https://hdlogistics.vn/news/${item.slug}`;
 
   return (
     <div className="bg-white">
-      {/* Hero */}
+      {/* ── Hero ── */}
       <section className="hero-bg py-14">
         <div className="wrap relative z-10">
-          {/* Breadcrumb (M06.02.02.03) */}
+          {/* Breadcrumb */}
           <nav aria-label="Breadcrumb"
             className="flex items-center gap-2 text-white/40 text-xs mb-6 flex-wrap">
             <Link href="/" className="hover:text-white transition-colors">Trang Chủ</Link>
             <ChevronRight size={12} />
             <Link href="/news" className="hover:text-white transition-colors">Tin Tức</Link>
             <ChevronRight size={12} />
-            <Link href={`/news/category/${item.category}`} className="hover:text-white transition-colors">
+            <Link href={`/news/category/${item.category}`}
+              className="hover:text-white transition-colors">
               {item.categoryLabel}
             </Link>
             <ChevronRight size={12} />
-            <span className="text-white/70 line-clamp-1">{item.title}</span>
+            <span className="text-white/60 line-clamp-1 max-w-[200px]">{item.title}</span>
           </nav>
 
           <div className="max-w-3xl">
-            <span className="bg-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-full inline-block mb-5">
+            <span className="bg-orange-500 text-white text-xs font-bold px-3 py-1.5
+                             rounded-full inline-block mb-5">
               {item.categoryLabel}
             </span>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white leading-snug tracking-tight mb-5">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-white leading-snug
+                           tracking-tight mb-5">
               {item.title}
             </h1>
-            {/* M06.02.01.03 – thời gian đọc */}
-            <div className="flex flex-wrap items-center gap-4 text-white/50 text-sm">
-              <span className="flex items-center gap-1.5"><Calendar size={13} />{item.date}</span>
-              <span className="flex items-center gap-1.5"><Clock size={13} />{item.readMinutes} phút đọc</span>
+            <div className="flex flex-wrap items-center gap-5 text-white/55 text-sm">
+              <span className="flex items-center gap-1.5">
+                <Calendar size={13} />{item.date}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Clock size={13} />{item.readMinutes} phút đọc
+              </span>
+              <span className="flex items-center gap-1.5">
+                <BookOpen size={13} />{item.categoryLabel}
+              </span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Content */}
+      {/* ── Content ── */}
       <section className="py-14">
         <div className="wrap">
-          <div className="grid lg:grid-cols-[1fr_320px] gap-12">
+          <div className="grid lg:grid-cols-[1fr_340px] gap-12">
 
-            {/* Article */}
+            {/* ── Article ── */}
             <article>
-              {/* Thumbnail */}
-              <div className="h-72 rounded-2xl bg-gradient-to-br from-navy-700 to-navy-900
-                              flex items-center justify-center mb-10 relative overflow-hidden">
-                <div className="absolute inset-0 opacity-10"
-                  style={{ backgroundImage: "repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(255,255,255,0.05) 20px,rgba(255,255,255,0.05) 40px)" }} />
-                <span className="text-9xl font-black text-white/[0.04] select-none">HDL</span>
+
+              {/* Ảnh thật thumbnail */}
+              <div className="relative h-72 md:h-96 rounded-2xl overflow-hidden mb-10 shadow-lg">
+                <Image
+                  src={item.image}
+                  alt={item.imageAlt}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 768px) 100vw, 70vw"
+                />
+                {/* Caption */}
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent
+                                px-5 py-3">
+                  <p className="text-white/60 text-xs">{item.imageAlt}</p>
+                </div>
               </div>
 
-              {/* Body */}
-              <div className="space-y-5 text-navy-600 text-[0.97rem] leading-[1.9]">
-                <p className="text-navy-700 text-lg font-medium leading-relaxed
-                               border-l-4 border-orange-400 pl-4 py-1 bg-orange-50 rounded-r-xl">
+              {/* Lead paragraph */}
+              <div className="border-l-4 border-orange-400 pl-5 py-1 bg-orange-50
+                              rounded-r-xl mb-8">
+                <p className="text-navy-700 text-lg font-medium leading-relaxed">
                   {item.excerpt}
                 </p>
-                {body.map((para, i) => <p key={i}>{para}</p>)}
               </div>
 
-              {/* M06.02.02.02 – Share (Client Component) */}
+              {/* Article body — rendered từ structured content */}
+              <div className="space-y-5">
+                {sections.map((section, i) => (
+                  <Section key={i} section={section} />
+                ))}
+              </div>
+
+              {/* Share buttons */}
               <ShareButtons url={pageUrl} title={item.title} />
 
-              {/* Back */}
-              <div className="mt-8">
+              {/* Back link */}
+              <div className="mt-8 pt-4">
                 <Link href="/news"
                   className="inline-flex items-center gap-2 text-navy-400 hover:text-orange-500
                              transition-colors text-sm font-semibold">
@@ -142,22 +215,31 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
               </div>
             </article>
 
-            {/* Sidebar */}
+            {/* ── Sidebar ── */}
             <aside className="space-y-5">
-              {/* M06.02.02.01 – Bài viết liên quan */}
+
+              {/* Related articles */}
               <div className="card p-6">
-                <h3 className="text-xs font-bold tracking-[0.15em] uppercase text-navy-400 mb-5 pb-3 border-b border-gray-100">
+                <h3 className="text-xs font-bold tracking-[0.15em] uppercase text-navy-400
+                               mb-5 pb-3 border-b border-gray-100">
                   Bài Viết Liên Quan
                 </h3>
                 <div className="space-y-4">
                   {related.map((n) => (
                     <Link key={n.id} href={`/news/${n.slug}`} className="group flex gap-3">
-                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-navy-600 to-navy-800
-                                      flex-shrink-0 flex items-center justify-center">
-                        <span className="text-white/20 font-black text-xs">HD</span>
+                      {/* Ảnh thumbnail nhỏ */}
+                      <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 relative">
+                        <Image
+                          src={n.image}
+                          alt={n.imageAlt}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          sizes="64px"
+                        />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <span className="text-orange-500 text-[10px] font-bold tracking-wider uppercase block">
+                        <span className="text-orange-500 text-[10px] font-bold
+                                         tracking-wider uppercase block">
                           {n.categoryLabel}
                         </span>
                         <h4 className="text-navy-700 text-xs font-semibold leading-snug mt-0.5
@@ -190,14 +272,17 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
                 </h3>
                 <div className="space-y-2">
                   {[
-                    { label: "Hướng dẫn và Thủ tục", href: "/news/category/huong-dan-va-thu-tuc", count: 4 },
-                    { label: "Tin ngành Logistics",   href: "/news/category/tin-nganh-logistics",  count: 2 },
+                    { label: "Hướng dẫn và Thủ tục",  href: "/news/category/huong-dan-va-thu-tuc", count: 4 },
+                    { label: "Tin ngành Logistics",    href: "/news/category/tin-nganh-logistics",  count: 2 },
                   ].map((cat) => (
                     <Link key={cat.label} href={cat.href}
                       className="flex items-center justify-between p-3 rounded-xl
                                  hover:bg-orange-50 hover:text-orange-500 transition-colors group">
-                      <span className="text-navy-600 text-sm group-hover:text-orange-500">{cat.label}</span>
-                      <span className="bg-navy-100 text-navy-600 text-xs font-bold px-2 py-0.5 rounded-full">
+                      <span className="text-navy-600 text-sm group-hover:text-orange-500">
+                        {cat.label}
+                      </span>
+                      <span className="bg-navy-100 text-navy-600 text-xs font-bold
+                                       px-2 py-0.5 rounded-full">
                         {cat.count}
                       </span>
                     </Link>
@@ -205,20 +290,40 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
                 </div>
               </div>
 
+              {/* Tu van hai quan box */}
+              <div className="card p-6 border-l-4 border-orange-400">
+                <h3 className="font-bold text-navy-800 mb-2 text-sm">
+                  Tư vấn hải quan miễn phí
+                </h3>
+                <p className="text-navy-500 text-xs leading-relaxed mb-4">
+                  Phân loại mã HS, tính thuế FTA, xin C/O — HD Logistics hỗ trợ
+                  doanh nghiệp tối ưu chi phí hải quan và tránh rủi ro truy thu.
+                </p>
+                <Link href="/tu-van-hai-quan"
+                  className="block w-full text-center bg-slate-50 hover:bg-navy-50 border border-navy-200
+                             hover:border-navy-400 text-navy-700 font-semibold py-2.5 rounded-xl
+                             text-sm transition-colors mb-2">
+                  Xem dịch vụ tư vấn HQ
+                </Link>
+              </div>
+
               {/* CTA */}
               <div className="rounded-2xl bg-navy-700 p-6 text-white">
-                <h3 className="font-bold mb-2">Cần tư vấn logistics?</h3>
+                <h3 className="font-bold mb-2">Cần hỗ trợ logistics?</h3>
                 <p className="text-white/60 text-sm mb-5 leading-relaxed">
-                  HD Logistics hỗ trợ doanh nghiệp giải quyết mọi vấn đề vận chuyển và hải quan.
+                  Đội ngũ HD Logistics sẵn sàng tư vấn giải pháp vận chuyển và
+                  hải quan phù hợp nhất cho doanh nghiệp của bạn.
                 </p>
                 <Link href="/contact"
-                  className="block w-full bg-orange-500 hover:bg-orange-600 text-white text-center
-                             font-semibold py-3 rounded-xl text-sm transition-colors mb-2">
+                  className="block w-full bg-orange-500 hover:bg-orange-600 text-white
+                             text-center font-semibold py-3 rounded-xl text-sm
+                             transition-colors mb-2">
                   Nhận Tư Vấn Miễn Phí
                 </Link>
                 <a href="tel:0929959699"
-                  className="block w-full border border-white/20 text-white/70 hover:text-white
-                             text-center font-medium py-2.5 rounded-xl text-sm transition-colors">
+                  className="block w-full border border-white/20 text-white/70
+                             hover:text-white text-center font-medium py-2.5 rounded-xl
+                             text-sm transition-colors">
                   📞 +84 929 959 699
                 </a>
               </div>

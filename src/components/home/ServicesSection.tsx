@@ -1,26 +1,65 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Plane, Ship, Boxes, Truck, FileText, Star } from "lucide-react";
-import { services } from "@/data";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 
-const iconMap: Record<string, React.ReactNode> = {
-  plane:      <Plane size={28} />,
-  ship:       <Ship size={28} />,
-  boxes:      <Boxes size={28} />,
-  truck:      <Truck size={28} />,
-  "file-text":<FileText size={28} />,
-  star:       <Star size={28} />,
-};
-
-const colorMap: Record<string, string> = {
-  blue:   "bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white",
-  cyan:   "bg-cyan-50 text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white",
-  teal:   "bg-teal-50 text-teal-600 group-hover:bg-teal-600 group-hover:text-white",
-  green:  "bg-green-50 text-green-600 group-hover:bg-green-600 group-hover:text-white",
-  orange: "bg-orange-50 text-orange-600 group-hover:bg-orange-500 group-hover:text-white",
-  rose:   "bg-rose-50 text-rose-600 group-hover:bg-rose-600 group-hover:text-white",
-};
+const services = [
+  {
+    no: "01",
+    slug: "van-chuyen-duong-khong",
+    title: "Vận Chuyển Đường Không",
+    desc: "Air freight quốc tế tốc độ cao — phù hợp hàng giá trị, hàng gấp. Kết nối 50+ hãng bay, tracking AWB real-time.",
+    image: "/images/services/air-freight.jpg",
+    alt: "Máy bay chở hàng vận chuyển hàng không quốc tế",
+    badge: "Express 1–3 ngày",
+  },
+  {
+    no: "02",
+    slug: "van-chuyen-duong-bien",
+    title: "Vận Chuyển Đường Biển",
+    desc: "FCL & LCL tới 100+ cảng biển. Booking Yang Ming, SITC, CMA CGM trực tiếp — không qua trung gian.",
+    image: "/images/services/sea-freight.jpg",
+    alt: "Tàu container vận chuyển hàng hóa đường biển quốc tế",
+    badge: "FCL & LCL",
+  },
+  {
+    no: "03",
+    slug: "gom-hang-le-lcl",
+    title: "Gom Hàng Lẻ (LCL)",
+    desc: "Ghép hàng lẻ vào container chung, tính cước theo CBM. Lịch gom hàng cố định hàng tuần.",
+    image: "/images/services/lcl.jpg",
+    alt: "Kho phân loại hàng lẻ LCL trước khi đóng container",
+    badge: "Từ 0.1 CBM",
+  },
+  {
+    no: "04",
+    slug: "van-chuyen-duong-bo",
+    title: "Vận Chuyển Đường Bộ",
+    desc: "63 tỉnh thành nội địa và xuyên biên giới ASEAN, Trung Quốc. Xe 1–40 tấn, GPS 24/7.",
+    image: "/images/services/road.jpg",
+    alt: "Xe container vận chuyển đường bộ Bắc Nam Việt Nam",
+    badge: "Door-to-door",
+  },
+  {
+    no: "05",
+    slug: "khai-thue-hai-quan",
+    title: "Khai Thuê Hải Quan",
+    desc: "Khai báo VNACCS, phân luồng, thông quan. Hồ sơ rà soát 2 cấp — tỷ lệ thông quan lần đầu >95%.",
+    image: "/images/services/customs.jpg",
+    alt: "Chuyên viên hải quan khai báo tờ khai điện tử VNACCS",
+    badge: "Thông quan >95%",
+  },
+  {
+    no: "06",
+    slug: "hang-dac-biet-du-an",
+    title: "Hàng Đặc Biệt / Dự Án",
+    desc: "Hàng OOG siêu trường siêu trọng, thiết bị dự án, hàng nguy hiểm. Lập kế hoạch chi tiết, an toàn tuyệt đối.",
+    image: "/images/services/project-cargo.jpg",
+    alt: "Vận chuyển hàng siêu trường siêu trọng dự án công nghiệp",
+    badge: "OOG & Heavy lift",
+  },
+];
 
 export default function ServicesSection() {
   return (
@@ -36,43 +75,57 @@ export default function ServicesSection() {
             </h2>
           </div>
           <p className="text-navy-500 text-sm leading-relaxed max-w-sm md:text-right">
-            Mỗi dịch vụ được tư vấn và thiết kế riêng cho từng doanh nghiệp —
-            đảm bảo tiến độ, kiểm soát chi phí và minh bạch toàn trình.
+            Mỗi dịch vụ được tư vấn và thiết kế riêng — đảm bảo tiến độ, kiểm soát chi phí và minh bạch toàn trình.
           </p>
         </div>
 
-        {/* M02.02.01 – Grid 6 thẻ dịch vụ */}
+        {/* Grid với ảnh thật */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {services.map((svc) => (
-            <Link
-              key={svc.slug}
-              href={`/services/${svc.slug}`}
-              className="svc-card group card p-7 flex flex-col gap-5"
-            >
-              {/* Số thứ tự (M02.02.01.01) */}
-              <div className="flex items-start justify-between">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center
-                                 transition-all duration-300 ${colorMap[svc.color]}`}>
-                  {iconMap[svc.icon]}
+            <Link key={svc.slug} href={`/services/${svc.slug}`}
+              className="group card overflow-hidden flex flex-col">
+
+              {/* Ảnh thật */}
+              <div className="relative h-48 overflow-hidden">
+                <Image
+                  src={svc.image}
+                  alt={svc.alt}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  quality={80}
+                />
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-900/60 to-transparent" />
+                {/* Badge */}
+                <div className="absolute top-3 right-3">
+                  <span className="bg-orange-500 text-white text-[10px] font-bold
+                                   px-2.5 py-1 rounded-full shadow-sm">
+                    {svc.badge}
+                  </span>
                 </div>
-                <span className="text-5xl font-black text-navy-50 select-none leading-none group-hover:text-orange-100 transition-colors">
-                  {svc.no}
-                </span>
+                {/* Number */}
+                <div className="absolute bottom-3 left-4">
+                  <span className="text-5xl font-black text-white/20 leading-none select-none">
+                    {svc.no}
+                  </span>
+                </div>
               </div>
 
-              <div>
-                <h3 className="font-bold text-navy-800 mb-2 group-hover:text-orange-500 transition-colors text-base">
+              {/* Content */}
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="font-bold text-navy-800 mb-2 group-hover:text-orange-500
+                               transition-colors text-base leading-snug">
                   {svc.title}
                 </h3>
-                <p className="text-navy-500 text-sm leading-relaxed line-clamp-3">
-                  {svc.shortDesc}
+                <p className="text-navy-500 text-sm leading-relaxed line-clamp-2 flex-1">
+                  {svc.desc}
                 </p>
-              </div>
-
-              <div className="mt-auto flex items-center gap-1.5 text-sm font-semibold
-                              text-navy-400 group-hover:text-orange-500 transition-colors">
-                Xem chi tiết
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                <div className="flex items-center gap-1.5 mt-4 text-sm font-semibold
+                                text-navy-400 group-hover:text-orange-500 transition-colors">
+                  Xem chi tiết
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </div>
               </div>
             </Link>
           ))}

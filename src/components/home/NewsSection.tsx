@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Calendar, Tag } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, Calendar, Clock } from "lucide-react";
 import { newsItems } from "@/data";
 
 export default function NewsSection() {
@@ -26,20 +27,34 @@ export default function NewsSection() {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-5">
-          {/* Featured */}
+
+          {/* Featured với ảnh thật */}
           <Link href={`/news/${featured.slug}`}
             className="lg:col-span-2 group card overflow-hidden flex flex-col">
-            <div className="h-56 bg-gradient-to-br from-navy-700 to-navy-900 relative overflow-hidden flex items-end p-6">
-              <div className="absolute inset-0 opacity-10"
-                style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.05) 20px, rgba(255,255,255,0.05) 40px)" }} />
-              <span className="relative z-10 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                {featured.category}
-              </span>
+            <div className="relative h-56 overflow-hidden">
+              <Image
+                src={featured.image}
+                alt={featured.imageAlt}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                priority
+                sizes="(max-width: 1024px) 100vw, 66vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              <div className="absolute top-4 left-4">
+                <span className="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                  {featured.categoryLabel}
+                </span>
+              </div>
             </div>
             <div className="p-7 flex flex-col flex-1">
-              <div className="flex items-center gap-3 text-xs text-navy-400 mb-3">
-                <span className="flex items-center gap-1"><Calendar size={11} />{featured.date}</span>
-                <span className="flex items-center gap-1"><Tag size={11} />{featured.category}</span>
+              <div className="flex items-center gap-3 text-navy-400 text-xs mb-3">
+                <span className="flex items-center gap-1">
+                  <Calendar size={11} />{featured.date}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock size={11} />{featured.readMinutes} phút đọc
+                </span>
               </div>
               <h3 className="font-bold text-navy-800 text-xl leading-snug mb-3
                              group-hover:text-orange-500 transition-colors">
@@ -50,30 +65,42 @@ export default function NewsSection() {
               </p>
               <div className="flex items-center gap-1.5 mt-5 text-sm font-semibold
                               text-navy-400 group-hover:text-orange-500 transition-colors">
-                Đọc tiếp <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                Đọc tiếp
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
           </Link>
 
-          {/* Side */}
+          {/* Side list với ảnh nhỏ */}
           <div className="flex flex-col gap-4">
             {rest.map((item) => (
               <Link key={item.id} href={`/news/${item.slug}`}
-                className="group card flex gap-4 p-5">
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-navy-600 to-navy-800
-                                flex items-center justify-center flex-shrink-0">
-                  <span className="text-white/20 font-black text-xs">HD</span>
+                className="group flex gap-4 card p-4 items-start">
+                {/* Ảnh thật thumbnail */}
+                <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
+                  <Image
+                    src={item.image}
+                    alt={item.imageAlt}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-300"
+                    sizes="80px"
+                  />
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className="text-orange-500 text-[10px] font-bold tracking-wider uppercase">
-                    {item.category}
+                    {item.categoryLabel}
                   </span>
                   <h4 className="font-semibold text-navy-800 text-sm leading-snug mt-1 mb-2
                                  group-hover:text-orange-500 transition-colors line-clamp-2">
                     {item.title}
                   </h4>
-                  <div className="flex items-center gap-1 text-navy-400 text-xs">
-                    <Calendar size={10} />{item.date}
+                  <div className="flex items-center gap-2 text-navy-400 text-xs">
+                    <span className="flex items-center gap-1">
+                      <Calendar size={10} />{item.date}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock size={10} />{item.readMinutes} phút
+                    </span>
                   </div>
                 </div>
               </Link>
