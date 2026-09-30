@@ -50,24 +50,18 @@ pipeline {
                     passwordVariable: 'GIT_TOKEN'
                 )]) {
                     sh """
-                        rm -rf gitops-tmp .git-credentials
-                        cat << EOF > .git-credentials
-https://\${GIT_USER}:\${GIT_TOKEN}@git.dnt.group
-EOF
-                        mkdir gitops-tmp
+                        rm -rf gitops-tmp
+                        ENCODED_TOKEN=\$(node -e "console.log(encodeURIComponent(process.env.GIT_TOKEN))")
+                        git clone https://\${GIT_USER}:\${ENCODED_TOKEN}@git.dnt.group/k8s/k8s-gitops.git gitops-tmp
                         cd gitops-tmp
-                        git init
-                        git config credential.helper 'store --file=../.git-credentials'
-                        git remote add origin https://git.dnt.group/k8s/k8s-gitops.git
-                        git pull origin main
                         yq e '.images[0].newTag = "${env.IMAGE_TAG}"' -i ${KUSTOMIZE_FILE}
                         git config user.email "jenkins@phuchoangmai.xyz"
                         git config user.name "Jenkins CI"
                         git add ${KUSTOMIZE_FILE}
                         git diff --cached --quiet || git commit -m "ci: update ${APP_NAME} to ${env.IMAGE_TAG}"
-                        git push origin HEAD:${GITOPS_BRANCH}
+                        git push origin main
                         cd ..
-                        rm -rf gitops-tmp .git-credentials
+                        rm -rf gitops-tmp
                     """
                 }
             }
