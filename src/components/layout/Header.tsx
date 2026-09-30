@@ -154,15 +154,15 @@ export default function Header() {
             scrolled ? "bg-white/96 backdrop-blur-xl shadow-md" : "bg-white"
           )}
         >
-          <div className="wrap flex items-center justify-between h-[80px]">
+          <div className="wrap flex items-center justify-between h-[80px] lg:h-[100px]">
 
             {/* Logo (M01.02.01.01) */}
             <Link href="/" title="HDT Logistics – Giải pháp vận chuyển & hải quan cho doanh nghiệp">
               <Image
                 src="/images/logo.png"
                 alt="HDT Logistics"
-                width={180} height={72}
-                className="object-contain h-14 w-auto"
+                width={240} height={96}
+                className="object-contain h-16 lg:h-[84px] w-auto transition-all"
                 priority
                 onError={(e) => { (e.target as HTMLImageElement).src = "/images/logo.svg"; }}
               />
