@@ -44,7 +44,7 @@ export default function FloatingButtons() {
                           shadow-2xl border border-gray-200 overflow-hidden">
             {/* Header */}
             <div className="bg-navy-700 px-5 py-4">
-              <p className="text-white font-bold text-sm">HD Logistics</p>
+              <p className="text-white font-bold text-sm">HDT Logistics</p>
               <div className="flex items-center gap-2 mt-0.5">
                 <span className="w-2 h-2 rounded-full bg-green-400" />
                 <span className="text-white/60 text-xs">Phản hồi trong 2 giờ làm việc</span>
@@ -64,7 +64,7 @@ export default function FloatingButtons() {
                   <p className="text-green-600 font-bold">1900 1234</p>
                 </div>
               </a>
-              <a href="https://zalo.me/hdlogistics" target="_blank" rel="noreferrer"
+              <a href="https://zalo.me/hdtlogistics" target="_blank" rel="noreferrer"
                 className="flex items-center gap-3 p-3.5 rounded-xl
                            bg-blue-50 border border-blue-200
                            hover:bg-blue-100 transition-colors">
@@ -76,7 +76,7 @@ export default function FloatingButtons() {
                   <p className="text-blue-600 font-bold text-sm">Nhắn tin ngay</p>
                 </div>
               </a>
-              <a href="mailto:sales@hdlogistics.vn"
+              <a href="mailto:sales@hdtlogistics.vn"
                 className="flex items-center gap-3 p-3.5 rounded-xl
                            bg-orange-50 border border-orange-200
                            hover:bg-orange-100 transition-colors">
@@ -85,7 +85,7 @@ export default function FloatingButtons() {
                 </div>
                 <div>
                   <p className="text-navy-700 text-xs font-bold">Gửi Email</p>
-                  <p className="text-orange-600 font-bold text-xs">sales@hdlogistics.vn</p>
+                  <p className="text-orange-600 font-bold text-xs">sales@hdtlogistics.vn</p>
                 </div>
               </a>
             </div>

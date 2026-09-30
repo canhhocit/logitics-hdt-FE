@@ -62,7 +62,7 @@ export default function TuVanHaiQuanPage() {
         <div className="absolute inset-0">
           <Image
             src="/images/customs-consulting.jpg"
-            alt="Tư vấn hải quan chuyên nghiệp tại HD Logistics"
+            alt="Tư vấn hải quan chuyên nghiệp tại HDT Logistics"
             fill
             className="object-cover"
             priority
@@ -87,7 +87,7 @@ export default function TuVanHaiQuanPage() {
             </h1>
             <p className="text-white/65 text-lg leading-relaxed mb-8 max-w-2xl">
               Tư vấn hải quan là bước nền tảng, ảnh hưởng trực tiếp đến tiến độ thông quan,
-              chi phí và sự tuân thủ pháp lý của doanh nghiệp. HD Logistics đồng hành từ
+              chi phí và sự tuân thủ pháp lý của doanh nghiệp. HDT Logistics đồng hành từ
               khâu chuẩn bị hồ sơ đến sau thông quan.
             </p>
             <Link href="/contact" className="btn-orange">
@@ -133,7 +133,7 @@ export default function TuVanHaiQuanPage() {
               <div className="flex items-start gap-2.5 bg-amber-50 border border-amber-200 rounded-xl p-4 mb-7">
                 <AlertCircle size={14} className="text-amber-500 flex-shrink-0 mt-0.5" />
                 <p className="text-amber-700 text-xs leading-relaxed">
-                  <strong>Lưu ý:</strong> HD Logistics cung cấp dịch vụ hải quan cho hàng{" "}
+                  <strong>Lưu ý:</strong> HDT Logistics cung cấp dịch vụ hải quan cho hàng{" "}
                   <strong>doanh nghiệp (B2B)</strong>. Chưa có dịch vụ cho hàng cá nhân và chuyển thư tín.
                 </p>
               </div>

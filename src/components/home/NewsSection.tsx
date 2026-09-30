@@ -16,7 +16,7 @@ export default function NewsSection() {
             <p className="eyebrow mb-4">Tin Tức & Sự Kiện</p>
             <h2 className="h2 text-navy-800">
               Cập nhật mới nhất<br />
-              <span className="text-grad">từ HD Logistics</span>
+              <span className="text-grad">từ HDT Logistics</span>
             </h2>
           </div>
           <Link href="/news"

@@ -137,7 +137,7 @@ export default function CareerDetailPage({ params }: { params: { id: string } })
                       </button>
                       <p className="text-[10px] text-navy-400 text-center">
                         Hoặc gửi trực tiếp:{" "}
-                        <a href="mailto:hr@hdlogistics.vn" className="text-orange-500 font-semibold">hr@hdlogistics.vn</a>
+                        <a href="mailto:hr@hdtlogistics.vn" className="text-orange-500 font-semibold">hr@hdtlogistics.vn</a>
                       </p>
                     </form>
                   </>

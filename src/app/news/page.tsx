@@ -7,7 +7,7 @@ import { newsItems, newsCategories } from "@/data";
 export const metadata: Metadata = {
   title: "Tin Tức",
   description:
-    "Cập nhật tin tức ngành logistics, hướng dẫn thủ tục xuất nhập khẩu và thông tin từ HD Logistics.",
+    "Cập nhật tin tức ngành logistics, hướng dẫn thủ tục xuất nhập khẩu và thông tin từ HDT Logistics.",
 };
 
 export default function NewsPage() {
@@ -30,7 +30,7 @@ export default function NewsPage() {
               <p className="eyebrow text-orange-400 mb-6">TIN TỨC & HƯỚNG DẪN</p>
               <h1 className="h1 text-white mb-3">
                 Cập nhật mới nhất<br />
-                <span className="text-orange-400">từ HD Logistics</span>
+                <span className="text-orange-400">từ HDT Logistics</span>
               </h1>
             </div>
           </div>

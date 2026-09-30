@@ -112,11 +112,11 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
     {
       type: "paragraph" as const,
       content:
-        "Nội dung bài viết đang được cập nhật. Vui lòng quay lại sau hoặc liên hệ HD Logistics để được tư vấn trực tiếp.",
+        "Nội dung bài viết đang được cập nhật. Vui lòng quay lại sau hoặc liên hệ HDT Logistics để được tư vấn trực tiếp.",
     },
   ];
 
-  const pageUrl = `https://hdlogistics.vn/news/${item.slug}`;
+  const pageUrl = `https://hdtlogistics.vn/news/${item.slug}`;
 
   return (
     <div className="bg-white">
@@ -296,7 +296,7 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
                   Tư vấn hải quan miễn phí
                 </h3>
                 <p className="text-navy-500 text-xs leading-relaxed mb-4">
-                  Phân loại mã HS, tính thuế FTA, xin C/O — HD Logistics hỗ trợ
+                  Phân loại mã HS, tính thuế FTA, xin C/O — HDT Logistics hỗ trợ
                   doanh nghiệp tối ưu chi phí hải quan và tránh rủi ro truy thu.
                 </p>
                 <Link href="/tu-van-hai-quan"
@@ -311,7 +311,7 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
               <div className="rounded-2xl bg-navy-700 p-6 text-white">
                 <h3 className="font-bold mb-2">Cần hỗ trợ logistics?</h3>
                 <p className="text-white/60 text-sm mb-5 leading-relaxed">
-                  Đội ngũ HD Logistics sẵn sàng tư vấn giải pháp vận chuyển và
+                  Đội ngũ HDT Logistics sẵn sàng tư vấn giải pháp vận chuyển và
                   hải quan phù hợp nhất cho doanh nghiệp của bạn.
                 </p>
                 <Link href="/contact"

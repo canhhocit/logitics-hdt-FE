@@ -50,7 +50,7 @@ export default function WhyUsSection() {
             <div className="relative w-full h-[500px] rounded-2xl overflow-hidden shadow-xl">
               <Image
                 src="/images/hero/hero-warehouse.jpg"
-                alt="Kho bãi logistics hiện đại HD Logistics"
+                alt="Kho bãi logistics hiện đại HDT Logistics"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -114,7 +114,7 @@ export default function WhyUsSection() {
 
             <div className="mt-8">
               <Link href="/about" className="btn-outline inline-flex">
-                Tìm Hiểu Về HD Logistics <ArrowRight size={15} />
+                Tìm Hiểu Về HDT Logistics <ArrowRight size={15} />
               </Link>
             </div>
           </div>

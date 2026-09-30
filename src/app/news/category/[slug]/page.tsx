@@ -12,7 +12,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const cat = newsCategories.find((c) => c.slug === params.slug);
   if (!cat) return {};
-  return { title: cat.label, description: `Các bài viết về ${cat.label} từ HD Logistics` };
+  return { title: cat.label, description: `Các bài viết về ${cat.label} từ HDT Logistics` };
 }
 
 export default function NewsCategoryPage({ params }: { params: { slug: string } }) {

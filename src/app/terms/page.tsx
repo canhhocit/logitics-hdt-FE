@@ -4,30 +4,30 @@ import { ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Điều Khoản Dịch Vụ",
-  description: "Điều khoản và điều kiện sử dụng dịch vụ của HD Logistics.",
+  description: "Điều khoản và điều kiện sử dụng dịch vụ của HDT Logistics.",
 };
 
 export default function TermsPage() {
   const sections = [
     {
       title: "1. Phạm vi dịch vụ",
-      body: "HD Logistics cung cấp dịch vụ vận chuyển đường không, đường biển, đường bộ, gom hàng lẻ LCL, khai thuê hải quan và tư vấn logistics cho khách hàng doanh nghiệp (B2B). Chúng tôi không cung cấp dịch vụ chuyển phát hàng cá nhân, chuyển thư tín hoặc dịch vụ bưu chính.",
+      body: "HDT Logistics cung cấp dịch vụ vận chuyển đường không, đường biển, đường bộ, gom hàng lẻ LCL, khai thuê hải quan và tư vấn logistics cho khách hàng doanh nghiệp (B2B). Chúng tôi không cung cấp dịch vụ chuyển phát hàng cá nhân, chuyển thư tín hoặc dịch vụ bưu chính.",
     },
     {
       title: "2. Trách nhiệm của các bên",
-      body: "Khách hàng có trách nhiệm cung cấp thông tin hàng hóa chính xác, đầy đủ; đảm bảo hàng hóa hợp pháp, không vi phạm quy định pháp luật; chuẩn bị đủ chứng từ theo yêu cầu. HD Logistics có trách nhiệm cung cấp dịch vụ theo thỏa thuận, bảo mật thông tin khách hàng và xử lý khiếu nại kịp thời.",
+      body: "Khách hàng có trách nhiệm cung cấp thông tin hàng hóa chính xác, đầy đủ; đảm bảo hàng hóa hợp pháp, không vi phạm quy định pháp luật; chuẩn bị đủ chứng từ theo yêu cầu. HDT Logistics có trách nhiệm cung cấp dịch vụ theo thỏa thuận, bảo mật thông tin khách hàng và xử lý khiếu nại kịp thời.",
     },
     {
       title: "3. Trách nhiệm về hàng hóa",
-      body: "HD Logistics chịu trách nhiệm về hàng hóa trong phạm vi được quy định tại hợp đồng dịch vụ. Mức bồi thường tối đa theo chuẩn quốc tế áp dụng cho từng phương thức vận tải (theo Công ước Hague-Visby đối với đường biển, Warsaw/Montreal đối với hàng không). Khách hàng được khuyến nghị mua bảo hiểm hàng hóa toàn diện.",
+      body: "HDT Logistics chịu trách nhiệm về hàng hóa trong phạm vi được quy định tại hợp đồng dịch vụ. Mức bồi thường tối đa theo chuẩn quốc tế áp dụng cho từng phương thức vận tải (theo Công ước Hague-Visby đối với đường biển, Warsaw/Montreal đối với hàng không). Khách hàng được khuyến nghị mua bảo hiểm hàng hóa toàn diện.",
     },
     {
       title: "4. Thanh toán",
-      body: "Cước vận chuyển và các phụ phí được xác định theo báo giá đã thống nhất. Thanh toán thực hiện theo điều khoản trong hợp đồng dịch vụ. HD Logistics có quyền giữ hàng cho đến khi công nợ được thanh toán đầy đủ.",
+      body: "Cước vận chuyển và các phụ phí được xác định theo báo giá đã thống nhất. Thanh toán thực hiện theo điều khoản trong hợp đồng dịch vụ. HDT Logistics có quyền giữ hàng cho đến khi công nợ được thanh toán đầy đủ.",
     },
     {
       title: "5. Quyền sở hữu trí tuệ",
-      body: "Toàn bộ nội dung website hdlogistics.vn thuộc quyền sở hữu của Công ty TNHH Đầu Tư Kinh Doanh Và Xây Dựng Hải Đăng. Nghiêm cấm sao chép, phân phối hoặc sử dụng nội dung vì mục đích thương mại mà không có sự đồng ý bằng văn bản.",
+      body: "Toàn bộ nội dung website hdtlogistics.vn thuộc quyền sở hữu của Công ty TNHH Đầu Tư Kinh Doanh Và Xây Dựng Hải Đăng. Nghiêm cấm sao chép, phân phối hoặc sử dụng nội dung vì mục đích thương mại mà không có sự đồng ý bằng văn bản.",
     },
     {
       title: "6. Giải quyết tranh chấp",
@@ -35,7 +35,7 @@ export default function TermsPage() {
     },
     {
       title: "7. Điều khoản sửa đổi",
-      body: "HD Logistics có quyền sửa đổi Điều khoản này bất kỳ lúc nào. Bản sửa đổi có hiệu lực ngay khi được đăng tải trên website. Tiếp tục sử dụng dịch vụ sau khi có sửa đổi đồng nghĩa với việc chấp thuận điều khoản mới.",
+      body: "HDT Logistics có quyền sửa đổi Điều khoản này bất kỳ lúc nào. Bản sửa đổi có hiệu lực ngay khi được đăng tải trên website. Tiếp tục sử dụng dịch vụ sau khi có sửa đổi đồng nghĩa với việc chấp thuận điều khoản mới.",
     },
   ];
 

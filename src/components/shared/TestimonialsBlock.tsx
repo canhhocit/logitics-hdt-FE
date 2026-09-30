@@ -20,7 +20,7 @@ export default function TestimonialsBlock() {
             <p className="eyebrow mb-4">Phản Hồi Từ Khách Hàng</p>
             <h2 className="h2 text-navy-800">
               Doanh nghiệp nói gì<br />
-              <span className="text-grad">về HD Logistics</span>
+              <span className="text-grad">về HDT Logistics</span>
             </h2>
           </div>
           <div className="flex gap-2">

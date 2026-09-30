@@ -44,7 +44,7 @@ const services: Record<string, ServiceData> = {
     title: "Vận Chuyển Đường Không",
     intro: "Air freight quốc tế tốc độ cao, phù hợp hàng giá trị, hàng gấp và hàng công nghệ. Cước tính theo kg thể tích (volumetric weight).",
     description:
-      "Vận tải hàng không đã không còn xa lạ với các doanh nghiệp xuất nhập khẩu. HD Logistics kết nối với hơn 50 hãng hàng không quốc tế, cung cấp dịch vụ Express và Economy linh hoạt. Chúng tôi theo dõi lịch bay liên tục và chủ động đề xuất phương án thay thế khi có thay đổi.",
+      "Vận tải hàng không đã không còn xa lạ với các doanh nghiệp xuất nhập khẩu. HDT Logistics kết nối với hơn 50 hãng hàng không quốc tế, cung cấp dịch vụ Express và Economy linh hoạt. Chúng tôi theo dõi lịch bay liên tục và chủ động đề xuất phương án thay thế khi có thay đổi.",
     advantages: [
       { title: "Tốc độ vượt trội", desc: "Thời gian transit 1–5 ngày tùy tuyến, lý tưởng cho hàng gấp và hàng có yêu cầu thời gian nghiêm ngặt." },
       { title: "Độ tin cậy cao", desc: "Lịch bay cố định, ít biến động hơn đường biển, tỷ lệ giao đúng hẹn cao." },
@@ -95,7 +95,7 @@ const services: Record<string, ServiceData> = {
     title: "Vận Chuyển Đường Biển",
     intro: "FCL, LCL, container lạnh, hàng rời — tới 100+ cảng biển toàn cầu. Booking trực tiếp Yang Ming, SITC, RCL, PIL, OOCL, ONE, COSCO, CMA CGM.",
     description:
-      "Vận tải đường biển là phương thức kinh tế nhất cho hàng hóa khối lượng lớn. HD Logistics có quan hệ trực tiếp với các hãng tàu lớn, đảm bảo booking sớm, không rớt hàng và theo dõi container xuyên suốt hành trình.",
+      "Vận tải đường biển là phương thức kinh tế nhất cho hàng hóa khối lượng lớn. HDT Logistics có quan hệ trực tiếp với các hãng tàu lớn, đảm bảo booking sớm, không rớt hàng và theo dõi container xuyên suốt hành trình.",
     advantages: [
       { title: "Chi phí tối ưu", desc: "Cước biển thấp nhất trong các phương thức vận tải, đặc biệt với hàng khối lượng lớn." },
       { title: "Đa dạng loại container", desc: "Standard 20'/40', Reefer, Open Top, Flat Rack, Bulk – đáp ứng mọi loại hàng." },
@@ -153,7 +153,7 @@ const services: Record<string, ServiceData> = {
     title: "Gom Hàng Lẻ (LCL)",
     intro: "Ghép hàng lẻ vào container chung, tính cước theo CBM (mét khối). Lịch gom hàng cố định hàng tuần, tiết kiệm tối đa chi phí cho lô hàng nhỏ.",
     description:
-      "Dịch vụ gom hàng lẻ LCL của HD Logistics cho phép doanh nghiệp vận chuyển hàng hóa khối lượng nhỏ mà không cần thuê nguyên container. Chúng tôi gom nhiều lô hàng của các khách hàng khác nhau vào một container, chia sẻ chi phí và tối ưu giá cước.",
+      "Dịch vụ gom hàng lẻ LCL của HDT Logistics cho phép doanh nghiệp vận chuyển hàng hóa khối lượng nhỏ mà không cần thuê nguyên container. Chúng tôi gom nhiều lô hàng của các khách hàng khác nhau vào một container, chia sẻ chi phí và tối ưu giá cước.",
     advantages: [
       { title: "Tiết kiệm chi phí", desc: "Chỉ trả cước theo khối lượng thực tế, không phải trả cho cả container." },
       { title: "Lịch cố định", desc: "Lịch cut-off và ETD rõ ràng hàng tuần, dễ lên kế hoạch sản xuất và kinh doanh." },
@@ -203,7 +203,7 @@ const services: Record<string, ServiceData> = {
     title: "Vận Chuyển Đường Bộ",
     intro: "Vận tải nội địa Bắc–Trung–Nam và xuyên biên giới ASEAN, Trung Quốc. Nhanh hơn đường biển, tiết kiệm hơn đường không.",
     description:
-      "HD Logistics vận hành đội xe đa dạng tải trọng 1–40 tấn, phủ sóng 63 tỉnh thành trong nước và các tuyến xuyên biên giới sang Lào, Campuchia, Thái Lan và Trung Quốc. GPS tracking 24/7 và bảo hiểm hàng hóa toàn trình.",
+      "HDT Logistics vận hành đội xe đa dạng tải trọng 1–40 tấn, phủ sóng 63 tỉnh thành trong nước và các tuyến xuyên biên giới sang Lào, Campuchia, Thái Lan và Trung Quốc. GPS tracking 24/7 và bảo hiểm hàng hóa toàn trình.",
     advantages: [
       { title: "Linh hoạt door-to-door", desc: "Lấy hàng tận nhà kho, giao tận điểm đích không cần trung chuyển qua cảng." },
       { title: "Thời gian hợp lý", desc: "Nhanh hơn đường biển đáng kể. Hà Nội – TP.HCM khoảng 2–3 ngày." },
@@ -253,7 +253,7 @@ const services: Record<string, ServiceData> = {
     title: "Khai Thuê Hải Quan",
     intro: "Khai báo tờ khai điện tử VNACCS/VCIS, phân luồng, thông quan, nộp thuế. Tỷ lệ thông quan lần đầu >95%.",
     description:
-      "Đội ngũ chuyên viên hải quan của HD Logistics được đào tạo bài bản, am hiểu sâu về phân loại hàng hóa, quy định thuế quan và thủ tục thông quan. Hồ sơ được rà soát 2 cấp trước khi nộp.",
+      "Đội ngũ chuyên viên hải quan của HDT Logistics được đào tạo bài bản, am hiểu sâu về phân loại hàng hóa, quy định thuế quan và thủ tục thông quan. Hồ sơ được rà soát 2 cấp trước khi nộp.",
     advantages: [
       { title: "Hồ sơ rà soát 2 cấp", desc: "Giảm tối đa tỷ lệ bổ sung chứng từ, thông quan nhanh lần đầu." },
       { title: "Am hiểu quy định", desc: "Cập nhật liên tục chính sách hải quan, biểu thuế FTA và quy định chuyên ngành." },
@@ -306,7 +306,7 @@ const services: Record<string, ServiceData> = {
     title: "Hàng Đặc Biệt / Hàng Dự Án",
     intro: "Hàng OOG (Out of Gauge), siêu trường siêu trọng, thiết bị dự án, hàng nguy hiểm/lạnh. Xử lý kịp thời, an toàn, chi phí hợp lý.",
     description:
-      "HD Logistics có kinh nghiệm xử lý nhiều dự án vận chuyển thiết bị nặng, máy móc công nghiệp và hàng OOG. Chúng tôi lập kế hoạch vận chuyển chi tiết, phối hợp với cơ quan chức năng để đảm bảo an toàn và đúng tiến độ dự án.",
+      "HDT Logistics có kinh nghiệm xử lý nhiều dự án vận chuyển thiết bị nặng, máy móc công nghiệp và hàng OOG. Chúng tôi lập kế hoạch vận chuyển chi tiết, phối hợp với cơ quan chức năng để đảm bảo an toàn và đúng tiến độ dự án.",
     advantages: [
       { title: "Kinh nghiệm dự án lớn", desc: "Đã xử lý nhiều dự án vận chuyển thiết bị nhà máy, turbine điện, cấu kiện công nghiệp." },
       { title: "Giải pháp trọn gói", desc: "Lập kế hoạch vận chuyển, xin phép, thuê thiết bị nâng hạ, đoàn hộ tống." },

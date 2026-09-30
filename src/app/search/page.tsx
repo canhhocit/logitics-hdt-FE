@@ -65,7 +65,7 @@ function SearchResults() {
             <Search size={48} className="text-navy-200 mx-auto mb-4" />
             <h2 className="text-xl font-bold text-navy-700 mb-2">Nhập từ khóa để tìm kiếm</h2>
             <p className="text-navy-400 text-sm max-w-sm mx-auto">
-              Tìm kiếm dịch vụ, bài viết hướng dẫn và thông tin hải quan trên toàn bộ website HD Logistics.
+              Tìm kiếm dịch vụ, bài viết hướng dẫn và thông tin hải quan trên toàn bộ website HDT Logistics.
             </p>
           </div>
         )}

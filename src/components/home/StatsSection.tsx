@@ -42,7 +42,7 @@ export default function StatsSection() {
           <p className="eyebrow text-orange-400 mb-4 justify-center">Thành Tựu</p>
           <h2 className="h2 text-white mb-4">Con số nói lên tất cả</h2>
           <p className="text-white/50 text-sm max-w-xl mx-auto leading-relaxed">
-            HD Logistics từng bước xây dựng năng lực vận hành ổn định trong lĩnh vực logistics doanh nghiệp — trọng tâm là vận chuyển đa phương thức, khai thuê hải quan và tối ưu chuỗi cung ứng.
+            HDT Logistics từng bước xây dựng năng lực vận hành ổn định trong lĩnh vực logistics doanh nghiệp — trọng tâm là vận chuyển đa phương thức, khai thuê hải quan và tối ưu chuỗi cung ứng.
           </p>
         </div>
 

@@ -93,7 +93,7 @@ export const articleContent: Record<string, ArticleSection[]> = {
     {
       type: "note",
       content:
-        "HD Logistics cung cấp dịch vụ tư vấn hải quan toàn diện: phân loại mã HS, xác định chính sách thuế, xin C/O theo FTA và hỗ trợ hoàn thuế xuất khẩu. Liên hệ ngay để được tư vấn miễn phí.",
+        "HDT Logistics cung cấp dịch vụ tư vấn hải quan toàn diện: phân loại mã HS, xác định chính sách thuế, xin C/O theo FTA và hỗ trợ hoàn thuế xuất khẩu. Liên hệ ngay để được tư vấn miễn phí.",
     },
   ],
 
@@ -178,7 +178,7 @@ export const articleContent: Record<string, ArticleSection[]> = {
     {
       type: "note",
       content:
-        "Mẹo thực tế: Chuẩn bị bộ chứng từ đầy đủ, chính xác ngay từ đầu là cách hiệu quả nhất để đạt luồng xanh. HD Logistics có đội chuyên viên hải quan kinh nghiệm rà soát hồ sơ 2 cấp, giúp tỷ lệ thông quan lần đầu luôn >95%.",
+        "Mẹo thực tế: Chuẩn bị bộ chứng từ đầy đủ, chính xác ngay từ đầu là cách hiệu quả nhất để đạt luồng xanh. HDT Logistics có đội chuyên viên hải quan kinh nghiệm rà soát hồ sơ 2 cấp, giúp tỷ lệ thông quan lần đầu luôn >95%.",
     },
   ],
 
@@ -305,7 +305,7 @@ export const articleContent: Record<string, ArticleSection[]> = {
     {
       type: "note",
       content:
-        "Lưu ý: Cước vận tải biển thay đổi theo tuần. Liên hệ HD Logistics để nhận báo giá cập nhật nhất.",
+        "Lưu ý: Cước vận tải biển thay đổi theo tuần. Liên hệ HDT Logistics để nhận báo giá cập nhật nhất.",
     },
     {
       type: "heading",
@@ -358,7 +358,7 @@ export const articleContent: Record<string, ArticleSection[]> = {
     {
       type: "note",
       content:
-        "HD Logistics đang triển khai các giải pháp vận tải bền vững: tối ưu trọng tải xe để giảm số chuyến, ưu tiên tuyến đường sắt thay đường bộ dài ngày, và đang nghiên cứu đội xe điện cho vận chuyển nội địa.",
+        "HDT Logistics đang triển khai các giải pháp vận tải bền vững: tối ưu trọng tải xe để giảm số chuyến, ưu tiên tuyến đường sắt thay đường bộ dài ngày, và đang nghiên cứu đội xe điện cho vận chuyển nội địa.",
     },
   ],
 
@@ -385,7 +385,7 @@ export const articleContent: Record<string, ArticleSection[]> = {
         "4 chữ số: Nhóm (Heading) – phân loại cụ thể hơn (ví dụ: 8471 = Máy tính)",
         "6 chữ số: Phân nhóm quốc tế (Subheading) – chuẩn toàn cầu",
         "8 chữ số: Phân nhóm Việt Nam – dùng trong khai hải quan",
-        "Tra cứu mã HS: tại website Tổng cục Hải quan (customs.gov.vn) hoặc liên hệ HD Logistics",
+        "Tra cứu mã HS: tại website Tổng cục Hải quan (customs.gov.vn) hoặc liên hệ HDT Logistics",
       ],
     },
     {
@@ -455,12 +455,12 @@ export const articleContent: Record<string, ArticleSection[]> = {
     {
       type: "note",
       content:
-        "Khuyến nghị: Luôn mua bảo hiểm điều kiện ICC (A) cho hàng điện tử, hàng giá trị cao và hàng dễ vỡ. Với hàng nguyên liệu, vật liệu xây dựng thô có thể dùng ICC (C) để tiết kiệm phí. HD Logistics có thể hỗ trợ mua bảo hiểm hàng hóa với mức phí cạnh tranh.",
+        "Khuyến nghị: Luôn mua bảo hiểm điều kiện ICC (A) cho hàng điện tử, hàng giá trị cao và hàng dễ vỡ. Với hàng nguyên liệu, vật liệu xây dựng thô có thể dùng ICC (C) để tiết kiệm phí. HDT Logistics có thể hỗ trợ mua bảo hiểm hàng hóa với mức phí cạnh tranh.",
     },
   ],
 
   // ─────────────────────────────────────────────────────────────────
-  "hd-logistics-giai-phap-van-chuyen-hai-quan-dn": [
+  "hdt-logistics-giai-phap-van-chuyen-hai-quan-dn": [
     {
       type: "paragraph",
       content:
@@ -468,12 +468,12 @@ export const articleContent: Record<string, ArticleSection[]> = {
     },
     {
       type: "heading",
-      content: "Mô hình dịch vụ 3 trong 1 của HD Logistics",
+      content: "Mô hình dịch vụ 3 trong 1 của HDT Logistics",
     },
     {
       type: "paragraph",
       content:
-        "HD Logistics xây dựng mô hình dịch vụ tích hợp 3 nhóm chức năng cốt lõi: Vận chuyển (Transportation) – Hải quan (Customs Brokerage) – Tư vấn chuỗi cung ứng (Supply Chain Consulting). Sự tích hợp này giúp doanh nghiệp tiết kiệm thời gian làm việc với nhiều nhà cung cấp, giảm rủi ro thông tin không đồng bộ và kiểm soát chi phí tổng thể hiệu quả hơn.",
+        "HDT Logistics xây dựng mô hình dịch vụ tích hợp 3 nhóm chức năng cốt lõi: Vận chuyển (Transportation) – Hải quan (Customs Brokerage) – Tư vấn chuỗi cung ứng (Supply Chain Consulting). Sự tích hợp này giúp doanh nghiệp tiết kiệm thời gian làm việc với nhiều nhà cung cấp, giảm rủi ro thông tin không đồng bộ và kiểm soát chi phí tổng thể hiệu quả hơn.",
     },
     {
       type: "heading",
@@ -494,7 +494,7 @@ export const articleContent: Record<string, ArticleSection[]> = {
     {
       type: "paragraph",
       content:
-        "HD Logistics chuyên phục vụ khách hàng doanh nghiệp (B2B), tập trung vào 3 nhóm đối tượng:",
+        "HDT Logistics chuyên phục vụ khách hàng doanh nghiệp (B2B), tập trung vào 3 nhóm đối tượng:",
     },
     {
       type: "table",
@@ -521,7 +521,7 @@ export const articleContent: Record<string, ArticleSection[]> = {
     {
       type: "note",
       content:
-        "Bạn cần tư vấn giải pháp logistics cho doanh nghiệp? Liên hệ HD Logistics qua hotline +84 929 959 699 hoặc điền form yêu cầu tư vấn. Đội ngũ chuyên gia sẵn sàng phân tích và đề xuất phương án phù hợp nhất trong vòng 2 giờ làm việc.",
+        "Bạn cần tư vấn giải pháp logistics cho doanh nghiệp? Liên hệ HDT Logistics qua hotline +84 929 959 699 hoặc điền form yêu cầu tư vấn. Đội ngũ chuyên gia sẵn sàng phân tích và đề xuất phương án phù hợp nhất trong vòng 2 giờ làm việc.",
     },
   ],
 };

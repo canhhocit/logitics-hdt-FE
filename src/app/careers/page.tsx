@@ -5,7 +5,7 @@ import { careers } from "@/data";
 
 export const metadata: Metadata = {
   title: "Tuyển Dụng",
-  description: "Cơ hội nghề nghiệp tại HD Logistics — môi trường chuyên nghiệp, lộ trình phát triển rõ ràng.",
+  description: "Cơ hội nghề nghiệp tại HDT Logistics — môi trường chuyên nghiệp, lộ trình phát triển rõ ràng.",
 };
 
 const benefits = [
@@ -34,7 +34,7 @@ export default function CareersPage() {
               <p className="eyebrow text-orange-400 mb-6">GIA NHẬP ĐỘI NGŨ</p>
               <h1 className="h1 text-white mb-5">
                 Xây dựng sự nghiệp<br />
-                <span className="text-orange-400">cùng HD Logistics</span>
+                <span className="text-orange-400">cùng HDT Logistics</span>
               </h1>
               <p className="text-white/65 text-lg leading-relaxed">
                 Chúng tôi tìm kiếm những tài năng đam mê logistics, làm việc có quy trình và muốn phát triển dài hạn trong một công ty ổn định, chuyên nghiệp.
@@ -62,7 +62,7 @@ export default function CareersPage() {
         <div className="wrap">
           <div className="text-center mb-12">
             <p className="eyebrow mb-4 justify-center">Quyền Lợi & Phúc Lợi</p>
-            <h2 className="h2 text-navy-800">Tại sao gia nhập HD Logistics?</h2>
+            <h2 className="h2 text-navy-800">Tại sao gia nhập HDT Logistics?</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {benefits.map((b) => (
@@ -140,10 +140,10 @@ export default function CareersPage() {
             <p className="text-white/55 text-sm mb-6 max-w-md mx-auto">
               Gửi CV của bạn — chúng tôi luôn chào đón tài năng xuất sắc và sẽ liên hệ khi có vị trí phù hợp.
             </p>
-            <a href="mailto:hr@hdlogistics.vn" className="btn-orange inline-flex">
+            <a href="mailto:hr@hdtlogistics.vn" className="btn-orange inline-flex">
               Gửi CV Tự Nguyện <ArrowRight size={15} />
             </a>
-            <p className="text-white/30 text-xs mt-3">hr@hdlogistics.vn</p>
+            <p className="text-white/30 text-xs mt-3">hr@hdtlogistics.vn</p>
           </div>
         </div>
       </section>

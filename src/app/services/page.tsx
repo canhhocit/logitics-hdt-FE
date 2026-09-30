@@ -8,7 +8,7 @@ import TestimonialsBlock from "@/components/shared/TestimonialsBlock";
 export const metadata: Metadata = {
   title: "Dịch Vụ",
   description:
-    "HD Logistics cung cấp 6 dịch vụ logistics: vận chuyển đường không, đường biển, gom hàng lẻ LCL, đường bộ, khai thuê hải quan và hàng đặc biệt/dự án.",
+    "HDT Logistics cung cấp 6 dịch vụ logistics: vận chuyển đường không, đường biển, gom hàng lẻ LCL, đường bộ, khai thuê hải quan và hàng đặc biệt/dự án.",
 };
 
 const iconMap: Record<string, React.ReactNode> = {

@@ -32,7 +32,7 @@ export default function ContactPage() {
             <p className="eyebrow text-orange-400 mb-6">LIÊN HỆ</p>
             <h1 className="h1 text-white mb-4">
               Bắt đầu hợp tác<br />
-              <span className="text-orange-400">cùng HD Logistics</span>
+              <span className="text-orange-400">cùng HDT Logistics</span>
             </h1>
             <p className="text-white/65 text-lg leading-relaxed">
               Đội ngũ chuyên gia sẵn sàng phân tích nhu cầu và đề xuất phương án vận chuyển
@@ -114,7 +114,7 @@ export default function ContactPage() {
               <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl p-4 mb-7">
                 <AlertTriangle size={14} className="text-amber-500 flex-shrink-0 mt-0.5" />
                 <p className="text-amber-700 text-xs leading-relaxed">
-                  <strong>Lưu ý:</strong> HD Logistics chưa có dịch vụ chuyển phát hàng cá nhân
+                  <strong>Lưu ý:</strong> HDT Logistics chưa có dịch vụ chuyển phát hàng cá nhân
                   và chuyển thư tín. Chúng tôi chuyên phục vụ khách hàng doanh nghiệp (B2B).
                 </p>
               </div>
@@ -126,7 +126,7 @@ export default function ContactPage() {
                   </div>
                   <h3 className="text-xl font-bold text-navy-800 mb-2">Gửi thành công!</h3>
                   <p className="text-navy-500 text-sm mb-6">
-                    Đội ngũ HD Logistics sẽ liên hệ lại trong vòng 2 giờ làm việc.
+                    Đội ngũ HDT Logistics sẽ liên hệ lại trong vòng 2 giờ làm việc.
                   </p>
                   <button
                     onClick={() => { setSubmitted(false); setForm({ name: "", company: "", phone: "", email: "", service: "", message: "" }); }}

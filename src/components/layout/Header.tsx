@@ -154,22 +154,22 @@ export default function Header() {
             scrolled ? "bg-white/96 backdrop-blur-xl shadow-md" : "bg-white"
           )}
         >
-          <div className="wrap flex items-center justify-between h-[68px]">
+          <div className="wrap flex items-center justify-between h-[80px]">
 
             {/* Logo (M01.02.01.01) */}
-            <Link href="/" title="HD Logistics – Giải pháp vận chuyển & hải quan cho doanh nghiệp">
+            <Link href="/" title="HDT Logistics – Giải pháp vận chuyển & hải quan cho doanh nghiệp">
               <Image
                 src="/images/logo.png"
-                alt="HD Logistics"
-                width={150} height={60}
-                className="object-contain h-12 w-auto"
+                alt="HDT Logistics"
+                width={180} height={72}
+                className="object-contain h-14 w-auto"
                 priority
                 onError={(e) => { (e.target as HTMLImageElement).src = "/images/logo.svg"; }}
               />
             </Link>
 
             {/* Desktop links (M01.02.02) */}
-            <ul className="hidden lg:flex items-center gap-0.5">
+            <ul className="hidden lg:flex items-center gap-0">
               {nav.map((item) => (
                 <li
                   key={item.label}
@@ -179,14 +179,14 @@ export default function Header() {
                 >
                   <Link
                     href={item.href}
-                    className="flex items-center gap-1 px-3.5 py-2 text-[13px] font-semibold
+                    className="flex items-center gap-0.5 px-2.5 py-2 text-[12.5px] font-semibold
                                text-navy-700 hover:text-orange-500 rounded-lg hover:bg-orange-50
-                               transition-colors"
+                               transition-colors whitespace-nowrap"
                   >
                     {item.label}
                     {item.children && (
                       <ChevronDown
-                        size={12}
+                        size={11}
                         className={clsx(
                           "transition-transform opacity-50",
                           dropdown === item.label && "rotate-180 opacity-100"
@@ -216,18 +216,20 @@ export default function Header() {
             </ul>
 
             {/* Right actions */}
-            <div className="hidden lg:flex items-center gap-2">
-              {/* Search icon (M01.02.04.01) */}
+            <div className="hidden lg:flex items-center gap-1.5 flex-shrink-0">
+              {/* Search icon */}
               <button
                 onClick={() => setSearchOpen(true)}
                 aria-label="Mở tìm kiếm"
-                className="w-9 h-9 flex items-center justify-center rounded-lg
+                className="w-8 h-8 flex items-center justify-center rounded-lg
                            text-navy-500 hover:text-orange-500 hover:bg-orange-50 transition-colors"
               >
-                <Search size={17} />
+                <Search size={16} />
               </button>
 
-              <Link href="/contact" className="btn-orange text-[13px] py-2.5 px-5">
+              <Link href="/contact"
+                className="text-[12px] font-bold bg-orange-500 hover:bg-orange-600
+                           text-white px-4 py-2 rounded-xl transition-colors whitespace-nowrap">
                 Nhận Tư Vấn
               </Link>
             </div>

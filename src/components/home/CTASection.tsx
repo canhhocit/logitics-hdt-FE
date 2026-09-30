@@ -22,7 +22,7 @@ export default function CTASection() {
             <span className="text-orange-400">chuỗi cung ứng của bạn?</span>
           </h2>
           <p className="text-white/65 text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-            Liên hệ ngay với đội ngũ chuyên gia HD Logistics để được tư vấn phương án vận chuyển phù hợp nhất — không phí thêm, không phát sinh ẩn, phản hồi trong 2 giờ làm việc.
+            Liên hệ ngay với đội ngũ chuyên gia HDT Logistics để được tư vấn phương án vận chuyển phù hợp nhất — không phí thêm, không phát sinh ẩn, phản hồi trong 2 giờ làm việc.
           </p>
 
           <div className="flex flex-wrap gap-4 justify-center mb-12">
@@ -40,8 +40,8 @@ export default function CTASection() {
               <Phone size={14} className="text-orange-400" />1900 1234 (24/7)
             </a>
             <span className="w-px h-4 bg-white/20 self-center hidden sm:block" />
-            <a href="mailto:sales@hdlogistics.vn" className="flex items-center gap-2 hover:text-orange-400 transition-colors">
-              <Mail size={14} className="text-orange-400" />sales@hdlogistics.vn
+            <a href="mailto:sales@hdtlogistics.vn" className="flex items-center gap-2 hover:text-orange-400 transition-colors">
+              <Mail size={14} className="text-orange-400" />sales@hdtlogistics.vn
             </a>
             <span className="w-px h-4 bg-white/20 self-center hidden sm:block" />
             <span className="flex items-center gap-2">

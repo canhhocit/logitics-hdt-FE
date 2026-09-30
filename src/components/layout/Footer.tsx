@@ -35,7 +35,7 @@ export default function Footer() {
           <div>
             <p className="eyebrow text-orange-400 mb-2">Bắt đầu hợp tác</p>
             <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">
-              Tối ưu logistics cùng HD Logistics
+              Tối ưu logistics cùng HDT Logistics
             </h3>
           </div>
           <div className="flex flex-wrap gap-3 flex-shrink-0">
@@ -58,7 +58,7 @@ export default function Footer() {
             <Link href="/" className="inline-block mb-5">
               <Image
                 src="/images/logo.svg"
-                alt="HD Logistics"
+                alt="HDT Logistics"
                 width={140} height={56}
                 className="object-contain brightness-0 invert h-11 w-auto"
               />
@@ -202,7 +202,7 @@ export default function Footer() {
             </p>
             {/* Copyright (M01.03.02.04) */}
             <p>
-              © {new Date().getFullYear()} HD Logistics. Tất cả quyền được bảo lưu.{" "}
+              © {new Date().getFullYear()} HDT Logistics. Tất cả quyền được bảo lưu.{" "}
               <span className="text-white/20">Thiết kế bởi HD Tech Team.</span>
             </p>
           </div>

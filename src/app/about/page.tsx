@@ -5,7 +5,7 @@ import { ChevronRight, ArrowRight, CheckCircle, Target, Eye, Heart, TrendingUp, 
 
 export const metadata: Metadata = {
   title: "Về Chúng Tôi",
-  description: "HD Logistics – Giải pháp logistics tổng thể. High Delivery – High Discipline – High Reliability.",
+  description: "HDT Logistics – Giải pháp logistics tổng thể. High Delivery – High Discipline – High Reliability.",
 };
 
 export default function AboutPage() {
@@ -17,7 +17,7 @@ export default function AboutPage() {
         <div className="absolute inset-0">
           <Image
             src="/images/hero/hero-port.jpg"
-            alt="Cảng container quốc tế – HD Logistics vận hành toàn quốc"
+            alt="Cảng container quốc tế – HDT Logistics vận hành toàn quốc"
             fill className="object-cover" priority quality={85} sizes="100vw"
           />
           <div className="absolute inset-0 bg-navy-950/72" />
@@ -56,9 +56,9 @@ export default function AboutPage() {
                 <span className="text-grad">niềm tin doanh nghiệp</span>
               </h2>
               <div className="space-y-4 text-navy-600 leading-[1.85] text-[0.95rem]">
-                <p>HD Logistics là đơn vị cung cấp giải pháp logistics tổng thể cho khách hàng doanh nghiệp, tập trung vào vận chuyển quốc tế, vận tải nội địa, khai thuê hải quan và dịch vụ kho bãi.</p>
+                <p>HDT Logistics là đơn vị cung cấp giải pháp logistics tổng thể cho khách hàng doanh nghiệp, tập trung vào vận chuyển quốc tế, vận tải nội địa, khai thuê hải quan và dịch vụ kho bãi.</p>
                 <p>Chúng tôi định hướng xây dựng mô hình vận hành dựa trên tính chính xác chứng từ, kiểm soát tiến độ và tối ưu chi phí theo từng lô hàng. Mỗi yêu cầu được phân tích theo tuyến, thời gian và đặc thù hàng hóa để đưa ra phương án phù hợp nhất.</p>
-                <p>Với định hướng <strong className="text-navy-800">High Delivery – High Discipline – High Reliability</strong>, HD Logistics tập trung vào chất lượng thực thi, tính minh bạch và khả năng phối hợp dài hạn với khách hàng.</p>
+                <p>Với định hướng <strong className="text-navy-800">High Delivery – High Discipline – High Reliability</strong>, HDT Logistics tập trung vào chất lượng thực thi, tính minh bạch và khả năng phối hợp dài hạn với khách hàng.</p>
               </div>
               <div className="grid grid-cols-2 gap-4 mt-8">
                 {[
@@ -80,7 +80,7 @@ export default function AboutPage() {
               <div className="relative w-full h-[480px] rounded-2xl overflow-hidden shadow-xl">
                 <Image
                   src="/images/about-team.jpg"
-                  alt="Đội ngũ chuyên gia logistics HD Logistics tại văn phòng"
+                  alt="Đội ngũ chuyên gia logistics HDT Logistics tại văn phòng"
                   fill className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw" quality={85}
                 />
@@ -149,7 +149,7 @@ export default function AboutPage() {
                 <Eye size={28} />
               </div>
               <h3 className="text-xl font-bold text-navy-800 mb-3">Tầm Nhìn</h3>
-              <p className="text-navy-500 leading-relaxed text-sm">Đến năm 2030, HD Logistics trở thành Top 10 doanh nghiệp logistics hàng đầu Việt Nam, với nền tảng công nghệ số tiên tiến và mạng lưới dịch vụ phủ sóng toàn Đông Nam Á.</p>
+              <p className="text-navy-500 leading-relaxed text-sm">Đến năm 2030, HDT Logistics trở thành Top 10 doanh nghiệp logistics hàng đầu Việt Nam, với nền tảng công nghệ số tiên tiến và mạng lưới dịch vụ phủ sóng toàn Đông Nam Á.</p>
             </div>
             <div className="card p-8">
               <div className="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 mb-5">
@@ -192,9 +192,9 @@ export default function AboutPage() {
           <p className="eyebrow mb-10 justify-center">Phản Hồi Từ Khách Hàng</p>
           <div className="grid md:grid-cols-3 gap-5">
             {[
-              { q: "HD Logistics hỗ trợ rất sát trong khâu chứng từ và lịch tàu. Khi có thay đổi về lịch, đội ngũ xử lý nhanh và đề xuất phương án thay thế ngay.", t: "Doanh nghiệp", i: "Sản xuất linh kiện" },
+              { q: "HDT Logistics hỗ trợ rất sát trong khâu chứng từ và lịch tàu. Khi có thay đổi về lịch, đội ngũ xử lý nhanh và đề xuất phương án thay thế ngay.", t: "Doanh nghiệp", i: "Sản xuất linh kiện" },
               { q: "Tư vấn tuyến vận chuyển và thủ tục hải quan chi tiết. Hồ sơ rà soát trước nên tỷ lệ bổ sung chứng từ thấp. Thời gian phản hồi nhanh.", t: "Công ty", i: "Thương mại XNK" },
-              { q: "HD Logistics đáp ứng tốt yêu cầu theo dõi tiến độ, bảng kê chi phí minh bạch và hỗ trợ xử lý phát sinh ngoài giờ khi cần.", t: "Doanh nghiệp", i: "FDI công nghiệp" },
+              { q: "HDT Logistics đáp ứng tốt yêu cầu theo dõi tiến độ, bảng kê chi phí minh bạch và hỗ trợ xử lý phát sinh ngoài giờ khi cần.", t: "Doanh nghiệp", i: "FDI công nghiệp" },
             ].map((item, i) => (
               <div key={i} className="card p-7">
                 <p className="text-navy-500 text-sm leading-[1.85] italic mb-6">"{item.q}"</p>

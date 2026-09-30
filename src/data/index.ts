@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────
 export const company = {
   name: "Công ty TNHH Đầu Tư Kinh Doanh Và Xây Dựng Hải Đăng",
-  shortName: "HD Logistics",
+  shortName: "HDT Logistics",
   taxCode: "4601607741",
   licenseDate: "15/07/2023",
   licenseOrg: "Sở Tài Chính Thái Nguyên",
@@ -11,14 +11,14 @@ export const company = {
   hotlineRaw: "0929959699",
   hotlineContact: "0563 877 509",   // trang Liên hệ
   hotlineContactRaw: "0563877509",
-  email: "info@hdlogistics.vn",
-  emailSales: "sales@hdlogistics.vn",
+  email: "info@hdtlogistics.vn",
+  emailSales: "sales@hdtlogistics.vn",
   workingHours: "06:00 – 22:00",
   social: {
-    facebook: "https://facebook.com/hdlogistics",
-    instagram: "https://instagram.com/hdlogistics",
-    twitter: "https://twitter.com/hdlogistics",
-    email: "mailto:info@hdlogistics.vn",
+    facebook: "https://facebook.com/hdtlogistics",
+    instagram: "https://instagram.com/hdtlogistics",
+    twitter: "https://twitter.com/hdtlogistics",
+    email: "mailto:info@hdtlogistics.vn",
   },
 };
 
@@ -80,35 +80,35 @@ export const contacts = [
   {
     name: "Nguyễn Văn Minh",
     title: "Giám đốc Khu vực Miền Bắc",
-    email: "minhngv@hdlogistics.vn",
+    email: "minhngv@hdtlogistics.vn",
     region: "Miền Bắc",
     initials: "NVM",
   },
   {
     name: "Trần Thị Lan",
     title: "Giám đốc Khu vực Trung – Nam",
-    email: "lantth@hdlogistics.vn",
+    email: "lantth@hdtlogistics.vn",
     region: "Miền Trung – Nam",
     initials: "TTL",
   },
   {
     name: "Lê Quốc Hùng",
     title: "Phó Giám đốc Kinh doanh Hà Nội",
-    email: "hunglq@hdlogistics.vn",
+    email: "hunglq@hdtlogistics.vn",
     region: "Hà Nội",
     initials: "LQH",
   },
   {
     name: "Phạm Thu Hằng",
     title: "Giám đốc Chi nhánh TP. HCM",
-    email: "hangpt@hdlogistics.vn",
+    email: "hangpt@hdtlogistics.vn",
     region: "TP. HCM",
     initials: "PTH",
   },
   {
     name: "Đỗ Mạnh Tuấn",
     title: "Quản lý Văn phòng Thái Nguyên",
-    email: "tuandm@hdlogistics.vn",
+    email: "tuandm@hdtlogistics.vn",
     region: "Thái Nguyên",
     initials: "ĐMT",
   },
@@ -199,7 +199,7 @@ export const stats = [
 export const testimonials = [
   {
     quote:
-      "HD Logistics hỗ trợ rất sát trong khâu chứng từ và lịch tàu. Các lô hàng xuất đi được theo dõi liên tục, cập nhật rõ ràng từng chặng. Khi có thay đổi về lịch, đội ngũ xử lý nhanh và đề xuất phương án thay thế ngay, không làm gián đoạn kế hoạch giao hàng của chúng tôi.",
+      "HDT Logistics hỗ trợ rất sát trong khâu chứng từ và lịch tàu. Các lô hàng xuất đi được theo dõi liên tục, cập nhật rõ ràng từng chặng. Khi có thay đổi về lịch, đội ngũ xử lý nhanh và đề xuất phương án thay thế ngay, không làm gián đoạn kế hoạch giao hàng của chúng tôi.",
     type: "Doanh nghiệp",
     industry: "Sản xuất linh kiện",
   },
@@ -211,7 +211,7 @@ export const testimonials = [
   },
   {
     quote:
-      "Chúng tôi cần đối tác logistics làm việc theo quy trình và có báo cáo rõ. HD Logistics đáp ứng tốt yêu cầu theo dõi tiến độ, bảng kê chi phí minh bạch và hỗ trợ xử lý phát sinh ngoài giờ khi cần. Mức độ phối hợp ổn định và chuyên nghiệp.",
+      "Chúng tôi cần đối tác logistics làm việc theo quy trình và có báo cáo rõ. HDT Logistics đáp ứng tốt yêu cầu theo dõi tiến độ, bảng kê chi phí minh bạch và hỗ trợ xử lý phát sinh ngoài giờ khi cần. Mức độ phối hợp ổn định và chuyên nghiệp.",
     type: "Doanh nghiệp",
     industry: "FDI ngành công nghiệp",
   },
@@ -305,17 +305,17 @@ export const newsItems = [
   },
   {
     id: 6,
-    slug: "hd-logistics-giai-phap-van-chuyen-hai-quan-dn",
-    title: "HD Logistics — Giải pháp vận chuyển & hải quan toàn diện cho Doanh nghiệp",
+    slug: "hdt-logistics-giai-phap-van-chuyen-hai-quan-dn",
+    title: "HDT Logistics — Giải pháp vận chuyển & hải quan toàn diện cho Doanh nghiệp",
     excerpt:
-      "HD Logistics cung cấp dịch vụ logistics tổng thể theo mô hình High Delivery – High Discipline – High Reliability: vận chuyển đa phương thức, khai thuê hải quan và tối ưu chuỗi cung ứng cho doanh nghiệp B2B.",
+      "HDT Logistics cung cấp dịch vụ logistics tổng thể theo mô hình High Delivery – High Discipline – High Reliability: vận chuyển đa phương thức, khai thuê hải quan và tối ưu chuỗi cung ứng cho doanh nghiệp B2B.",
     date: "30/01/2026",
     dateISO: "2026-01-30",
     readMinutes: 5,
     category: "tin-nganh-logistics" as NewsCategory,
     categoryLabel: "Tin ngành Logistics",
     image: "/images/news/news-hd-intro.jpg",
-    imageAlt: "Đội ngũ chuyên gia logistics HD Logistics tư vấn doanh nghiệp",
+    imageAlt: "Đội ngũ chuyên gia logistics HDT Logistics tư vấn doanh nghiệp",
     imageCredit: "Photo by Unsplash",
   },
 ];

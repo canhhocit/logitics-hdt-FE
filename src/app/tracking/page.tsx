@@ -194,7 +194,7 @@ export default function TrackingPage() {
               </div>
               <h3 className="text-navy-600 font-semibold text-lg mb-2">Nhập mã để tra cứu</h3>
               <p className="text-navy-400 text-sm max-w-xs mx-auto">
-                Mã vận đơn được cung cấp trong biên lai sau khi sử dụng dịch vụ HD Logistics.
+                Mã vận đơn được cung cấp trong biên lai sau khi sử dụng dịch vụ HDT Logistics.
               </p>
             </div>
           )}
@@ -208,7 +208,7 @@ export default function TrackingPage() {
             {[
               { icon: "📦", title: "Mã vận đơn ở đâu?", desc: "Mã 14 ký tự bắt đầu bằng HDVN được gửi qua SMS/email ngay sau khi đặt dịch vụ." },
               { icon: "🔄", title: "Cập nhật bao lâu?", desc: "Trạng thái được cập nhật tự động từ hệ thống GPS và điểm trung chuyển — thường mỗi 4–6 giờ." },
-              { icon: "📞", title: "Cần hỗ trợ thêm?", desc: "Gọi hotline 1900 1234 (24/7) hoặc email tracking@hdlogistics.vn để được hỗ trợ ngay." },
+              { icon: "📞", title: "Cần hỗ trợ thêm?", desc: "Gọi hotline 1900 1234 (24/7) hoặc email tracking@hdtlogistics.vn để được hỗ trợ ngay." },
             ].map((item) => (
               <div key={item.title} className="card p-7">
                 <div className="text-4xl mb-4">{item.icon}</div>

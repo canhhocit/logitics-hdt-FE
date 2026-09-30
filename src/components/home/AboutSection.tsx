@@ -16,7 +16,7 @@ export default function AboutSection() {
             <div className="relative w-full h-[460px] rounded-2xl overflow-hidden shadow-xl">
               <Image
                 src="/images/hero/hero-port.jpg"
-                alt="Cảng container quốc tế – HD Logistics vận hành"
+                alt="Cảng container quốc tế – HDT Logistics vận hành"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -68,7 +68,7 @@ export default function AboutSection() {
 
             <div className="space-y-4 text-navy-600 text-[0.95rem] leading-[1.85] mb-8">
               <p>
-                HD Logistics là đơn vị cung cấp giải pháp logistics tổng thể cho doanh nghiệp,
+                HDT Logistics là đơn vị cung cấp giải pháp logistics tổng thể cho doanh nghiệp,
                 chuyên về <strong className="text-navy-800">vận chuyển quốc tế</strong>,{" "}
                 <strong className="text-navy-800">vận tải nội địa</strong>,{" "}
                 <strong className="text-navy-800">khai thuê hải quan</strong> và{" "}

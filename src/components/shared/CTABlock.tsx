@@ -39,7 +39,7 @@ export default function CTABlock({ variant = "full", showNote = true }: CTABlock
             <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl p-4">
               <AlertTriangle size={15} className="text-amber-500 flex-shrink-0 mt-0.5" />
               <p className="text-amber-700 text-xs leading-relaxed">
-                <strong>Lưu ý:</strong> HD Logistics chưa có dịch vụ chuyển phát hàng cá nhân
+                <strong>Lưu ý:</strong> HDT Logistics chưa có dịch vụ chuyển phát hàng cá nhân
                 và chuyển thư tín. Chúng tôi chuyên phục vụ khách hàng doanh nghiệp (B2B).
               </p>
             </div>
@@ -73,7 +73,7 @@ export default function CTABlock({ variant = "full", showNote = true }: CTABlock
             <span className="text-orange-400">chuỗi cung ứng của bạn?</span>
           </h2>
           <p className="text-white/65 text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-            Liên hệ với đội ngũ chuyên gia HD Logistics để được tư vấn phương án vận
+            Liên hệ với đội ngũ chuyên gia HDT Logistics để được tư vấn phương án vận
             chuyển và hải quan phù hợp nhất — phản hồi trong 2 giờ làm việc.
           </p>
 
@@ -92,7 +92,7 @@ export default function CTABlock({ variant = "full", showNote = true }: CTABlock
                             rounded-xl px-5 py-3 text-left max-w-xl">
               <AlertTriangle size={14} className="text-orange-300 flex-shrink-0 mt-0.5" />
               <p className="text-white/60 text-xs leading-relaxed">
-                <strong className="text-white/80">Lưu ý:</strong> HD Logistics chưa có dịch vụ
+                <strong className="text-white/80">Lưu ý:</strong> HDT Logistics chưa có dịch vụ
                 chuyển phát hàng cá nhân và chuyển thư tín. Chúng tôi chuyên phục vụ
                 khách hàng doanh nghiệp (B2B).
               </p>

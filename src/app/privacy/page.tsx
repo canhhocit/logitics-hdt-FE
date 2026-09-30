@@ -4,12 +4,12 @@ import { ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Chính Sách Bảo Mật",
-  description: "Chính sách bảo mật thông tin của HD Logistics.",
+  description: "Chính sách bảo mật thông tin của HDT Logistics.",
 };
 
 export default function PrivacyPage() {
   const sections = [
-    { title: "1. Giới thiệu", body: "Công ty Cổ phần HD Logistics cam kết bảo vệ quyền riêng tư và thông tin cá nhân của khách hàng, đối tác sử dụng website và dịch vụ. Chính sách này mô tả cách chúng tôi thu thập, sử dụng và bảo vệ thông tin của bạn." },
+    { title: "1. Giới thiệu", body: "Công ty Cổ phần HDT Logistics cam kết bảo vệ quyền riêng tư và thông tin cá nhân của khách hàng, đối tác sử dụng website và dịch vụ. Chính sách này mô tả cách chúng tôi thu thập, sử dụng và bảo vệ thông tin của bạn." },
     { title: "2. Thông tin chúng tôi thu thập", body: "Chúng tôi có thể thu thập: thông tin nhận dạng (họ tên, email, số điện thoại, địa chỉ), thông tin công ty (tên công ty, mã số thuế), thông tin giao dịch (lịch sử đặt dịch vụ, vận đơn), và thông tin kỹ thuật (địa chỉ IP, trình duyệt, thời gian truy cập)." },
     { title: "3. Mục đích sử dụng", body: "Thông tin được sử dụng để: cung cấp và cải thiện dịch vụ logistics, xử lý đơn hàng và vận đơn, liên hệ tư vấn và hỗ trợ khách hàng, gửi thông tin dịch vụ khi bạn đồng ý, và tuân thủ quy định pháp luật." },
     { title: "4. Bảo mật thông tin", body: "Chúng tôi áp dụng các biện pháp bảo mật kỹ thuật và tổ chức phù hợp để bảo vệ thông tin cá nhân khỏi truy cập trái phép. Hệ thống được mã hóa SSL và tuân thủ tiêu chuẩn bảo mật quốc tế." },
@@ -44,8 +44,8 @@ export default function PrivacyPage() {
               <h2 className="font-bold text-navy-800 mb-3">7. Liên hệ</h2>
               <p className="text-navy-500 text-sm leading-[1.85]">
                 Nếu có câu hỏi về chính sách bảo mật, vui lòng liên hệ:{" "}
-                <a href="mailto:info@hdlogistics.vn" className="text-orange-500 font-semibold hover:underline">
-                  info@hdlogistics.vn
+                <a href="mailto:info@hdtlogistics.vn" className="text-orange-500 font-semibold hover:underline">
+                  info@hdtlogistics.vn
                 </a>{" "}
                 hoặc gọi hotline{" "}
                 <a href="tel:19001234" className="text-orange-500 font-semibold hover:underline">

@@ -1,10 +1,12 @@
+/* Google Fonts phải đứng TRƯỚC @tailwind */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap');
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
 body {
@@ -15,9 +17,22 @@ body {
 }
 
 ::selection { background: #1a3a8f; color: #fff; }
+
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: #f1f5f9; }
 ::-webkit-scrollbar-thumb { background: #1a3a8f; border-radius: 4px; }
+
+/* ── Utility: Image fill container ── */
+.img-fill {
+  position: relative;
+  overflow: hidden;
+}
+.img-fill > img,
+.img-fill > span > img {
+  object-fit: cover;
+  width: 100% !important;
+  height: 100% !important;
+}
 
 @layer components {
 
@@ -31,20 +46,25 @@ body {
   .eyebrow::before { content: ''; @apply block w-5 h-px bg-orange-500; }
 
   /* ── Headings ── */
-  .h1 { @apply font-extrabold leading-[1.1] tracking-[-0.025em]; font-size: clamp(2.2rem, 5vw, 4rem); }
-  .h2 { @apply font-extrabold leading-[1.15] tracking-[-0.02em]; font-size: clamp(1.75rem, 3.5vw, 2.75rem); }
-  .h3 { @apply font-bold leading-snug tracking-[-0.01em] text-xl; }
+  .h1 {
+    @apply font-extrabold leading-[1.1] tracking-[-0.025em];
+    font-size: clamp(2.2rem, 5vw, 4rem);
+  }
+  .h2 {
+    @apply font-extrabold leading-[1.15] tracking-[-0.02em];
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  }
 
   /* ── Buttons ── */
   .btn-orange {
     @apply inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white
-           font-bold px-7 py-3.5 rounded-xl transition-all duration-200 shadow-orange
-           hover:shadow-lg hover:-translate-y-px text-sm;
+           font-bold px-7 py-3.5 rounded-xl transition-all duration-200 text-sm
+           shadow-[0_4px_24px_rgba(249,115,22,0.25)] hover:shadow-[0_6px_30px_rgba(249,115,22,0.35)]
+           hover:-translate-y-px;
   }
   .btn-navy {
     @apply inline-flex items-center gap-2 bg-navy-700 hover:bg-navy-800 text-white
-           font-bold px-7 py-3.5 rounded-xl transition-all duration-200 shadow-navy
-           hover:shadow-lg hover:-translate-y-px text-sm;
+           font-bold px-7 py-3.5 rounded-xl transition-all duration-200 text-sm;
   }
   .btn-outline {
     @apply inline-flex items-center gap-2 border-2 border-navy-700 text-navy-700
@@ -53,51 +73,44 @@ body {
   }
   .btn-ghost-white {
     @apply inline-flex items-center gap-2 border border-white/30 text-white/90
-           hover:border-white hover:text-white hover:bg-white/10 font-semibold
-           px-7 py-3.5 rounded-xl transition-all duration-200 text-sm;
+           hover:border-white hover:bg-white/10 font-semibold px-7 py-3.5 rounded-xl
+           transition-all duration-200 text-sm;
   }
 
   /* ── Cards ── */
   .card {
-    @apply bg-white border border-gray-100 rounded-2xl shadow-card
-           hover:shadow-card-hover hover:-translate-y-1.5 transition-all duration-300;
-  }
-  .card-navy {
-    @apply bg-navy-700 rounded-2xl text-white;
-  }
-  .card-light {
-    @apply bg-navy-50 rounded-2xl border border-navy-100;
+    @apply bg-white border border-gray-100 rounded-2xl
+           shadow-[0_2px_20px_rgba(26,58,143,0.07)]
+           hover:shadow-[0_8px_40px_rgba(26,58,143,0.13)]
+           hover:-translate-y-1.5 transition-all duration-300;
   }
 
-  /* ── Section bg variants ── */
-  .bg-section-white  { @apply bg-white; }
-  .bg-section-light  { @apply bg-slate-50; }
-  .bg-section-navy   { @apply bg-navy-700; }
-  .bg-section-dark   { @apply bg-navy-900; }
+  /* ── Gradient text ── */
+  .text-grad {
+    background: linear-gradient(120deg, #1a3a8f 0%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
-  /* ── Dividers ── */
-  .divider { @apply w-10 h-1 bg-orange-500 rounded-full; }
+  /* ── Hero bg ── */
+  .hero-bg {
+    background: linear-gradient(135deg, #071432 0%, #1a3a8f 50%, #132d6e 100%);
+  }
+
+  /* ── Service card hover bar ── */
+  .svc-card { @apply relative overflow-hidden; }
+  .svc-card::after {
+    content: ''; @apply absolute left-0 bottom-0 right-0 h-[3px] rounded;
+    background: linear-gradient(90deg, #f97316, #fbbf24);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .svc-card:hover::after { transform: scaleX(1); }
 }
 
-/* ── Gradient text ── */
-.text-grad {
-  background: linear-gradient(120deg, #1a3a8f 0%, #f97316 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ── Hero gradient ── */
-.hero-bg {
-  background: linear-gradient(135deg, #071432 0%, #1a3a8f 50%, #132d6e 100%);
-}
-
-/* ── Service card hover bar ── */
-.svc-card { position: relative; overflow: hidden; }
-.svc-card::after {
-  content: ''; position: absolute; left: 0; bottom: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, #f97316, #fbbf24);
-  transform: scaleX(0); transform-origin: left;
-  transition: transform 0.3s ease;
-}
-.svc-card:hover::after { transform: scaleX(1); }
+/* ── Animations ── */
+@keyframes marquee  { from { transform: translateX(0) }  to { transform: translateX(-50%) } }
+@keyframes marquee2 { from { transform: translateX(50%) } to { transform: translateX(0) } }
+.animate-marquee  { animation: marquee  35s linear infinite; }
+.animate-marquee2 { animation: marquee2 35s linear infinite; }
