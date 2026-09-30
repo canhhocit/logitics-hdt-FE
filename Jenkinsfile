@@ -51,8 +51,12 @@ pipeline {
                 )]) {
                     sh """
                         rm -rf gitops-tmp
-                        git clone https://\$GIT_USER:\$GIT_TOKEN@git.dnt.group/k8s/k8s-gitops.git gitops-tmp
+                        cat << EOF > .git-credentials
+https://\${GIT_USER}:\${GIT_TOKEN}@git.dnt.group
+EOF
+                        git clone -c credential.helper='store --file=.git-credentials' https://git.dnt.group/k8s/k8s-gitops.git gitops-tmp
                         cd gitops-tmp
+                        git config credential.helper 'store --file=../.git-credentials'
                         yq e '.images[0].newTag = "${env.IMAGE_TAG}"' -i ${KUSTOMIZE_FILE}
                         git config user.email "jenkins@phuchoangmai.xyz"
                         git config user.name "Jenkins CI"
@@ -60,7 +64,7 @@ pipeline {
                         git diff --cached --quiet || git commit -m "ci: update ${APP_NAME} to ${env.IMAGE_TAG}"
                         git push origin ${GITOPS_BRANCH}
                         cd ..
-                        rm -rf gitops-tmp
+                        rm -rf gitops-tmp .git-credentials
                     """
                 }
             }
