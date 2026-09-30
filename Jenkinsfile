@@ -51,15 +51,7 @@ pipeline {
                 )]) {
                     sh """
                         rm -rf gitops-tmp
-                        if command -v python3 >/dev/null 2>&1; then
-                            ENCODED_TOKEN=\$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "\$GIT_TOKEN")
-                        elif command -v python >/dev/null 2>&1; then
-                            ENCODED_TOKEN=\$(python -c "import urllib, sys; print urllib.quote(sys.argv[1])" "\$GIT_TOKEN")
-                        else
-                            ENCODED_TOKEN="\${GIT_TOKEN//#/%23}"
-                            ENCODED_TOKEN="\${ENCODED_TOKEN//@/%40}"
-                            ENCODED_TOKEN="\${ENCODED_TOKEN//:/%3A}"
-                        fi
+                        ENCODED_TOKEN=\$(printf "%s" "\$GIT_TOKEN" | sed 's/%/%25/g; s/#/%23/g; s/@/%40/g; s/:/%3A/g; s/\\//%2F/g')
                         git clone https://\${GIT_USER}:\${ENCODED_TOKEN}@git.dnt.group/k8s/k8s-gitops.git gitops-tmp
                         cd gitops-tmp
                         yq e '.images[0].newTag = "${env.IMAGE_TAG}"' -i ${KUSTOMIZE_FILE}
