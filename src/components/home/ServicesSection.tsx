@@ -1,4 +1,4 @@
-"use client";
+
 
 import Link from "next/link";
 import Image from "next/image";
@@ -61,7 +61,10 @@ const services = [
   },
 ];
 
-export default function ServicesSection() {
+import { fetchServices } from "@/lib/api";
+
+export default async function ServicesSection() {
+  const apiServices = await fetchServices();
   return (
     <section className="py-24 bg-slate-50">
       <div className="wrap">
@@ -81,15 +84,15 @@ export default function ServicesSection() {
 
         {/* Grid với ảnh thật */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {services.map((svc) => (
+          {apiServices.map((svc: any) => (
             <Link key={svc.slug} href={`/services/${svc.slug}`}
               className="group card overflow-hidden flex flex-col">
 
               {/* Ảnh thật */}
               <div className="relative h-48 overflow-hidden">
                 <Image
-                  src={svc.image}
-                  alt={svc.alt}
+                  src={(svc.thumbnail || "/images/hero/hero-port.jpg")}
+                  alt={svc.name}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -101,13 +104,13 @@ export default function ServicesSection() {
                 <div className="absolute top-3 right-3">
                   <span className="bg-orange-500 text-white text-[10px] font-bold
                                    px-2.5 py-1 rounded-full shadow-sm">
-                    {svc.badge}
+                    {"Dịch vụ"}
                   </span>
                 </div>
                 {/* Number */}
                 <div className="absolute bottom-3 left-4">
                   <span className="text-5xl font-black text-white/20 leading-none select-none">
-                    {svc.no}
+                    {String(svc.orderNo).padStart(2, "0")}
                   </span>
                 </div>
               </div>
@@ -116,10 +119,10 @@ export default function ServicesSection() {
               <div className="p-6 flex flex-col flex-1">
                 <h3 className="font-bold text-navy-800 mb-2 group-hover:text-orange-500
                                transition-colors text-base leading-snug">
-                  {svc.title}
+                  {svc.name}
                 </h3>
                 <p className="text-navy-500 text-sm leading-relaxed line-clamp-2 flex-1">
-                  {svc.desc}
+                  {svc.intro}
                 </p>
                 <div className="flex items-center gap-1.5 mt-4 text-sm font-semibold
                                 text-navy-400 group-hover:text-orange-500 transition-colors">

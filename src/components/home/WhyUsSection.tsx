@@ -39,7 +39,10 @@ const pillars = [
   },
 ];
 
-export default function WhyUsSection() {
+export default function WhyUsSection({ settings = {} }: { settings?: Record<string, string> }) {
+  const staff   = settings.counter_staff     || "";
+  const offices = settings.counter_offices   || "";
+  const ships   = settings.counter_shipments || "";
   return (
     <section className="py-24 bg-white">
       <div className="wrap">
@@ -64,9 +67,9 @@ export default function WhyUsSection() {
               <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-5 shadow-xl
                               grid grid-cols-3 divide-x divide-gray-100">
                 {[
-                  { n: "50+", l: "Nhân sự" },
-                  { n: "5", l: "Văn phòng" },
-                  { n: "1,500+", l: "Chuyến hàng" },
+                  { n: staff,  l: "Nhân sự" },
+                  { n: offices, l: "Văn phòng" },
+                  { n: ships,  l: "Chuyến hàng" },
                 ].map((s) => (
                   <div key={s.l} className="text-center px-4">
                     <div className="text-xl font-extrabold text-navy-700">{s.n}</div>

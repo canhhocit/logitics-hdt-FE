@@ -2,14 +2,30 @@
 
 import { useState } from "react";
 import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
-import { testimonials } from "@/data";
+
 import clsx from "clsx";
 
 /**
  * M01.04.03.01 – Khối 'Phản hồi từ khách hàng' dùng chung
  * Dùng trên: trang chủ, tư vấn hải quan, trang dịch vụ
  */
-export default function TestimonialsBlock() {
+const testimonialsFallback = [
+  {
+    content: "HDT Logistics hỗ trợ rất sát trong khâu chứng từ và lịch tàu.",
+    author: { name: "Doanh nghiệp", title: "Sản xuất linh kiện", initial: "D" },
+  },
+  {
+    content: "Điểm tốt là tư vấn tuyến vận chuyển và thủ tục hải quan khá chi tiết.",
+    author: { name: "Công ty", title: "Thương mại xuất nhập khẩu", initial: "C" },
+  },
+  {
+    content: "Chúng tôi cần đối tác logistics làm việc theo quy trình và có báo cáo rõ.",
+    author: { name: "Doanh nghiệp", title: "FDI ngành công nghiệp", initial: "D" },
+  },
+];
+
+export default function TestimonialsBlock({ testimonials: apiTestimonials }: { testimonials?: any[] }) {
+  const data = apiTestimonials && apiTestimonials.length > 0 ? apiTestimonials : testimonialsFallback;
   const [active, setActive] = useState(0);
 
   return (
@@ -25,7 +41,7 @@ export default function TestimonialsBlock() {
           </div>
           <div className="flex gap-2">
             <button
-              onClick={() => setActive((p) => (p - 1 + testimonials.length) % testimonials.length)}
+              onClick={() => setActive((p) => (p - 1 + data.length) % data.length)}
               className="w-10 h-10 rounded-xl border-2 border-navy-200 text-navy-500
                          hover:border-orange-400 hover:text-orange-500 hover:bg-orange-50
                          flex items-center justify-center transition-all"
@@ -34,7 +50,7 @@ export default function TestimonialsBlock() {
               <ChevronLeft size={17} />
             </button>
             <button
-              onClick={() => setActive((p) => (p + 1) % testimonials.length)}
+              onClick={() => setActive((p) => (p + 1) % data.length)}
               className="w-10 h-10 rounded-xl border-2 border-navy-200 text-navy-500
                          hover:border-orange-400 hover:text-orange-500 hover:bg-orange-50
                          flex items-center justify-center transition-all"
@@ -46,7 +62,7 @@ export default function TestimonialsBlock() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {testimonials.map((t, i) => (
+          {data.map((t, i) => (
             <div
               key={i}
               onClick={() => setActive(i)}
@@ -67,7 +83,7 @@ export default function TestimonialsBlock() {
               </div>
 
               <p className={clsx("text-sm leading-[1.85] mb-7", i === active ? "text-white/80" : "text-navy-500")}>
-                "{t.quote}"
+                "{t.content || t.quote || ""}"
               </p>
 
               <div
@@ -80,14 +96,14 @@ export default function TestimonialsBlock() {
                     i === active ? "bg-orange-500 text-white" : "bg-navy-100 text-navy-700"
                   )}
                 >
-                  {t.type.charAt(0)}
+                  {(t.customerName || t.type || t.author?.name || "D").charAt(0)}
                 </div>
                 <div>
                   <p className={clsx("font-bold text-sm", i === active ? "text-white" : "text-navy-800")}>
-                    {t.type}
+                    {t.customerName || t.type || t.author?.name || "Doanh nghiệp"}
                   </p>
                   <p className={clsx("text-xs", i === active ? "text-white/50" : "text-navy-400")}>
-                    {t.industry}
+                    {t.customerType || t.industry || t.author?.title || ""}
                   </p>
                 </div>
                 {i === active && <div className="ml-auto w-2 h-2 rounded-full bg-orange-400" />}
@@ -98,7 +114,7 @@ export default function TestimonialsBlock() {
 
         {/* Dots */}
         <div className="flex justify-center gap-2 mt-7">
-          {testimonials.map((_, i) => (
+          {data.map((_, i) => (
             <button
               key={i}
               onClick={() => setActive(i)}

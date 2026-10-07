@@ -4,7 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, CheckCircle } from "lucide-react";
 
-export default function AboutSection() {
+export default function AboutSection({ settings = {} }: { settings?: Record<string, string> }) {
+  const staff   = settings.counter_staff     || "";
+  const offices = settings.counter_offices   || "";
+  const exp     = settings.counter_experience || "";
+
   return (
     <section className="py-24 bg-white">
       <div className="wrap">
@@ -29,8 +33,8 @@ export default function AboutSection() {
             <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl p-5 border border-gray-100">
               <div className="grid grid-cols-2 gap-4 text-center">
                 {[
-                  { n: "1,500+", l: "Chuyến hàng" },
-                  { n: "5",      l: "Văn phòng" },
+                  { n: staff,   l: "Chuyến hàng" },
+                  { n: offices, l: "Văn phòng" },
                 ].map((s) => (
                   <div key={s.l}>
                     <div className="text-2xl font-extrabold text-navy-700">{s.n}</div>
@@ -43,7 +47,7 @@ export default function AboutSection() {
             {/* Badge kinh nghiệm */}
             <div className="absolute -top-5 -left-5 bg-orange-500 text-white rounded-2xl
                             shadow-lg px-5 py-3 text-center">
-              <div className="text-3xl font-black leading-none">10+</div>
+              <div className="text-3xl font-black leading-none">{exp}</div>
               <div className="text-orange-100 text-xs mt-0.5 font-medium">Năm kinh nghiệm</div>
             </div>
           </div>

@@ -28,31 +28,42 @@ function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
   return <span ref={ref}>{val.toLocaleString()}{suffix}</span>;
 }
 
-export default function StatsSection() {
+/**
+ * settings: Record<string, string> từ GET /public/settings
+ * Keys: counter_staff, counter_offices, counter_shipments, counter_experience
+ */
+export default function StatsSection({ settings = {} }: { settings?: Record<string, string> }) {
+  /** Parse "50+" → { target: 50, suffix: "+" } */
+  function parse(raw: string | undefined, fallback = 0, fallbackSuffix = "") {
+    if (!raw) return { target: fallback, suffix: fallbackSuffix };
+    const match = raw.match(/^(\d[\d,]*)(\D*)$/);
+    if (!match) return { target: fallback, suffix: fallbackSuffix };
+    return { target: parseInt(match[1].replace(/,/g, ""), 10), suffix: match[2] || "" };
+  }
+
+  const stats = [
+    { ...parse(settings.counter_staff),      label: "Nhân Sự",        sub: "Chuyên môn nghiệp vụ" },
+    { ...parse(settings.counter_offices),    label: "Văn Phòng",      sub: "Toàn quốc & Quốc tế" },
+    { ...parse(settings.counter_shipments),  label: "Chuyến Hàng",    sub: "Đã thực hiện thành công" },
+    { ...parse(settings.counter_experience), label: "Năm Kinh Nghiệm", sub: "Trong ngành logistics" },
+  ].filter(s => s.target > 0); // chỉ hiện nếu có data từ API
+
   return (
     <section className="py-20 bg-navy-700 relative overflow-hidden">
-      {/* Decorative */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-20 right-10 w-72 h-72 rounded-full bg-white/5 blur-3xl" />
         <div className="absolute bottom-0 left-20 w-56 h-56 rounded-full bg-orange-500/10 blur-3xl" />
       </div>
-
       <div className="wrap relative z-10">
         <div className="text-center mb-12">
           <p className="eyebrow text-orange-400 mb-4 justify-center">Thành Tựu</p>
           <h2 className="h2 text-white mb-4">Con số nói lên tất cả</h2>
           <p className="text-white/50 text-sm max-w-xl mx-auto leading-relaxed">
-            HDT Logistics từng bước xây dựng năng lực vận hành ổn định trong lĩnh vực logistics doanh nghiệp — trọng tâm là vận chuyển đa phương thức, khai thuê hải quan và tối ưu chuỗi cung ứng.
+            HDT Logistics từng bước xây dựng năng lực vận hành ổn định trong lĩnh vực logistics doanh nghiệp.
           </p>
         </div>
-
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-          {[
-            { target: 50,   suffix: "+",    label: "Nhân Sự",           sub: "Chuyên môn nghiệp vụ" },
-            { target: 5,    suffix: "+",    label: "Văn Phòng",          sub: "Toàn quốc" },
-            { target: 1500, suffix: "+",    label: "Chuyến Hàng",        sub: "Đã thực hiện thành công" },
-            { target: 10,   suffix: "+",    label: "Năm Kinh Nghiệm",    sub: "Trong ngành logistics" },
-          ].map((s) => (
+          {stats.map((s) => (
             <div key={s.label}
               className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-7
                          text-center hover:bg-white/15 transition-colors group">

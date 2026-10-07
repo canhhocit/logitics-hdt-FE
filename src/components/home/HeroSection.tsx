@@ -33,7 +33,18 @@ const slides = [
   },
 ];
 
-export default function HeroSection() {
+export default function HeroSection({ settings = {} }: { settings?: Record<string, string> }) {
+  const staff   = settings.counter_staff       || "";
+  const offices = settings.counter_offices     || "";
+  const ships   = settings.counter_shipments   || "";
+  const exp     = settings.counter_experience  || "";
+
+  const statsStrip = [
+    { n: staff,   l: "Nhân sự chuyên môn"      },
+    { n: offices, l: "Văn phòng toàn quốc"     },
+    { n: ships,   l: "Chuyến hàng hoàn thành"  },
+    { n: exp,     l: "Năm kinh nghiệm"          },
+  ].filter(s => s.n); // chỉ hiện nếu có data từ API
   const [cur, setCur] = useState(0);
   const [code, setCode] = useState("");
   const len = slides.length;
@@ -149,16 +160,11 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* ── Stats strip ── */}
+      {/* Stats strip — từ API settings */}
       <div className="relative z-10 bg-white/10 backdrop-blur-sm border-t border-white/15">
         <div className="wrap">
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/15">
-            {[
-              { n: "50+",    l: "Nhân sự chuyên môn" },
-              { n: "5",      l: "Văn phòng toàn quốc" },
-              { n: "1,500+", l: "Chuyến hàng hoàn thành" },
-              { n: "10+",    l: "Năm kinh nghiệm" },
-            ].map((st) => (
+            {statsStrip.map((st) => (
               <div key={st.l} className="py-5 px-6 text-center">
                 <div className="text-2xl font-extrabold text-orange-400">{st.n}</div>
                 <div className="text-white/55 text-xs mt-0.5">{st.l}</div>

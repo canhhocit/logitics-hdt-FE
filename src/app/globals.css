@@ -114,3 +114,95 @@ body {
 @keyframes marquee2 { from { transform: translateX(50%) } to { transform: translateX(0) } }
 .animate-marquee  { animation: marquee  35s linear infinite; }
 .animate-marquee2 { animation: marquee2 35s linear infinite; }
+
+/* ── Article content (news detail page) ── */
+.article-content {
+  color: #374151;
+  font-size: 0.94rem;
+  line-height: 1.85;
+}
+.article-content h2 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #111827;
+  margin-top: 2rem;
+  margin-bottom: 0.85rem;
+}
+.article-content h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+.article-content p {
+  margin-bottom: 0.9rem;
+  color: #4b5563;
+}
+.article-content strong {
+  font-weight: 700;
+  color: #111827;
+}
+/* List — icon ★ cam, không phải số */
+.article-content ul,
+.article-content ol {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+.article-content li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.3rem 0;
+  color: #4b5563;
+  font-size: 0.91rem;
+  line-height: 1.65;
+}
+.article-content li::before {
+  content: "★";
+  color: #f97316;
+  font-size: 0.65rem;
+  flex-shrink: 0;
+  margin-top: 0.35rem;
+  line-height: 1;
+}
+/* Table */
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.article-content table td,
+.article-content table th {
+  padding: 0.65rem 1rem;
+  border: 1px solid #e5e7eb;
+  vertical-align: top;
+  line-height: 1.55;
+  color: #374151;
+  background: #fff;
+}
+.article-content table td:first-child {
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  width: 28%;
+}
+/* Blockquote — nền cam nhạt, border trái cam */
+.article-content blockquote {
+  background: #fff7ed;
+  border-left: 4px solid #f97316;
+  border-radius: 0 0.6rem 0.6rem 0;
+  padding: 0.9rem 1.1rem;
+  margin: 1.1rem 0;
+  color: #9a3412;
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+.article-content blockquote strong { color: #7c2d12; }
+.article-content a { color: #f97316; text-decoration: none; }
+.article-content a:hover { text-decoration: underline; }

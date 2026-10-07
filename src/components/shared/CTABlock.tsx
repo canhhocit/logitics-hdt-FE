@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Phone, ArrowRight, AlertTriangle } from "lucide-react";
-import { company } from "@/data";
+
 
 interface CTABlockProps {
+  settings?: any;
   variant?: "full" | "compact";
   showNote?: boolean;
 }
@@ -11,7 +12,7 @@ interface CTABlockProps {
  * M08.01 – Khối CTA 'Nhận tư vấn' dùng chung
  * Xuất hiện đầu/cuối hầu hết các trang
  */
-export default function CTABlock({ variant = "full", showNote = true }: CTABlockProps) {
+export default function CTABlock({ variant = "full", showNote = true, settings }: CTABlockProps) {
   if (variant === "compact") {
     return (
       <section className="py-14 bg-slate-50 border-t border-gray-100">
@@ -28,8 +29,8 @@ export default function CTABlock({ variant = "full", showNote = true }: CTABlock
             <Link href="/contact" className="btn-orange">
               Nhận Tư Vấn <ArrowRight size={15} />
             </Link>
-            <a href={`tel:${company.hotlineRaw}`} className="btn-outline">
-              <Phone size={14} /> {company.hotline}
+            <a href={`tel:${(settings?.hotline || "")}`} className="btn-outline">
+              <Phone size={14} /> {(settings?.hotline || "")}
             </a>
           </div>
         </div>
@@ -81,8 +82,8 @@ export default function CTABlock({ variant = "full", showNote = true }: CTABlock
             <Link href="/contact" className="btn-orange shadow-orange">
               Nhận Tư Vấn Miễn Phí <ArrowRight size={16} />
             </Link>
-            <a href={`tel:${company.hotlineRaw}`} className="btn-ghost-white">
-              <Phone size={15} /> {company.hotline}
+            <a href={`tel:${(settings?.hotline || "")}`} className="btn-ghost-white">
+              <Phone size={15} /> {(settings?.hotline || "")}
             </a>
           </div>
 

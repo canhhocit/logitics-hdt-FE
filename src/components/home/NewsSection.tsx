@@ -3,11 +3,31 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Calendar, Clock } from "lucide-react";
-import { newsItems } from "@/data";
 
-export default function NewsSection() {
-  const [featured, ...rest] = newsItems.slice(0, 4);
 
+export default function NewsSection({ posts }: { posts?: any[] }) {
+  const newsFallback = [
+    {
+      slug: "chinh-sach-thu-tuc-xnk-2026",
+      title: "Chính sách & Thủ tục Xuất Nhập Khẩu",
+      date: "30/01/2026",
+      readTime: "8 phút đọc",
+      category: "Hướng dẫn",
+      image: "/images/services/customs.jpg",
+      excerpt: "Tổng hợp các chính sách và thủ tục xuất nhập khẩu..."
+    }
+  ];
+
+  const items = posts && posts.length > 0 ? posts.map((p: any) => ({
+    slug: p.slug,
+    title: p.title,
+    date: new Date(p.publishedAt).toLocaleDateString("vi-VN"),
+    readTime: `${p.readMinutes || 5} phút đọc`,
+    category: p.category?.name || "Tin tức",
+    image: p.thumbnail || "/images/services/road.jpg",
+    excerpt: p.excerpt
+  })) : newsFallback;
+  const [featured, ...rest] = items.slice(0, 4);
   return (
     <section className="py-24 bg-slate-50">
       <div className="wrap">
@@ -34,7 +54,7 @@ export default function NewsSection() {
             <div className="relative h-56 overflow-hidden">
               <Image
                 src={featured.image}
-                alt={featured.imageAlt}
+                alt={featured.title}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                 priority
@@ -43,7 +63,7 @@ export default function NewsSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               <div className="absolute top-4 left-4">
                 <span className="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  {featured.categoryLabel}
+                  {featured.category}
                 </span>
               </div>
             </div>
@@ -53,7 +73,7 @@ export default function NewsSection() {
                   <Calendar size={11} />{featured.date}
                 </span>
                 <span className="flex items-center gap-1">
-                  <Clock size={11} />{featured.readMinutes} phút đọc
+                  <Clock size={11} />{featured.readTime}
                 </span>
               </div>
               <h3 className="font-bold text-navy-800 text-xl leading-snug mb-3
@@ -74,13 +94,13 @@ export default function NewsSection() {
           {/* Side list với ảnh nhỏ */}
           <div className="flex flex-col gap-4">
             {rest.map((item) => (
-              <Link key={item.id} href={`/news/${item.slug}`}
+              <Link key={item.slug} href={`/news/${item.slug}`}
                 className="group flex gap-4 card p-4 items-start">
                 {/* Ảnh thật thumbnail */}
                 <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
                   <Image
                     src={item.image}
-                    alt={item.imageAlt}
+                    alt={item.title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-300"
                     sizes="80px"
@@ -88,7 +108,7 @@ export default function NewsSection() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className="text-orange-500 text-[10px] font-bold tracking-wider uppercase">
-                    {item.categoryLabel}
+                    {item.category}
                   </span>
                   <h4 className="font-semibold text-navy-800 text-sm leading-snug mt-1 mb-2
                                  group-hover:text-orange-500 transition-colors line-clamp-2">
@@ -99,7 +119,7 @@ export default function NewsSection() {
                       <Calendar size={10} />{item.date}
                     </span>
                     <span className="flex items-center gap-1">
-                      <Clock size={10} />{item.readMinutes} phút
+                      <Clock size={10} />{item.readTime}
                     </span>
                   </div>
                 </div>
