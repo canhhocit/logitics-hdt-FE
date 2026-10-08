@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, ArrowRight, Plane, Ship, Boxes, Truck, FileText, Star, CheckCircle } from "lucide-react";
-import { fetchServices } from "@/lib/api";
+import { fetchServices, fetchTestimonials } from "@/lib/api";
 import CTABlock from "@/components/shared/CTABlock";
 import TestimonialsBlock from "@/components/shared/TestimonialsBlock";
 
@@ -40,7 +40,10 @@ const serviceFeatures: Record<string, string[]> = {
 };
 
 export default async function ServicesPage() {
-  const services = await fetchServices();
+  const [services, testimonials] = await Promise.all([
+    fetchServices(),
+    fetchTestimonials()
+  ]);
 
   return (
     <div className="bg-white">
@@ -130,7 +133,7 @@ export default async function ServicesPage() {
         </div>
       </section>
 
-      <TestimonialsBlock />
+      <TestimonialsBlock testimonials={testimonials} />
       <CTABlock />
     </div>
   );

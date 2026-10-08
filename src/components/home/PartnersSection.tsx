@@ -65,27 +65,15 @@ export default function PartnersSection({ partners = [] }: { partners?: Partner[
         <div className="mb-16">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
             <div>
-              <p className="eyebrow mb-2">Đối Tác Vận Chuyển</p>
-              <h3 className="text-xl font-bold text-navy-800">Hãng tàu & hãng bay đối tác</h3>
+              <p className="eyebrow mb-2">Đối Tác</p>
+              <h3 className="text-xl font-bold text-navy-800">Đối tác vận chuyển của chúng tôi</h3>
             </div>
-            <p className="text-navy-400 text-sm max-w-xs md:text-right">Booking trực tiếp — không qua trung gian</p>
+            <p className="text-navy-400 text-sm max-w-xs md:text-right">Phối hợp với các đối tác hàng đầu để mang lại dịch vụ tốt nhất</p>
           </div>
           <LogoTrack items={shippingLines} />
         </div>
 
-        {/* Hiệp hội */}
-        <div className="pt-12 border-t border-gray-100">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-4">
-            <div>
-              <p className="eyebrow mb-2">Các Hiệp Hội</p>
-              <h3 className="text-xl font-bold text-navy-800">Thành viên hiệp hội uy tín</h3>
-            </div>
-          </div>
-          <p className="text-navy-500 text-sm leading-relaxed mb-8 max-w-2xl">
-            HDT Logistics tự hào là thành viên tích cực của nhiều Hiệp hội nổi tiếng về Logistics trong nước và quốc tế.
-          </p>
-          <LogoTrack items={associations} reverse />
-        </div>
+        
       </div>
     </section>
   );
