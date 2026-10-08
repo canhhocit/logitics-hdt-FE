@@ -151,3 +151,34 @@ export const getAdminCategories    = () => api.get<any[]>("/admin/categories");
 export const createCategory        = (body: any) => api.post<any>("/admin/categories", body);
 export const updateCategory        = (id: string, body: any) => api.put<any>(`/admin/categories/${id}`, body);
 export const deleteCategory        = (id: string) => api.delete<any>(`/admin/categories/${id}`);
+
+// ── Media (Upload) ────────────────────────────
+export async function uploadMedia(file: File) {
+  const token = getToken();
+  const url = `${BASE}/admin/media/upload`;
+  const formData = new FormData();
+  formData.append("file", file);
+
+  // Không set Content-Type, trình duyệt sẽ tự động tạo boundary cho multipart/form-data
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (res.status === 401) {
+    console.warn("[Admin API] 401 Unauthorized — redirecting to login");
+    localStorage.removeItem("accessToken");
+    window.location.href = "/admin/login";
+    throw new Error("Phiên đăng nhập hết hạn");
+  }
+
+  const json = await res.json();
+  if (!res.ok) {
+    console.error(`[Admin API] POST ${url} → ${res.status}:`, json);
+    throw new Error(json.message || `Upload thất bại HTTP ${res.status}`);
+  }
+  return json.data; // Trả về MediaResponse (url, id, fileName...)
+}

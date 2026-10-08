@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Save, Settings } from "lucide-react";
-import { getAdminSettings, upsertSettings } from "../../_lib/api";
+import { getAdminSettings, upsertSettings, uploadMedia } from "../../_lib/api";
 import { useToast } from "../../_components/Toast";
 
 const GROUPS = [
@@ -66,6 +66,14 @@ const GROUPS = [
       { key: "about_vision",  label: "Tầm nhìn",  type: "textarea" },
       { key: "about_mission", label: "Sứ mệnh",   type: "textarea" },
       { key: "about_tagline", label: "Tagline",    type: "text" },
+    ],
+  },
+  {
+    label: "Tài liệu công ty (PDF/File)",
+    keys: [
+      { key: "file_ho_so_cong_ty",  label: "Hồ sơ công ty",  type: "file" },
+      { key: "file_co_cau_to_chuc", label: "Cơ cấu tổ chức", type: "file" },
+      { key: "file_ho_so_nang_luc", label: "Hồ sơ năng lực", type: "file" },
     ],
   },
 ];
@@ -132,6 +140,20 @@ export default function SettingsPage() {
                     <textarea rows={3} value={values[key] || ""} onChange={(e) => set(key, e.target.value)}
                       placeholder={placeholder}
                       className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm resize-none focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200" />
+                  ) : type === "file" ? (
+                    <div>
+                      <input type="file" onChange={async (e) => {
+                        if (!e.target.files?.length) return;
+                        try {
+                          const res = await uploadMedia(e.target.files[0]);
+                          set(key, res.url);
+                          toast("success", "Tải file lên thành công!");
+                        } catch (err: any) {
+                          toast("error", err.message);
+                        }
+                      }} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                      {values[key] && <p className="text-xs mt-2 text-green-600 font-medium">File hiện tại: <a href={values[key]} target="_blank" className="underline">{values[key]}</a></p>}
+                    </div>
                   ) : (
                     <input type={type || "text"} value={values[key] || ""} onChange={(e) => set(key, e.target.value)}
                       placeholder={placeholder}

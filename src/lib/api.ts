@@ -22,6 +22,13 @@ async function get<T>(path: string, fallback: T): Promise<T> {
   }
 }
 
+function resolvePostThumbnail(post: any) {
+  if (post && post.thumbnail && post.thumbnail.startsWith('/uploads')) {
+    post.thumbnail = `http://localhost:8080${post.thumbnail}`;
+  }
+  return post;
+}
+
 // ── Services ─────────────────────────────────────────────────
 
 export async function fetchServices() {
@@ -48,7 +55,8 @@ export async function fetchSettings(): Promise<Record<string, string>> {
 
 /** Lấy N bài gần nhất (dùng cho homepage NewsSection) */
 export async function fetchPosts(size: number = 6) {
-  return get(`/public/posts?size=${size}`, []);
+  const data = await get<any[]>(`/public/posts?size=${size}`, []);
+  return data.map(resolvePostThumbnail);
 }
 
 /** Lấy danh sách phân trang (dùng cho news/page.tsx) */
@@ -62,11 +70,16 @@ export async function fetchPostsPaged(params?: {
   if (params?.size    !== undefined) p.set('size', String(params.size));
   if (params?.categorySlug)          p.set('categorySlug', params.categorySlug);
   const query = p.toString();
-  return get(`/public/posts${query ? `?${query}` : ''}`, { content: [], totalPages: 1, totalElements: 0, page: 0, size: 10 });
+  const res = await get<any>(`/public/posts${query ? `?${query}` : ''}`, { content: [], totalPages: 1, totalElements: 0, page: 0, size: 10 });
+  if (res && res.content) {
+    res.content = res.content.map(resolvePostThumbnail);
+  }
+  return res;
 }
 
 export async function fetchPostBySlug(slug: string) {
-  return get(`/public/posts/${slug}`, null);
+  const data = await get(`/public/posts/${slug}`, null);
+  return resolvePostThumbnail(data);
 }
 
 // ── Categories ───────────────────────────────────────────────

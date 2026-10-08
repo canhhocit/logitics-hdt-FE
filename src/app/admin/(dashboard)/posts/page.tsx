@@ -2,13 +2,13 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { Plus, Pencil, Trash2, FileText } from "lucide-react";
-import { getAdminPosts, createPost, updatePost, deletePost, getCategories } from "../../_lib/api";
+import { getAdminPosts, createPost, updatePost, deletePost, getCategories, uploadMedia } from "../../_lib/api";
 import Pagination from "../../_components/Pagination";
 import Modal from "../../_components/Modal";
 import ConfirmDialog from "../../_components/ConfirmDialog";
 import { useToast } from "../../_components/Toast";
 
-const EMPTY = { title: "", slug: "", excerpt: "", content: "", categoryId: "", status: "PUBLISHED", readMinutes: 5 };
+const EMPTY = { title: "", slug: "", excerpt: "", content: "", categoryId: "", status: "PUBLISHED", readMinutes: 5, thumbnail: "" };
 
 function slugify(s: string) {
   return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -50,7 +50,7 @@ export default function PostsPage() {
   const openEdit = (p: any) => {
     setEditing(p);
     setForm({ title: p.title, slug: p.slug, excerpt: p.excerpt || "", content: p.content || "",
-      categoryId: p.category?.id || "", status: p.status, readMinutes: p.readMinutes || 5 });
+      categoryId: p.category?.id || "", status: p.status, readMinutes: p.readMinutes || 5, thumbnail: p.thumbnail || "" });
     setModalOpen(true);
   };
 
@@ -205,6 +205,20 @@ export default function PostsPage() {
               onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
               placeholder="Tóm tắt ngắn hiển thị trong danh sách bài viết..."
               className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm resize-none focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200" />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-gray-600 mb-1.5">Ảnh bìa (Thumbnail)</label>
+            <input type="file" accept="image/*" onChange={async (e) => {
+              if (!e.target.files?.length) return;
+              try {
+                const res = await uploadMedia(e.target.files[0]);
+                setForm({ ...form, thumbnail: res.url });
+                toast("success", "Upload ảnh thành công!");
+              } catch (err: any) {
+                toast("error", err.message);
+              }
+            }} className="mb-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+            {form.thumbnail && <img src={`http://localhost:8080${form.thumbnail}`} alt="Thumb" className="h-24 w-auto object-cover rounded border shadow-sm" />}
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-600 mb-1.5">Nội dung bài viết (HTML)</label>
