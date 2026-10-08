@@ -84,8 +84,13 @@ export const updateService    = (id: string, body: any) => api.put<any>(`/admin/
 export const deleteService    = (id: string) => api.delete<any>(`/admin/services/${id}`);
 
 // ── Posts ─────────────────────────────────────
-export const getAdminPosts    = (page = 0, size = 20) =>
-  api.get<any>(`/admin/posts?page=${page}&size=${size}&sort=createdAt,desc`);
+export const getAdminPosts    = (page = 0, size = 20, keyword = "", fromDate = "", toDate = "", sortBy = "createdAt", sortDir = "desc") => {
+  const p = new URLSearchParams({ page: String(page), size: String(size), sort: `${sortBy},${sortDir}` });
+  if (keyword) p.set("keyword", keyword);
+  if (fromDate) p.set("fromDate", fromDate + "T00:00:00");
+  if (toDate) p.set("toDate", toDate + "T23:59:59");
+  return api.get<any>(`/admin/posts?${p.toString()}`);
+};
 export const createPost       = (body: any) => api.post<any>("/admin/posts", body);
 export const updatePost       = (id: string, body: any) => api.put<any>(`/admin/posts/${id}`, body);
 export const deletePost       = (id: string) => api.delete<any>(`/admin/posts/${id}`);
@@ -151,3 +156,34 @@ export const getAdminCategories    = () => api.get<any[]>("/admin/categories");
 export const createCategory        = (body: any) => api.post<any>("/admin/categories", body);
 export const updateCategory        = (id: string, body: any) => api.put<any>(`/admin/categories/${id}`, body);
 export const deleteCategory        = (id: string) => api.delete<any>(`/admin/categories/${id}`);
+
+// ── Media (Upload) ────────────────────────────
+export async function uploadMedia(file: File) {
+  const token = getToken();
+  const url = `${BASE}/admin/media/upload`;
+  const formData = new FormData();
+  formData.append("file", file);
+
+  // Không set Content-Type, trình duyệt sẽ tự động tạo boundary cho multipart/form-data
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (res.status === 401) {
+    console.warn("[Admin API] 401 Unauthorized — redirecting to login");
+    localStorage.removeItem("accessToken");
+    window.location.href = "/admin/login";
+    throw new Error("Phiên đăng nhập hết hạn");
+  }
+
+  const json = await res.json();
+  if (!res.ok) {
+    console.error(`[Admin API] POST ${url} → ${res.status}:`, json);
+    throw new Error(json.message || `Upload thất bại HTTP ${res.status}`);
+  }
+  return json.data; // Trả về MediaResponse (url, id, fileName...)
+}
