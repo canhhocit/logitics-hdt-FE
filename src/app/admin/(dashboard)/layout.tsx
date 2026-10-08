@@ -81,22 +81,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (!mounted) return null;
 
   const sidebar = (
-    <aside className="w-64 bg-slate-900 min-h-screen flex flex-col flex-shrink-0">
+    <aside className="w-64 bg-slate-900 h-screen flex flex-col flex-shrink-0 relative">
+      <style dangerouslySetInnerHTML={{__html: `
+        .dark-scrollbar::-webkit-scrollbar { width: 5px; }
+        .dark-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .dark-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+        .dark-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+      `}} />
       {/* Logo */}
-      <div className="px-6 py-5 border-b border-white/10">
+      <div className="px-6 py-5 border-b border-white/10 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
             <Package size={16} className="text-white" />
           </div>
-          <div>
-            <p className="text-white font-bold text-sm leading-none">HDT Logistics</p>
+          <div className="min-w-0">
+            <p className="text-white font-bold text-sm leading-none truncate">HDT Logistics</p>
             <p className="text-slate-500 text-[10px] mt-0.5">Admin CMS</p>
           </div>
         </div>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
+      <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-0.5 dark-scrollbar">
         {NAV.map((item, i) => (
           <NavItem key={i} item={item} pathname={pathname} onClick={() => setSidebarOpen(false)} />
         ))}
@@ -127,7 +133,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <ToastProvider>
       <div className="min-h-screen bg-slate-50 flex">
         {/* Desktop sidebar */}
-        <div className="hidden lg:flex">{sidebar}</div>
+        <div className="hidden lg:flex sticky top-0 h-screen">{sidebar}</div>
 
         {/* Mobile sidebar overlay */}
         {sidebarOpen && (

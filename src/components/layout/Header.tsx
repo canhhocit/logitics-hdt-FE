@@ -51,6 +51,7 @@ interface MenuItem {
 interface Props {
   settings?: Record<string, string>;
   menuItems?: MenuItem[];
+  categories?: any[];
 }
 
 /**
@@ -60,7 +61,7 @@ interface Props {
  *   1. Lọc top-level (parent === null)
  *   2. Với mỗi top-level, gắn các item có parent.id === top-level.id làm children
  */
-function buildNav(items: any[], settings: Record<string, string>): { label: string; href: string; children: any[] }[] {
+function buildNav(items: any[], settings: Record<string, string>, categories: any[]): { label: string; href: string; children: any[] }[] {
   if (!items || items.length === 0) return NAV_FALLBACK;
 
   // Top-level items
@@ -69,16 +70,25 @@ function buildNav(items: any[], settings: Record<string, string>): { label: stri
     .sort((a, b) => (a.orderNo ?? 0) - (b.orderNo ?? 0));
 
   return topLevel.map((top) => {
-    const children = items
+    const children: any[] = items
       .filter((item) => item.parent?.id === top.id)
       .sort((a, b) => (a.orderNo ?? 0) - (b.orderNo ?? 0))
       .map((c) => ({ label: c.label, href: c.url || "/" }));
 
     // Tự động gắn các file vào menu Về chúng tôi
-    if (top.url === "/about" || top.url === "/about") {
-      if (settings.file_ho_so_cong_ty)  children.push({ label: "Hồ sơ công ty",  href: resolveFileUrl(settings.file_ho_so_cong_ty), isPDF: true });
-      if (settings.file_co_cau_to_chuc) children.push({ label: "Cơ cấu tổ chức", href: resolveFileUrl(settings.file_co_cau_to_chuc), isPDF: true });
-      if (settings.file_ho_so_nang_luc) children.push({ label: "Hồ sơ năng lực", href: resolveFileUrl(settings.file_ho_so_nang_luc), isPDF: true });
+    if (top.url === "/about") {
+      children.push({ label: "Hồ sơ công ty",  href: settings.file_ho_so_cong_ty ? resolveFileUrl(settings.file_ho_so_cong_ty) : "#", isPDF: true });
+      children.push({ label: "Cơ cấu tổ chức", href: settings.file_co_cau_to_chuc ? resolveFileUrl(settings.file_co_cau_to_chuc) : "#", isPDF: true });
+      children.push({ label: "Hồ sơ năng lực", href: settings.file_ho_so_nang_luc ? resolveFileUrl(settings.file_ho_so_nang_luc) : "#", isPDF: true });
+    }
+
+    // Tự động đưa toàn bộ Danh mục (Categories) vào menu Tin tức
+    if (top.url === "/news" || top.label?.toLowerCase() === "tin tức") {
+      // Ghi đè menu con mặc định bằng danh sách Category từ DB
+      children.length = 0;
+      categories.forEach(cat => {
+        children.push({ label: cat.name, href: `/news?categorySlug=${cat.slug}` });
+      });
     }
 
     return {
@@ -89,8 +99,8 @@ function buildNav(items: any[], settings: Record<string, string>): { label: stri
   });
 }
 
-export default function Header({ settings = {}, menuItems = [] }: Props) {
-  const nav = buildNav(menuItems, settings);
+export default function Header({ settings = {}, menuItems = [], categories = [] }: Props) {
+  const nav = buildNav(menuItems, settings, categories);
 
   // Company info từ settings, fallback về giá trị mặc định
   const hotline        = settings.hotline         || "";
@@ -209,7 +219,13 @@ export default function Header({ settings = {}, menuItems = [] }: Props) {
                                     shadow-xl border border-gray-100 py-2 z-50 min-w-[220px]">
                       {item.children.map((c) => (
                         (c as any).isPDF ? (
-                          <a key={c.label} href={c.href || "/"} download
+                          <a key={c.label} href={c.href || "/"} target="_blank" rel="noreferrer"
+                            onClick={(e) => {
+                              if (c.href === "#" || c.href === "/") {
+                                e.preventDefault();
+                                alert("Tài liệu đang được cập nhật!");
+                              }
+                            }}
                             className="flex items-center gap-2 px-5 py-2.5 text-[13px] text-navy-600
                                        hover:text-orange-500 hover:bg-orange-50 transition-colors">
                               <Download size={14} className="text-gray-400 group-hover:text-orange-500" />
@@ -275,9 +291,16 @@ export default function Header({ settings = {}, menuItems = [] }: Props) {
                         {mobileExpand === item.label && (
                           <div className="ml-4 border-l-2 border-orange-100 pl-4 py-1 space-y-0.5">
                             {item.children.map((c) => (
-                              <Link key={c.label} href={c.href || "/"} download={c.isPDF} target={c.isPDF ? "_blank" : undefined}
-                                className={clsx("block py-2 text-[13px] hover:text-orange-500", c.isPDF ? "text-orange-500 font-semibold" : "text-navy-500")}
-                                onClick={() => setMobileOpen(false)}>
+                              <Link key={c.label} href={c.href || "/"} target={c.isPDF ? "_blank" : undefined}
+                                onClick={(e) => {
+                                  if (c.isPDF && (c.href === "#" || c.href === "/")) {
+                                    e.preventDefault();
+                                    alert("Tài liệu đang được cập nhật!");
+                                  } else {
+                                    setMobileOpen(false);
+                                  }
+                                }}
+                                className={clsx("block py-2 text-[13px] hover:text-orange-500", c.isPDF ? "text-orange-500 font-semibold" : "text-navy-500")}>
                                 {c.isPDF ? `↓ ${c.label}` : c.label}
                               </Link>
                             ))}
