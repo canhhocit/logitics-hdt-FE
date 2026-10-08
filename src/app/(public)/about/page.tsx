@@ -220,30 +220,7 @@ export default async function AboutPage() {
         </section>
       )}
 
-      {/* Testimonials — từ API */}
-      {testimonials.length > 0 && (
-        <section className="py-16">
-          <div className="wrap">
-            <p className="eyebrow mb-10 justify-center">Phản Hồi Từ Khách Hàng</p>
-            <div className="grid md:grid-cols-3 gap-5">
-              {testimonials.slice(0, 3).map((item: any) => (
-                <div key={item.id} className="card p-7">
-                  <p className="text-navy-500 text-sm leading-[1.85] italic mb-6">"{item.content}"</p>
-                  <div className="flex items-center gap-3 pt-5 border-t border-gray-100">
-                    <div className="w-10 h-10 rounded-full bg-navy-700 flex items-center justify-center text-white font-bold text-sm">
-                      {item.customerName?.charAt(0) ?? "K"}
-                    </div>
-                    <div>
-                      <p className="font-bold text-navy-800 text-sm">{item.customerName || "Khách hàng"}</p>
-                      <p className="text-navy-400 text-xs">{item.customerType}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+
 
       {/* Awards — từ API */}
       {awards.length > 0 && (

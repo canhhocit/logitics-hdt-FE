@@ -387,11 +387,14 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return { title: svc.name, description: svc.intro };
 }
 
-import { fetchServiceBySlug, fetchServices } from "@/lib/api";
+import { fetchServiceBySlug, fetchServices, fetchTestimonials } from "@/lib/api";
 export default async function ServiceDetailPage({ params }: { params: { slug: string } }) {
   
-  const serviceDB = await fetchServiceBySlug(params.slug) as any;
-  const allServices = await fetchServices() as any[];
+  const [serviceDB, allServices, testimonials] = await Promise.all([
+    fetchServiceBySlug(params.slug) as Promise<any>,
+    fetchServices() as Promise<any[]>,
+    fetchTestimonials() as Promise<any[]>
+  ]);
   
   if (!serviceDB) notFound();
   
@@ -422,22 +425,60 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
     desc:  step.split(":").slice(1).join(":").trim() || step,
   }));
 
-  // cargo_types: string[] — dùng từ API, fallback hardcode nếu không có
-  const suitableGoods: string[] = content?.cargo_types?.length
-    ? content.cargo_types
-    : ["Hàng tiêu dùng", "Hàng điện tử", "Nguyên liệu sản xuất", "Thiết bị máy móc"];
+  let fallbackSvc = services[params.slug];
+  
+  if (!fallbackSvc && serviceDB.icon) {
+    const iconToSlug: Record<string, string> = {
+      'plane': 'van-chuyen-duong-khong',
+      'ship': 'van-chuyen-duong-bien',
+      'boxes': 'gom-hang-le-lcl',
+      'truck': 'van-chuyen-duong-bo',
+      'file-text': 'khai-thue-hai-quan',
+      'star': 'hang-dac-biet-du-an',
+    };
+    const mappedSlug = iconToSlug[serviceDB.icon];
+    if (mappedSlug) fallbackSvc = services[mappedSlug];
+  }
+
+  const genericFallback: Partial<ServiceData> = {
+    title: serviceDB.name || "Dịch Vụ",
+    intro: serviceDB.intro || "Giải pháp logistics chuyên nghiệp",
+    description: serviceDB.intro || "Chúng tôi cung cấp giải pháp logistics chuyên nghiệp, tối ưu chi phí và thời gian cho doanh nghiệp.",
+    suitableGoods: ["Hàng tiêu dùng", "Hàng điện tử", "Nguyên liệu sản xuất", "Thiết bị máy móc"],
+    advantages: [
+      { title: "Dịch vụ chuyên nghiệp", desc: "Đội ngũ giàu kinh nghiệm, quy trình vận hành tối ưu." },
+      { title: "Tối ưu chi phí", desc: "Cung cấp giải pháp linh hoạt với mức giá cạnh tranh." },
+      { title: "Hỗ trợ 24/7", desc: "Luôn sẵn sàng tư vấn và giải đáp mọi thắc mắc của khách hàng." },
+      { title: "An toàn & Bảo mật", desc: "Cam kết bảo vệ hàng hóa và thông tin an toàn tuyệt đối." }
+    ],
+    types: [
+      { name: "Dịch vụ Tiêu chuẩn", desc: "Phù hợp với hầu hết các nhu cầu cơ bản." },
+      { name: "Dịch vụ Nâng cao", desc: "Ưu tiên xử lý nhanh, đáp ứng yêu cầu khắt khe." }
+    ],
+    process: [
+      { step: "01", title: "Tiếp nhận yêu cầu", desc: "Ghi nhận thông tin và tư vấn phương án." },
+      { step: "02", title: "Lên kế hoạch", desc: "Chốt phương án và chuẩn bị nguồn lực." },
+      { step: "03", title: "Thực hiện", desc: "Triển khai dịch vụ theo đúng cam kết." },
+      { step: "04", title: "Bàn giao", desc: "Hoàn tất thủ tục và nghiệm thu." }
+    ],
+    limitations: [],
+    documents: ["Hợp đồng dịch vụ", "Giấy tờ pháp lý liên quan"],
+    additionalServices: ["Tư vấn miễn phí"],
+  };
+
+  fallbackSvc = fallbackSvc || genericFallback;
 
   const svc = {
-    title: serviceDB.name,
-    intro: serviceDB.intro,
-    description: serviceDB.intro,
-    suitableGoods,
-    advantages,
-    types,
-    limitations: content?.limitations || content?.risks || [],
-    process,
-    documents: content?.documents || [],
-    additionalServices: content?.additionalServices || ["Khai báo hải quan trọn gói", "Bảo hiểm hàng hóa 100% trị giá"],
+    title: serviceDB.name || fallbackSvc.title,
+    intro: serviceDB.intro || fallbackSvc.intro,
+    description: content?.description || fallbackSvc.description || serviceDB.intro,
+    suitableGoods: content?.cargo_types?.length ? content.cargo_types : (fallbackSvc.suitableGoods || ["Hàng tiêu dùng", "Hàng điện tử", "Nguyên liệu sản xuất", "Thiết bị máy móc"]),
+    advantages: advantages.length > 0 ? advantages : (fallbackSvc.advantages || []),
+    types: types.length > 0 ? types : (fallbackSvc.types || []),
+    limitations: (content?.limitations?.length || content?.risks?.length) ? (content?.limitations || content?.risks) : (fallbackSvc.limitations || []),
+    process: process.length > 0 ? process : (fallbackSvc.process || []),
+    documents: content?.documents?.length ? content.documents : (fallbackSvc.documents || []),
+    additionalServices: content?.additionalServices?.length ? content.additionalServices : (fallbackSvc.additionalServices || ["Khai báo hải quan trọn gói", "Bảo hiểm hàng hóa 100% trị giá"]),
   };
   const otherSlugs = allServices.filter((s: any) => s.slug !== params.slug).slice(0, 3).map((s: any) => s.slug);
 
@@ -652,7 +693,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
       </section>
 
       {/* Shared blocks */}
-      <TestimonialsBlock />
+      <TestimonialsBlock testimonials={testimonials} />
       <CTABlock />
     </div>
   );

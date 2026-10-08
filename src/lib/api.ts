@@ -55,8 +55,9 @@ export async function fetchSettings(): Promise<Record<string, string>> {
 
 /** Lấy N bài gần nhất (dùng cho homepage NewsSection) */
 export async function fetchPosts(size: number = 6) {
-  const data = await get<any[]>(`/public/posts?size=${size}`, []);
-  return data.map(resolvePostThumbnail);
+  const data = await get<any>(`/public/posts?size=${size}`, { content: [] });
+  const arr = Array.isArray(data) ? data : (data?.content || []);
+  return arr.map(resolvePostThumbnail);
 }
 
 /** Lấy danh sách phân trang (dùng cho news/page.tsx) */

@@ -26,11 +26,11 @@ const NAV_FALLBACK = [
   ]},
   { label: "Tư Vấn Hải Quan", href: "/tu-van-hai-quan", children: [] },
   { label: "Dịch Vụ",         href: "/services",        children: [
+    { label: "Khai Thuê Hải Quan",     href: "/services/khai-thue-hai-quan" },
     { label: "Vận Chuyển Đường Không", href: "/services/van-chuyen-duong-khong" },
     { label: "Vận Chuyển Đường Biển",  href: "/services/van-chuyen-duong-bien" },
     { label: "Pickup",                 href: "/services/pickup" },
     { label: "Vận Chuyển Đường Bộ",    href: "/services/van-chuyen-duong-bo" },
-    { label: "Khai Thuê Hải Quan",     href: "/services/khai-thue-hai-quan" },
   ]},
   { label: "Tin Tức",          href: "/news",            children: [
     { label: "Hướng dẫn và Thủ tục", href: "/news?categorySlug=huong-dan-va-thu-tuc" },
