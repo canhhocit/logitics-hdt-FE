@@ -1,24 +1,31 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Plus, Pencil, Trash2, Briefcase } from "lucide-react";
+import { Plus, Pencil, Trash2, Briefcase, Plane, Ship, Boxes, Truck, FileText, Star, Package, Globe, Zap } from "lucide-react";
 import { getAdminServices, createService, updateService, deleteService } from "../../_lib/api";
 import Modal from "../../_components/Modal";
 import ConfirmDialog from "../../_components/ConfirmDialog";
 import { useToast } from "../../_components/Toast";
 
-const EMPTY = { name: "", slug: "", shortDesc: "", intro: "", icon: "briefcase", color: "blue", orderNo: 0, status: "PUBLISHED" };
+const EMPTY = { name: "", slug: "", shortDesc: "", intro: "", icon: "briefcase", color: "blue", orderNo: 0, status: "PUBLISHED", contentBlocks: { advantages: [{title: "", desc: ""}, {title: "", desc: ""}, {title: "", desc: ""}, {title: "", desc: ""}] } };
 
-const ICONS = ["plane","ship","boxes","truck","file-text","star","briefcase","package","globe","zap"];
+const ICONS: Record<string, any> = {
+  "plane": Plane, "ship": Ship, "boxes": Boxes, "truck": Truck, "file-text": FileText,
+  "star": Star, "briefcase": Briefcase, "package": Package, "globe": Globe, "zap": Zap
+};
+const ICON_LABELS: Record<string, string> = {
+  "plane": "Máy bay", "ship": "Tàu biển", "boxes": "Hàng hóa", "truck": "Xe tải", "file-text": "Tài liệu",
+  "star": "Ngôi sao", "briefcase": "Cặp xách", "package": "Kiện hàng", "globe": "Toàn cầu", "zap": "Tốc độ"
+};
 const COLORS = [
-  { value: "blue",   label: "Xanh dương",  cls: "bg-blue-100 text-blue-600" },
-  { value: "cyan",   label: "Xanh ngọc",   cls: "bg-cyan-100 text-cyan-600" },
-  { value: "teal",   label: "Teal",         cls: "bg-teal-100 text-teal-600" },
-  { value: "green",  label: "Xanh lá",     cls: "bg-green-100 text-green-600" },
-  { value: "orange", label: "Cam",         cls: "bg-orange-100 text-orange-600" },
-  { value: "rose",   label: "Hồng",        cls: "bg-rose-100 text-rose-600" },
-  { value: "indigo", label: "Chàm",        cls: "bg-indigo-100 text-indigo-600" },
-  { value: "violet", label: "Tím",         cls: "bg-violet-100 text-violet-600" },
+  { value: "blue",   label: "Xanh dương",  cls: "bg-blue-100 text-blue-600",     dotCls: "bg-blue-500" },
+  { value: "cyan",   label: "Xanh ngọc",   cls: "bg-cyan-100 text-cyan-600",     dotCls: "bg-cyan-500" },
+  { value: "teal",   label: "Teal",        cls: "bg-teal-100 text-teal-600",     dotCls: "bg-teal-500" },
+  { value: "green",  label: "Xanh lá",     cls: "bg-green-100 text-green-600",   dotCls: "bg-green-500" },
+  { value: "orange", label: "Cam",         cls: "bg-orange-100 text-orange-600", dotCls: "bg-orange-500" },
+  { value: "rose",   label: "Hồng",        cls: "bg-rose-100 text-rose-600",     dotCls: "bg-rose-500" },
+  { value: "indigo", label: "Chàm",        cls: "bg-indigo-100 text-indigo-600", dotCls: "bg-indigo-500" },
+  { value: "violet", label: "Tím",         cls: "bg-violet-100 text-violet-600", dotCls: "bg-violet-500" },
 ];
 
 function slugify(s: string) {
@@ -51,16 +58,29 @@ export default function ServicesPage() {
   const openEdit = (s: any) => {
     setEditing(s);
     setForm({ name: s.name, slug: s.slug, shortDesc: s.shortDesc || "", intro: s.intro || "",
-      icon: s.icon || "briefcase", color: s.color || "blue", orderNo: s.orderNo || 0, status: s.status || "PUBLISHED" });
+      icon: s.icon || "briefcase", color: s.color || "blue", orderNo: s.orderNo || 0, status: s.status || "PUBLISHED",
+      contentBlocks: {
+        advantages: s.contentBlocks?.advantages?.length 
+          ? s.contentBlocks.advantages.map((a: any) => typeof a === "string" ? { title: a, desc: "" } : { title: a?.title || "", desc: a?.desc || "" }) 
+          : [{title: "", desc: ""}, {title: "", desc: ""}, {title: "", desc: ""}, {title: "", desc: ""}]
+      }
+    });
     setModalOpen(true);
   };
 
   const handleSave = async () => {
     if (!form.name || !form.slug) { toast("error", "Vui lòng điền tên và slug"); return; }
+    
+    // Filter empty advantages
+    const payload = { ...form };
+    if (payload.contentBlocks?.advantages) {
+      payload.contentBlocks.advantages = payload.contentBlocks.advantages.filter((a: any) => (a.title && a.title.trim() !== "") || (a.desc && a.desc.trim() !== ""));
+    }
+
     setSaving(true);
     try {
-      if (editing) await updateService(editing.id, form);
-      else         await createService(form);
+      if (editing) await updateService(editing.id, payload);
+      else         await createService(payload);
       toast("success", editing ? "Cập nhật dịch vụ thành công" : "Tạo dịch vụ thành công");
       setModalOpen(false);
       fetchData();
@@ -101,10 +121,10 @@ export default function ServicesPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">STT</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">STT ưu tiên</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Dịch vụ</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Slug</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Icon / Màu</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Icon</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Trạng thái</th>
                   <th className="px-4 py-3" />
                 </tr>
@@ -121,9 +141,14 @@ export default function ServicesPage() {
                       </td>
                       <td className="px-4 py-3 font-mono text-xs text-gray-400">{s.slug}</td>
                       <td className="px-4 py-3">
-                        <div className="flex items-center gap-2">
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${colorObj.cls}`}>{s.icon || "—"}</span>
-                          <span className={`w-4 h-4 rounded-full ${colorObj.cls.split(" ")[0]} border border-gray-200`} title={colorObj.label} />
+                        <div className="flex items-center gap-2.5">
+                          <span className={`w-7 h-7 flex items-center justify-center rounded-full shadow-sm ${colorObj.cls}`}>
+                            {(() => {
+                              const IconComp = s.icon && ICONS[s.icon] ? ICONS[s.icon] : Briefcase;
+                              return <IconComp size={14} />;
+                            })()}
+                          </span>
+                          <span className={`w-3 h-3 rounded-full shadow-sm ${colorObj.dotCls}`} title={colorObj.label} />
                         </div>
                       </td>
                       <td className="px-4 py-3">
@@ -164,17 +189,33 @@ export default function ServicesPage() {
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-600 mb-1.5">Icon (Lucide name)</label>
-              <select value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })}
-                className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
-                {ICONS.map((ic) => <option key={ic} value={ic}>{ic}</option>)}
-              </select>
+              <div className="flex gap-2">
+                <div className="w-10 flex-shrink-0 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-xl text-gray-500">
+                  {(() => {
+                    const IconComp = ICONS[form.icon] || Briefcase;
+                    return <IconComp size={18} />;
+                  })()}
+                </div>
+                <select value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })}
+                  className="flex-1 border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
+                  {Object.keys(ICONS).map((ic) => <option key={ic} value={ic}>{ICON_LABELS[ic]} ({ic})</option>)}
+                </select>
+              </div>
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-600 mb-1.5">Màu sắc</label>
-              <select value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })}
-                className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
-                {COLORS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
-              </select>
+              <div className="flex gap-2">
+                <div className="w-10 flex-shrink-0 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-xl">
+                  {(() => {
+                    const c = COLORS.find(x => x.value === form.color) || COLORS[0];
+                    return <span className={`w-4 h-4 rounded-full shadow-sm ${c.dotCls}`} />;
+                  })()}
+                </div>
+                <select value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })}
+                  className="flex-1 border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
+                  {COLORS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+                </select>
+              </div>
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-600 mb-1.5">Thứ tự hiển thị</label>
@@ -195,6 +236,44 @@ export default function ServicesPage() {
             <textarea value={form.shortDesc} rows={2} onChange={(e) => setForm({ ...form, shortDesc: e.target.value })}
               placeholder="Mô tả 1-2 dòng hiển thị trên trang danh sách dịch vụ..."
               className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm resize-none focus:outline-none focus:border-indigo-400" />
+          </div>
+          <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+            <div className="flex items-center justify-between mb-3">
+              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wide">Điểm nổi bật</label>
+              <button type="button" onClick={() => setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: [...(form.contentBlocks?.advantages || []), {title: "", desc: ""}] } })}
+                className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold bg-white px-2 py-1 rounded border shadow-sm">
+                + Thêm ô
+              </button>
+            </div>
+            <div className="space-y-3">
+              {(form.contentBlocks?.advantages || []).map((adv: any, idx: number) => (
+                <div key={idx} className="flex gap-2 items-start bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                  <div className="flex-1 space-y-2">
+                    <input value={adv.title || ""} onChange={(e) => {
+                      const newAdv = [...(form.contentBlocks?.advantages || [])];
+                      newAdv[idx] = { ...adv, title: e.target.value };
+                      setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
+                    }}
+                    placeholder={`Tiêu đề ${idx + 1}...`}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-semibold focus:outline-none focus:border-indigo-400 bg-gray-50" />
+                    
+                    <textarea value={adv.desc || ""} rows={2} onChange={(e) => {
+                      const newAdv = [...(form.contentBlocks?.advantages || [])];
+                      newAdv[idx] = { ...adv, desc: e.target.value };
+                      setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
+                    }}
+                    placeholder={`Mô tả chi tiết...`}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:border-indigo-400" />
+                  </div>
+                  <button type="button" onClick={() => {
+                    const newAdv = form.contentBlocks.advantages.filter((_: any, i: number) => i !== idx);
+                    setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
+                  }} className="text-gray-400 hover:text-red-500 bg-gray-50 border border-gray-200 rounded-lg p-2.5 flex-shrink-0 transition-colors">
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-600 mb-1.5">Giới thiệu chi tiết</label>

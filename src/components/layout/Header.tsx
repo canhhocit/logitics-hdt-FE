@@ -52,6 +52,7 @@ interface Props {
   settings?: Record<string, string>;
   menuItems?: MenuItem[];
   categories?: any[];
+  services?: any[];
 }
 
 /**
@@ -61,7 +62,7 @@ interface Props {
  *   1. Lọc top-level (parent === null)
  *   2. Với mỗi top-level, gắn các item có parent.id === top-level.id làm children
  */
-function buildNav(items: any[], settings: Record<string, string>, categories: any[]): { label: string; href: string; children: any[] }[] {
+function buildNav(items: any[], settings: Record<string, string>, categories: any[], services: any[]): { label: string; href: string; children: any[] }[] {
   if (!items || items.length === 0) return NAV_FALLBACK;
 
   // Top-level items
@@ -91,6 +92,14 @@ function buildNav(items: any[], settings: Record<string, string>, categories: an
       });
     }
 
+    // Tự động đưa toàn bộ Dịch vụ (Services) vào menu Dịch vụ
+    if (top.url === "/services" || top.label?.toLowerCase() === "dịch vụ") {
+      children.length = 0;
+      services.forEach(svc => {
+        children.push({ label: svc.name, href: `/services/${svc.slug}` });
+      });
+    }
+
     return {
       label: top.label,
       href: top.url || "/",
@@ -99,8 +108,8 @@ function buildNav(items: any[], settings: Record<string, string>, categories: an
   });
 }
 
-export default function Header({ settings = {}, menuItems = [], categories = [] }: Props) {
-  const nav = buildNav(menuItems, settings, categories);
+export default function Header({ settings = {}, menuItems = [], categories = [], services = [] }: Props) {
+  const nav = buildNav(menuItems, settings, categories, services);
 
   // Company info từ settings, fallback về giá trị mặc định
   const hotline        = settings.hotline         || "";

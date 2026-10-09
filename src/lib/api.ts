@@ -138,6 +138,7 @@ export interface LeadRequest {
   phone: string;
   email?: string;
   company?: string;
+  serviceName?: string;
   message?: string;
   sourcePage?: string;
 }

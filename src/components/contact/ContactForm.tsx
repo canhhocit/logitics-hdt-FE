@@ -37,7 +37,8 @@ export default function ContactForm() {
       phone:      form.phone,
       email:      form.email || undefined,
       company:    form.company || undefined,
-      message:    `${form.service ? `[Dịch vụ: ${form.service}] ` : ""}${form.message}`,
+      serviceName: form.service || undefined,
+      message:    form.message,
       sourcePage: "/contact",
     });
 
