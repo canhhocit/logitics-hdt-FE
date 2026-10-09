@@ -7,7 +7,7 @@ import Modal from "../../_components/Modal";
 import ConfirmDialog from "../../_components/ConfirmDialog";
 import { useToast } from "../../_components/Toast";
 
-const EMPTY = { name: "", slug: "", shortDesc: "", intro: "", icon: "briefcase", color: "blue", orderNo: 0, status: "PUBLISHED", contentBlocks: { advantages: ["", "", "", ""] } };
+const EMPTY = { name: "", slug: "", shortDesc: "", intro: "", icon: "briefcase", color: "blue", orderNo: 0, status: "PUBLISHED", contentBlocks: { advantages: [{title: "", desc: ""}, {title: "", desc: ""}, {title: "", desc: ""}, {title: "", desc: ""}] } };
 
 const ICONS: Record<string, any> = {
   "plane": Plane, "ship": Ship, "boxes": Boxes, "truck": Truck, "file-text": FileText,
@@ -60,7 +60,9 @@ export default function ServicesPage() {
     setForm({ name: s.name, slug: s.slug, shortDesc: s.shortDesc || "", intro: s.intro || "",
       icon: s.icon || "briefcase", color: s.color || "blue", orderNo: s.orderNo || 0, status: s.status || "PUBLISHED",
       contentBlocks: {
-        advantages: s.contentBlocks?.advantages?.length ? s.contentBlocks.advantages : ["", "", "", ""]
+        advantages: s.contentBlocks?.advantages?.length 
+          ? s.contentBlocks.advantages.map((a: any) => typeof a === "string" ? { title: a, desc: "" } : { title: a?.title || "", desc: a?.desc || "" }) 
+          : [{title: "", desc: ""}, {title: "", desc: ""}, {title: "", desc: ""}, {title: "", desc: ""}]
       }
     });
     setModalOpen(true);
@@ -72,7 +74,7 @@ export default function ServicesPage() {
     // Filter empty advantages
     const payload = { ...form };
     if (payload.contentBlocks?.advantages) {
-      payload.contentBlocks.advantages = payload.contentBlocks.advantages.filter((a: string) => a.trim() !== "");
+      payload.contentBlocks.advantages = payload.contentBlocks.advantages.filter((a: any) => (a.title && a.title.trim() !== "") || (a.desc && a.desc.trim() !== ""));
     }
 
     setSaving(true);
@@ -238,25 +240,35 @@ export default function ServicesPage() {
           <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
             <div className="flex items-center justify-between mb-3">
               <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wide">Điểm nổi bật (Các ô vuông nhỏ)</label>
-              <button type="button" onClick={() => setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: [...(form.contentBlocks?.advantages || []), ""] } })}
+              <button type="button" onClick={() => setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: [...(form.contentBlocks?.advantages || []), {title: "", desc: ""}] } })}
                 className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold bg-white px-2 py-1 rounded border shadow-sm">
                 + Thêm ô
               </button>
             </div>
-            <div className="space-y-2.5">
-              {(form.contentBlocks?.advantages || []).map((adv: string, idx: number) => (
-                <div key={idx} className="flex gap-2">
-                  <input value={adv} onChange={(e) => {
-                    const newAdv = [...(form.contentBlocks?.advantages || [])];
-                    newAdv[idx] = e.target.value;
-                    setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
-                  }}
-                  placeholder={`Điểm nổi bật ${idx + 1}...`}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-400 bg-white" />
+            <div className="space-y-3">
+              {(form.contentBlocks?.advantages || []).map((adv: any, idx: number) => (
+                <div key={idx} className="flex gap-2 items-start bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                  <div className="flex-1 space-y-2">
+                    <input value={adv.title || ""} onChange={(e) => {
+                      const newAdv = [...(form.contentBlocks?.advantages || [])];
+                      newAdv[idx] = { ...adv, title: e.target.value };
+                      setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
+                    }}
+                    placeholder={`Tiêu đề ${idx + 1}...`}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-semibold focus:outline-none focus:border-indigo-400 bg-gray-50" />
+                    
+                    <textarea value={adv.desc || ""} rows={2} onChange={(e) => {
+                      const newAdv = [...(form.contentBlocks?.advantages || [])];
+                      newAdv[idx] = { ...adv, desc: e.target.value };
+                      setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
+                    }}
+                    placeholder={`Mô tả chi tiết...`}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:border-indigo-400" />
+                  </div>
                   <button type="button" onClick={() => {
                     const newAdv = form.contentBlocks.advantages.filter((_: any, i: number) => i !== idx);
                     setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
-                  }} className="text-gray-400 hover:text-red-500 bg-white border border-gray-200 rounded-lg px-2.5 flex-shrink-0 transition-colors">
+                  }} className="text-gray-400 hover:text-red-500 bg-gray-50 border border-gray-200 rounded-lg p-2.5 flex-shrink-0 transition-colors">
                     <Trash2 size={16} />
                   </button>
                 </div>
