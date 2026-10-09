@@ -18,14 +18,14 @@ const ICON_LABELS: Record<string, string> = {
   "star": "Ngôi sao", "briefcase": "Cặp xách", "package": "Kiện hàng", "globe": "Toàn cầu", "zap": "Tốc độ"
 };
 const COLORS = [
-  { value: "blue",   label: "Xanh dương",  cls: "bg-blue-100 text-blue-600" },
-  { value: "cyan",   label: "Xanh ngọc",   cls: "bg-cyan-100 text-cyan-600" },
-  { value: "teal",   label: "Teal",         cls: "bg-teal-100 text-teal-600" },
-  { value: "green",  label: "Xanh lá",     cls: "bg-green-100 text-green-600" },
-  { value: "orange", label: "Cam",         cls: "bg-orange-100 text-orange-600" },
-  { value: "rose",   label: "Hồng",        cls: "bg-rose-100 text-rose-600" },
-  { value: "indigo", label: "Chàm",        cls: "bg-indigo-100 text-indigo-600" },
-  { value: "violet", label: "Tím",         cls: "bg-violet-100 text-violet-600" },
+  { value: "blue",   label: "Xanh dương",  cls: "bg-blue-100 text-blue-600",     dotCls: "bg-blue-500" },
+  { value: "cyan",   label: "Xanh ngọc",   cls: "bg-cyan-100 text-cyan-600",     dotCls: "bg-cyan-500" },
+  { value: "teal",   label: "Teal",        cls: "bg-teal-100 text-teal-600",     dotCls: "bg-teal-500" },
+  { value: "green",  label: "Xanh lá",     cls: "bg-green-100 text-green-600",   dotCls: "bg-green-500" },
+  { value: "orange", label: "Cam",         cls: "bg-orange-100 text-orange-600", dotCls: "bg-orange-500" },
+  { value: "rose",   label: "Hồng",        cls: "bg-rose-100 text-rose-600",     dotCls: "bg-rose-500" },
+  { value: "indigo", label: "Chàm",        cls: "bg-indigo-100 text-indigo-600", dotCls: "bg-indigo-500" },
+  { value: "violet", label: "Tím",         cls: "bg-violet-100 text-violet-600", dotCls: "bg-violet-500" },
 ];
 
 function slugify(s: string) {
@@ -146,7 +146,7 @@ export default function ServicesPage() {
                               return <IconComp size={14} />;
                             })()}
                           </span>
-                          <span className={`w-3.5 h-3.5 rounded-full border border-gray-200 ${colorObj.cls.split(" ")[0]}`} title={colorObj.label} />
+                          <span className={`w-3 h-3 rounded-full shadow-sm ${colorObj.dotCls}`} title={colorObj.label} />
                         </div>
                       </td>
                       <td className="px-4 py-3">
@@ -206,7 +206,7 @@ export default function ServicesPage() {
                 <div className="w-10 flex-shrink-0 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-xl">
                   {(() => {
                     const c = COLORS.find(x => x.value === form.color) || COLORS[0];
-                    return <span className={`w-4 h-4 rounded-full border border-gray-200 ${c.cls.split(" ")[0]}`} />;
+                    return <span className={`w-4 h-4 rounded-full shadow-sm ${c.dotCls}`} />;
                   })()}
                 </div>
                 <select value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })}
