@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Plus, Pencil, Trash2, Briefcase } from "lucide-react";
+import { Plus, Pencil, Trash2, Briefcase, Plane, Ship, Boxes, Truck, FileText, Star, Package, Globe, Zap } from "lucide-react";
 import { getAdminServices, createService, updateService, deleteService } from "../../_lib/api";
 import Modal from "../../_components/Modal";
 import ConfirmDialog from "../../_components/ConfirmDialog";
@@ -9,7 +9,10 @@ import { useToast } from "../../_components/Toast";
 
 const EMPTY = { name: "", slug: "", shortDesc: "", intro: "", icon: "briefcase", color: "blue", orderNo: 0, status: "PUBLISHED", contentBlocks: { advantages: ["", "", "", ""] } };
 
-const ICONS = ["plane","ship","boxes","truck","file-text","star","briefcase","package","globe","zap"];
+const ICONS: Record<string, any> = {
+  "plane": Plane, "ship": Ship, "boxes": Boxes, "truck": Truck, "file-text": FileText,
+  "star": Star, "briefcase": Briefcase, "package": Package, "globe": Globe, "zap": Zap
+};
 const COLORS = [
   { value: "blue",   label: "Xanh dương",  cls: "bg-blue-100 text-blue-600" },
   { value: "cyan",   label: "Xanh ngọc",   cls: "bg-cyan-100 text-cyan-600" },
@@ -175,17 +178,33 @@ export default function ServicesPage() {
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-600 mb-1.5">Icon (Lucide name)</label>
-              <select value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })}
-                className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
-                {ICONS.map((ic) => <option key={ic} value={ic}>{ic}</option>)}
-              </select>
+              <div className="flex gap-2">
+                <div className="w-10 flex-shrink-0 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-xl text-gray-500">
+                  {(() => {
+                    const IconComp = ICONS[form.icon] || Briefcase;
+                    return <IconComp size={18} />;
+                  })()}
+                </div>
+                <select value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })}
+                  className="flex-1 border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
+                  {Object.keys(ICONS).map((ic) => <option key={ic} value={ic}>{ic}</option>)}
+                </select>
+              </div>
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-600 mb-1.5">Màu sắc</label>
-              <select value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })}
-                className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
-                {COLORS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
-              </select>
+              <div className="flex gap-2">
+                <div className="w-10 flex-shrink-0 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-xl">
+                  {(() => {
+                    const c = COLORS.find(x => x.value === form.color) || COLORS[0];
+                    return <span className={`w-4 h-4 rounded-full border border-gray-200 ${c.cls.split(" ")[0]}`} />;
+                  })()}
+                </div>
+                <select value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })}
+                  className="flex-1 border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
+                  {COLORS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+                </select>
+              </div>
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-600 mb-1.5">Thứ tự hiển thị</label>
