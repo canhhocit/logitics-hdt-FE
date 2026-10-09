@@ -7,7 +7,7 @@ import Modal from "../../_components/Modal";
 import ConfirmDialog from "../../_components/ConfirmDialog";
 import { useToast } from "../../_components/Toast";
 
-const EMPTY = { name: "", slug: "", shortDesc: "", intro: "", icon: "briefcase", color: "blue", orderNo: 0, status: "PUBLISHED" };
+const EMPTY = { name: "", slug: "", shortDesc: "", intro: "", icon: "briefcase", color: "blue", orderNo: 0, status: "PUBLISHED", contentBlocks: { advantages: ["", "", "", ""] } };
 
 const ICONS = ["plane","ship","boxes","truck","file-text","star","briefcase","package","globe","zap"];
 const COLORS = [
@@ -51,16 +51,27 @@ export default function ServicesPage() {
   const openEdit = (s: any) => {
     setEditing(s);
     setForm({ name: s.name, slug: s.slug, shortDesc: s.shortDesc || "", intro: s.intro || "",
-      icon: s.icon || "briefcase", color: s.color || "blue", orderNo: s.orderNo || 0, status: s.status || "PUBLISHED" });
+      icon: s.icon || "briefcase", color: s.color || "blue", orderNo: s.orderNo || 0, status: s.status || "PUBLISHED",
+      contentBlocks: {
+        advantages: s.contentBlocks?.advantages?.length ? s.contentBlocks.advantages : ["", "", "", ""]
+      }
+    });
     setModalOpen(true);
   };
 
   const handleSave = async () => {
     if (!form.name || !form.slug) { toast("error", "Vui lòng điền tên và slug"); return; }
+    
+    // Filter empty advantages
+    const payload = { ...form };
+    if (payload.contentBlocks?.advantages) {
+      payload.contentBlocks.advantages = payload.contentBlocks.advantages.filter((a: string) => a.trim() !== "");
+    }
+
     setSaving(true);
     try {
-      if (editing) await updateService(editing.id, form);
-      else         await createService(form);
+      if (editing) await updateService(editing.id, payload);
+      else         await createService(payload);
       toast("success", editing ? "Cập nhật dịch vụ thành công" : "Tạo dịch vụ thành công");
       setModalOpen(false);
       fetchData();
@@ -195,6 +206,34 @@ export default function ServicesPage() {
             <textarea value={form.shortDesc} rows={2} onChange={(e) => setForm({ ...form, shortDesc: e.target.value })}
               placeholder="Mô tả 1-2 dòng hiển thị trên trang danh sách dịch vụ..."
               className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm resize-none focus:outline-none focus:border-indigo-400" />
+          </div>
+          <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+            <div className="flex items-center justify-between mb-3">
+              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wide">Điểm nổi bật (Các ô vuông nhỏ)</label>
+              <button type="button" onClick={() => setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: [...(form.contentBlocks?.advantages || []), ""] } })}
+                className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold bg-white px-2 py-1 rounded border shadow-sm">
+                + Thêm ô
+              </button>
+            </div>
+            <div className="space-y-2.5">
+              {(form.contentBlocks?.advantages || []).map((adv: string, idx: number) => (
+                <div key={idx} className="flex gap-2">
+                  <input value={adv} onChange={(e) => {
+                    const newAdv = [...(form.contentBlocks?.advantages || [])];
+                    newAdv[idx] = e.target.value;
+                    setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
+                  }}
+                  placeholder={`Điểm nổi bật ${idx + 1}...`}
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-400 bg-white" />
+                  <button type="button" onClick={() => {
+                    const newAdv = form.contentBlocks.advantages.filter((_: any, i: number) => i !== idx);
+                    setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
+                  }} className="text-gray-400 hover:text-red-500 bg-white border border-gray-200 rounded-lg px-2.5 flex-shrink-0 transition-colors">
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-600 mb-1.5">Giới thiệu chi tiết</label>
