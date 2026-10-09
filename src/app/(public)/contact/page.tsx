@@ -65,9 +65,9 @@ export default async function ContactPage() {
               <p className="eyebrow mb-3 justify-center">Đội Ngũ Hỗ Trợ</p>
               <h2 className="text-2xl font-extrabold text-navy-800">Người phụ trách từng khu vực</h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="flex flex-wrap justify-center gap-4">
               {contacts.map((c: any) => (
-                <div key={c.id} className="card p-5 text-center group">
+                <div key={c.id} className="w-full sm:w-[calc(50%-8px)] lg:w-[220px] card p-5 text-center group shrink-0">
                   <div className="w-14 h-14 rounded-full bg-gradient-to-br from-navy-600 to-navy-800
                                   text-white font-bold text-sm flex items-center justify-center mx-auto mb-4
                                   group-hover:scale-110 transition-transform">
