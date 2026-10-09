@@ -406,11 +406,11 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
   }
 
   // ── Map contentBlocks từ DB → format component cần ──────────────
-  // advantages: string[] → [{title, desc}]
-  const advantages = (content?.advantages || []).map((a: string) => ({
-    title: "Điểm nổi bật",
-    desc: a,
-  }));
+  // advantages: string[] hoặc {title, desc}[]
+  const advantages = (content?.advantages || []).map((a: any) => {
+    if (typeof a === "string") return { title: "Điểm nổi bật", desc: a };
+    return { title: a?.title || "Điểm nổi bật", desc: a?.desc || "" };
+  });
 
   // methods: string[] → [{name, desc}]  (trước đây nhầm lấy m.title từ string)
   const types = (content?.methods || []).map((m: string) => ({
@@ -532,6 +532,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
       </section>
 
       {/* Description + Process */}
+      {/* 
       <section className="py-20">
         <div className="wrap">
           <div className="grid lg:grid-cols-2 gap-16 items-start mb-16">
@@ -540,7 +541,6 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
               <h2 className="h2 text-navy-800 mb-5">{svc.title}</h2>
               <p className="text-navy-500 text-lg leading-[1.85] mb-7">{svc.description}</p>
 
-              {/* Suitable goods */}
               <div>
                 <h3 className="font-bold text-navy-800 mb-4">Loại hàng phù hợp</h3>
                 <div className="grid grid-cols-2 gap-2">
@@ -555,7 +555,6 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
             </div>
 
             <div>
-              {/* Service types — chỉ hiện khi có data */}
               {svc.types.length > 0 && (
                 <>
                   <p className="eyebrow mb-5">Các Phương Thức</p>
@@ -576,7 +575,6 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
                 </>
               )}
 
-              {/* Limitations — chỉ hiện khi có data */}
               {svc.limitations.length > 0 && (
                 <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
                   <h3 className="font-bold text-amber-700 text-sm mb-3">Lưu ý & Hạn chế</h3>
@@ -593,7 +591,6 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
             </div>
           </div>
 
-          {/* Process — chỉ hiện khi có data */}
           {svc.process.length > 0 && (
             <div className="mb-16">
               <p className="eyebrow mb-5">Quy Trình Thực Hiện</p>
@@ -619,7 +616,6 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
             </div>
           )}
 
-          {/* Documents + Additional — chỉ hiện khi có data */}
           {(svc.documents.length > 0 || svc.additionalServices.length > 0) && (
             <div className="grid md:grid-cols-2 gap-10">
               {svc.documents.length > 0 && (
@@ -652,8 +648,13 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
           )}
         </div>
       </section>
+      */}
+
+      {/* CTABlock ngay sau chi tiết dịch vụ */}
+      <CTABlock />
 
       {/* Other services */}
+      {/* 
       <section className="py-16 bg-slate-50 border-t border-gray-100">
         <div className="wrap">
           <div className="flex items-center justify-between mb-8">
@@ -691,10 +692,12 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
           </div>
         </div>
       </section>
+      */}
+
 
       {/* Shared blocks */}
-      <TestimonialsBlock testimonials={testimonials} />
-      <CTABlock />
+      {/* Phản hồi từ khách hàng */}
+      {/* <TestimonialsBlock testimonials={testimonials} /> */}
     </div>
   );
 }

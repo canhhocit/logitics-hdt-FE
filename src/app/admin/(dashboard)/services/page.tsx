@@ -121,10 +121,10 @@ export default function ServicesPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">STT</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">STT ưu tiên</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Dịch vụ</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Slug</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Icon / Màu</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Icon</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Trạng thái</th>
                   <th className="px-4 py-3" />
                 </tr>
@@ -239,7 +239,7 @@ export default function ServicesPage() {
           </div>
           <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
             <div className="flex items-center justify-between mb-3">
-              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wide">Điểm nổi bật (Các ô vuông nhỏ)</label>
+              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wide">Điểm nổi bật</label>
               <button type="button" onClick={() => setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: [...(form.contentBlocks?.advantages || []), {title: "", desc: ""}] } })}
                 className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold bg-white px-2 py-1 rounded border shadow-sm">
                 + Thêm ô
