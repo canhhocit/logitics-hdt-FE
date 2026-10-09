@@ -135,9 +135,14 @@ export default function ServicesPage() {
                       </td>
                       <td className="px-4 py-3 font-mono text-xs text-gray-400">{s.slug}</td>
                       <td className="px-4 py-3">
-                        <div className="flex items-center gap-2">
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${colorObj.cls}`}>{s.icon || "—"}</span>
-                          <span className={`w-4 h-4 rounded-full ${colorObj.cls.split(" ")[0]} border border-gray-200`} title={colorObj.label} />
+                        <div className="flex items-center gap-2.5">
+                          <span className={`w-7 h-7 flex items-center justify-center rounded-full shadow-sm ${colorObj.cls}`}>
+                            {(() => {
+                              const IconComp = s.icon && ICONS[s.icon] ? ICONS[s.icon] : Briefcase;
+                              return <IconComp size={14} />;
+                            })()}
+                          </span>
+                          <span className={`w-3.5 h-3.5 rounded-full border border-gray-200 ${colorObj.cls.split(" ")[0]}`} title={colorObj.label} />
                         </div>
                       </td>
                       <td className="px-4 py-3">
