@@ -13,6 +13,10 @@ const ICONS: Record<string, any> = {
   "plane": Plane, "ship": Ship, "boxes": Boxes, "truck": Truck, "file-text": FileText,
   "star": Star, "briefcase": Briefcase, "package": Package, "globe": Globe, "zap": Zap
 };
+const ICON_LABELS: Record<string, string> = {
+  "plane": "Máy bay", "ship": "Tàu biển", "boxes": "Hàng hóa", "truck": "Xe tải", "file-text": "Tài liệu",
+  "star": "Ngôi sao", "briefcase": "Cặp xách", "package": "Kiện hàng", "globe": "Toàn cầu", "zap": "Tốc độ"
+};
 const COLORS = [
   { value: "blue",   label: "Xanh dương",  cls: "bg-blue-100 text-blue-600" },
   { value: "cyan",   label: "Xanh ngọc",   cls: "bg-cyan-100 text-cyan-600" },
@@ -192,7 +196,7 @@ export default function ServicesPage() {
                 </div>
                 <select value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })}
                   className="flex-1 border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
-                  {Object.keys(ICONS).map((ic) => <option key={ic} value={ic}>{ic}</option>)}
+                  {Object.keys(ICONS).map((ic) => <option key={ic} value={ic}>{ICON_LABELS[ic]} ({ic})</option>)}
                 </select>
               </div>
             </div>
