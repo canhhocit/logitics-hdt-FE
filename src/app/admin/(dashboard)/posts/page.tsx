@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { Plus, Pencil, Trash2, FileText, Search, Filter, ArrowDown, ArrowUp } from "lucide-react";
-import { getAdminPosts, createPost, updatePost, deletePost, getCategories, uploadMedia } from "../../_lib/api";
+import { getAdminPosts, createPost, updatePost, deletePost, getCategories, uploadMedia, ADMIN_API } from "../../_lib/api";
 import Pagination from "../../_components/Pagination";
 import Modal from "../../_components/Modal";
 import ConfirmDialog from "../../_components/ConfirmDialog";
@@ -293,7 +293,7 @@ export default function PostsPage() {
                 toast("error", err.message);
               }
             }} className="mb-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
-            {form.thumbnail && <img src={`http://localhost:8080${form.thumbnail}`} alt="Thumb" className="h-24 w-auto object-cover rounded border shadow-sm" />}
+            {form.thumbnail && <img src={form.thumbnail.startsWith("http") ? form.thumbnail : `${ADMIN_API}${form.thumbnail}`} alt="Thumb" className="h-24 w-auto object-cover rounded border shadow-sm" />}
           </div>
           <div>
             <div className="flex items-center justify-between mb-1.5">

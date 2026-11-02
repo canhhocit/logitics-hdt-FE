@@ -24,7 +24,8 @@ async function get<T>(path: string, fallback: T): Promise<T> {
 
 function resolvePostThumbnail(post: any) {
   if (post && post.thumbnail && post.thumbnail.startsWith('/uploads')) {
-    post.thumbnail = `http://localhost:8080${post.thumbnail}`;
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/v1\/?$/, "") || "";
+    post.thumbnail = backendUrl ? `${backendUrl}${post.thumbnail}` : post.thumbnail;
   }
   return post;
 }
