@@ -26,9 +26,10 @@ interface Props {
 const SERVICE_LINKS = [
   { label: "Vận Chuyển Đường Không",  href: "/services/van-chuyen-duong-khong" },
   { label: "Vận Chuyển Đường Biển",   href: "/services/van-chuyen-duong-bien" },
-  { label: "Pickup",                   href: "/services/pickup" },
+  { label: "Gom Hàng Lẻ (LCL)",       href: "/services/gom-hang-le-lcl" },
   { label: "Vận Chuyển Đường Bộ",      href: "/services/van-chuyen-duong-bo" },
-  { label: "Khai Thuê Hải Quan",        href: "/services/khai-thue-hai-quan" },
+  { label: "Dịch Vụ Thuê Kho Bãi",    href: "/services/dich-vu-thue-kho-bai" },
+  { label: "Hàng Đặc Biệt & Dự Án",  href: "/services/hang-dac-biet-du-an" },
 ];
 
 const QUICK_LINKS_FALLBACK = [

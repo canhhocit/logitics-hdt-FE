@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ChevronRight, ArrowRight, CheckCircle, Phone,
-  Plane, Ship, Boxes, Truck, FileText, Star, Briefcase,
+  Plane, Ship, Boxes, Truck, FileText, Star, Briefcase, Package, Warehouse
 } from "lucide-react";
 import TestimonialsBlock from "@/components/shared/TestimonialsBlock";
 import CTABlock          from "@/components/shared/CTABlock";
@@ -16,6 +16,8 @@ const iconMapByName: Record<string, React.ReactNode> = {
   "file-text": <FileText size={32} />,
   star:        <Star size={32} />,
   briefcase:   <Briefcase size={32} />,
+  package:     <Package size={32} />,
+  warehouse:   <Warehouse size={32} />,
 };
 
 const colorMapByName: Record<string, string> = {
@@ -34,6 +36,7 @@ const iconMap: Record<string, React.ReactNode> = {
   "van-chuyen-duong-bien":  <Ship size={32} />,
   "gom-hang-le-lcl":        <Boxes size={32} />,
   "van-chuyen-duong-bo":    <Truck size={32} />,
+  "dich-vu-thue-kho-bai":   <Package size={32} />,
   "khai-thue-hai-quan":     <FileText size={32} />,
   "hang-dac-biet-du-an":    <Star size={32} />,
 };
@@ -43,6 +46,7 @@ const colorMap: Record<string, string> = {
   "van-chuyen-duong-bien":  "bg-cyan-100 text-cyan-600",
   "gom-hang-le-lcl":        "bg-teal-100 text-teal-600",
   "van-chuyen-duong-bo":    "bg-green-100 text-green-600",
+  "dich-vu-thue-kho-bai":   "bg-cyan-100 text-cyan-600",
   "khai-thue-hai-quan":     "bg-orange-100 text-orange-600",
   "hang-dac-biet-du-an":    "bg-rose-100 text-rose-600",
 };
@@ -374,6 +378,62 @@ const services: Record<string, ServiceData> = {
       "Thuê cẩu & xe đặc chủng", "Project management",
     ],
   },
+
+  "dich-vu-thue-kho-bai": {
+    title: "Dịch Vụ Thuê Kho Bãi & Lưu Trữ Hàng Hóa",
+    intro: "Hệ thống kho bãi tiêu chuẩn cao tại các đầu mối giao thương trọng điểm — cung cấp giải pháp lưu kho an toàn, quản lý tồn kho thông minh WMS và tối ưu 30–40% chi phí vận hành cho doanh nghiệp.",
+    description:
+      "HDT Logistics cung cấp chuỗi giải pháp kho bãi toàn diện phục vụ doanh nghiệp thương mại, sản xuất và xuất nhập khẩu. Hệ thống kho sở hữu vị trí chiến lược gần các cảng biển lớn, sân bay quốc tế và các khu công nghiệp trọng điểm (Hà Nội, Hải Phòng, Bắc Ninh, Đà Nẵng, TP.HCM). Kho được trang bị hệ thống quản lý kho WMS hiện đại, camera an ninh CCTV 24/7, PCCC tự động tiêu chuẩn cao, sàn chịu tải lớn và hệ thống dock leveler thủy lực đảm bảo quá trình bốc xếp hàng hóa diễn ra nhanh chóng, an toàn tuyệt đối.",
+    advantages: [
+      { title: "Tiết kiệm chi phí đầu tư", desc: "Không tốn chi phí xây dựng, bảo trì kho riêng hay duy trì đội ngũ nhân sự quản lý kho cồng kềnh. Chi phí tính linh hoạt theo diện tích (m2) hoặc thể tích (CBM) thực tế sử dụng." },
+      { title: "Vị trí giao thương đắc địa", desc: "Hệ thống kho nằm sát các trục cao tốc huyết mạch, gần cụm cảng biển, ICD và sân bay, rút ngắn thời gian trung chuyển và giao nhận hàng hóa." },
+      { title: "Quản lý tồn kho WMS thông minh", desc: "Theo dõi tồn kho chính xác theo thời gian thực (real-time) bằng mã barcode/QR code, kiểm soát xuất – nhập – tồn theo chuẩn FIFO/FEFO và xuất báo cáo tự động." },
+      { title: "An toàn & Bảo mật tuyệt đối", desc: "Hệ thống PCCC tự động đạt chuẩn, bảo hiểm hàng hóa toàn diện, camera giám sát CCTV 24/7 và lực lượng an ninh kiểm soát nghiêm ngặt 3 lớp." },
+    ],
+    limitations: [
+      "Yêu cầu cung cấp đầy đủ thông tin MSDS đối với các mặt hàng hóa chất hoặc hàng có điều kiện đặc biệt",
+      "Cần thông báo trước kế hoạch nhập/xuất đối với các lô hàng khối lượng lớn hoặc hàng siêu trường siêu trọng",
+      "Chi phí lưu kho tăng nếu hàng lưu bãi quá hạn cam kết mà không giải phóng mặt bằng",
+    ],
+    types: [
+      { name: "Kho chung / Kho chia sẻ (Public Warehouse)", desc: "Giải pháp lưu kho linh hoạt theo m2 hoặc pallet/CBM, tối ưu cho doanh nghiệp vừa và nhỏ, hàng theo mùa vụ." },
+      { name: "Kho độc lập / Kho riêng (Dedicated Warehouse)", desc: "Bàn giao trọn gói kho riêng biệt theo diện tích lớn, tùy biến thiết kế theo quy chuẩn vận hành riêng của khách hàng." },
+      { name: "Kho mát & Kho kiểm soát nhiệt độ", desc: "Duy trì dải nhiệt độ 18°C – 25°C, chuyên dụng cho thực phẩm đóng gói, dược phẩm, mỹ phẩm và linh kiện điện tử nhạy cảm." },
+      { name: "Kho ngoại quan & Điểm tập kết CFS", desc: "Lưu trữ hàng hóa chưa làm thủ tục hải quan, hỗ trợ chia tách, đóng gói ghép container xuất khẩu và gom hàng nhập khẩu." },
+    ],
+    suitableGoods: [
+      "Hàng tiêu dùng nhanh (FMCG), thực phẩm khô và đồ uống",
+      "Thiết bị điện tử, viễn thông và linh kiện công nghệ cao",
+      "Nguyên phụ liệu dệt may, da giày và phụ tùng cơ khí",
+      "Máy móc thiết bị công nghiệp và phụ tùng thay thế",
+      "Hóa mỹ phẩm, dược phẩm và thực phẩm chức năng (kho mát)",
+      "Hàng thương mại điện tử (E-commerce) cần đóng gói và phân loại nhanh",
+    ],
+    process: [
+      { step: "01", title: "Khảo sát & Lên phương án", desc: "Tiếp nhận thông tin loại hàng, quy cách đóng gói, thể tích, yêu cầu nhiệt độ và thời gian lưu kho để tư vấn giải pháp tối ưu." },
+      { step: "02", title: "Ký hợp đồng & Đặt chỗ", desc: "Thống nhất diện tích, đơn giá, cam kết SLA bảo quản và ký hợp đồng lưu kho kèm bảo hiểm hàng hóa." },
+      { step: "03", title: "Tiếp nhận & Kiểm đếm (Inbound)", desc: "Hàng đến kho được kiểm tra số lượng, tình trạng bao bì, dán mã barcode/QR code định danh từng kiện." },
+      { step: "04", title: "Sắp xếp & Cập nhật WMS", desc: "Xe nâng đưa hàng vào vị trí kệ (racking system) chuyên dụng, hệ thống WMS ghi nhận vị trí và số lượng tồn kho tự động." },
+      { step: "05", title: "Dịch vụ giá trị gia tăng (VAS)", desc: "Thực hiện đóng gói, đóng kiện gỗ, dán tem phụ, dán nhãn tiếng Việt, chia chọn đơn hàng theo yêu cầu khách hàng." },
+      { step: "06", title: "Xuất kho & Giao nhận (Outbound)", desc: "Tiếp nhận lệnh xuất hàng, pick hàng chính xác theo lô FIFO/FEFO, bốc xếp lên xe và bàn giao chứng từ biên bản xuất kho." },
+    ],
+    documents: [
+      "Biên bản giao nhận hàng hóa & Phiếu xuất/nhập kho (Inbound/Outbound Note)",
+      "Hợp đồng dịch vụ thuê kho & lưu trữ hàng hóa",
+      "Danh mục kiểm đếm hàng hóa (Packing List / Tally Sheet)",
+      "Báo cáo tồn kho định kỳ từ hệ thống WMS (Inventory Report)",
+      "Chứng nhận bảo hiểm hàng hóa lưu kho (Insurance Certificate)",
+      "Bảng chỉ dẫn an toàn hóa chất (MSDS) đối với hàng hóa đặc biệt",
+    ],
+    additionalServices: [
+      "Đóng gói, quấn màng co & đóng kiện gỗ pallet",
+      "Dán nhãn phụ, in tem mã vạch và phân loại hàng",
+      "Bốc xếp, hạ hàng bằng xe nâng và cẩu chuyên dụng",
+      "Cross-docking trung chuyển hàng nhanh trong ngày",
+      "Vận chuyển phân phối chặng cuối (Last-mile delivery)",
+      "Khai thuê hải quan cho hàng kho ngoại quan & CFS",
+    ],
+  },
 };
 
 // Aliases cho các slug cũ để đảm bảo tương thích và tránh 404
@@ -384,6 +444,9 @@ services["van-tai-duong-bien"] = services["van-chuyen-duong-bien"];
 services["van-tai-duong-bo"] = services["van-chuyen-duong-bo"];
 services["khai-bao-hai-quan"] = services["khai-thue-hai-quan"];
 services["hang-dac-biet"] = services["hang-dac-biet-du-an"];
+services["kho-bai"] = services["dich-vu-thue-kho-bai"];
+services["kho-bai-phan-phoi"] = services["dich-vu-thue-kho-bai"];
+services["cho-thue-kho-bai"] = services["dich-vu-thue-kho-bai"];
 
 export async function generateStaticParams() {
   return [
@@ -391,6 +454,7 @@ export async function generateStaticParams() {
     { slug: "van-chuyen-duong-bien" },
     { slug: "gom-hang-le-lcl" },
     { slug: "van-chuyen-duong-bo" },
+    { slug: "dich-vu-thue-kho-bai" },
     { slug: "khai-thue-hai-quan" },
     { slug: "hang-dac-biet-du-an" },
   ];
@@ -399,21 +463,34 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const { fetchServiceBySlug } = await import("@/lib/api");
   const svc = await fetchServiceBySlug(params.slug) as any;
-  if (!svc) return {};
-  return { title: svc.name, description: svc.intro };
+  const fallback = services[params.slug];
+  if (!svc && !fallback) return {};
+  return {
+    title: svc?.name || fallback?.title || "Dịch Vụ",
+    description: svc?.intro || fallback?.intro || "Giải pháp logistics HDT",
+  };
 }
 
 import { fetchServiceBySlug, fetchServices, fetchTestimonials } from "@/lib/api";
 export default async function ServiceDetailPage({ params }: { params: { slug: string } }) {
-  
-  const [serviceDB, allServices, testimonials] = await Promise.all([
+  const initialFallback = services[params.slug];
+
+  const [rawServiceDB, allServices, testimonials] = await Promise.all([
     fetchServiceBySlug(params.slug) as Promise<any>,
     fetchServices() as Promise<any[]>,
     fetchTestimonials() as Promise<any[]>
   ]);
-  
-  if (!serviceDB) notFound();
-  
+
+  if (!rawServiceDB && !initialFallback) notFound();
+
+  const serviceDB = rawServiceDB || {
+    name: initialFallback?.title,
+    intro: initialFallback?.intro,
+    icon: params.slug === "khai-thue-hai-quan" ? "file-text" : "package",
+    color: params.slug === "khai-thue-hai-quan" ? "orange" : "cyan",
+    status: "PUBLISHED"
+  };
+
   let content = null;
   if (typeof serviceDB.contentBlocks === 'string') {
     try { content = JSON.parse(serviceDB.contentBlocks); } catch(e) {}
@@ -449,6 +526,8 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
       'ship': 'van-chuyen-duong-bien',
       'boxes': 'gom-hang-le-lcl',
       'truck': 'van-chuyen-duong-bo',
+      'package': 'dich-vu-thue-kho-bai',
+      'warehouse': 'dich-vu-thue-kho-bai',
       'file-text': 'khai-thue-hai-quan',
       'star': 'hang-dac-biet-du-an',
     };

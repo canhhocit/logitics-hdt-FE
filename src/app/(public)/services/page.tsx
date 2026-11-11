@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, ArrowRight, Plane, Ship, Boxes, Truck, FileText, Star, CheckCircle } from "lucide-react";
+import { ChevronRight, ArrowRight, Plane, Ship, Boxes, Truck, FileText, Star, CheckCircle, Package, Warehouse } from "lucide-react";
 import { fetchServices, fetchTestimonials } from "@/lib/api";
 import CTABlock from "@/components/shared/CTABlock";
 import TestimonialsBlock from "@/components/shared/TestimonialsBlock";
@@ -8,7 +8,7 @@ import TestimonialsBlock from "@/components/shared/TestimonialsBlock";
 export const metadata: Metadata = {
   title: "Dịch Vụ",
   description:
-    "HDT Logistics cung cấp giải pháp logistics toàn diện: vận chuyển đường không, đường biển, gom hàng lẻ LCL, đường bộ, khai thuê hải quan và hàng đặc biệt/dự án.",
+    "HDT Logistics cung cấp giải pháp logistics toàn diện: vận chuyển đường không, đường biển, gom hàng lẻ LCL, đường bộ, dịch vụ thuê kho bãi và hàng đặc biệt/dự án.",
 };
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -18,6 +18,8 @@ const iconMap: Record<string, React.ReactNode> = {
   truck:       <Truck size={32} />,
   "file-text": <FileText size={32} />,
   star:        <Star size={32} />,
+  package:     <Package size={32} />,
+  warehouse:   <Warehouse size={32} />,
 };
 
 const colorMap: Record<string, string> = {
@@ -31,15 +33,19 @@ const colorMap: Record<string, string> = {
 
 // Feature bullets per service — display-only UI enhancement (không phải business data từ CMS)
 const serviceFeatures: Record<string, string[]> = {
-  // Canonical Slugs (Chuẩn hóa V16)
+  // Canonical Slugs
   "van-chuyen-duong-khong": ["Kết nối 50+ hãng hàng không", "Express & Economy linh hoạt", "Hàng lạnh / hàng DGR", "Tracking AWB real-time"],
   "van-chuyen-duong-bien":  ["FCL & LCL – 100+ cảng biển", "Booking Yang Ming, SITC, CMA CGM...", "Container lạnh, hàng rời", "Tracking container 24/7"],
   "gom-hang-le-lcl":        ["Tính cước theo CBM", "Lịch gom hàng cố định hàng tuần", "Tiết kiệm cho lô hàng nhỏ", "Tuyến xuất & nhập khẩu"],
   "van-chuyen-duong-bo":    ["63 tỉnh thành nội địa", "Xuyên biên giới ASEAN, Trung Quốc", "Xe 1–40 tấn, GPS 24/7", "Door-to-door trọn gói"],
+  "dich-vu-thue-kho-bai":   ["Kho thường, kho mát & kho CFS", "Hệ thống quản lý tồn kho WMS", "PCCC tự động, camera 24/7", "Đóng gói, dán tem & chia chọn"],
   "khai-thue-hai-quan":     ["Khai báo VNACCS/VCIS", "Tỷ lệ thông quan lần đầu >95%", "Tư vấn HS Code, chính sách thuế", "Hồ sơ rà soát 2 cấp"],
   "hang-dac-biet-du-an":    ["Hàng OOG, siêu trường siêu trọng", "Hàng nguy hiểm (DGR/IMO)", "Lập kế hoạch dự án chi tiết", "Xin phép lưu thông, hộ tống"],
 
   // Backward-compatible Aliases
+  "kho-bai":             ["Kho thường, kho mát & kho CFS", "Hệ thống quản lý tồn kho WMS", "PCCC tự động, camera 24/7", "Đóng gói, dán tem & chia chọn"],
+  "kho-bai-phan-phoi":   ["Kho thường, kho mát & kho CFS", "Hệ thống quản lý tồn kho WMS", "PCCC tự động, camera 24/7", "Đóng gói, dán tem & chia chọn"],
+  "cho-thue-kho-bai":    ["Kho thường, kho mát & kho CFS", "Hệ thống quản lý tồn kho WMS", "PCCC tự động, camera 24/7", "Đóng gói, dán tem & chia chọn"],
   "van-tai-hang-khong":  ["Kết nối 50+ hãng hàng không", "Express & Economy linh hoạt", "Hàng lạnh / hàng DGR", "Tracking AWB real-time"],
   "van-tai-duong-bien":  ["FCL & LCL – 100+ cảng biển", "Booking Yang Ming, SITC, CMA CGM...", "Container lạnh, hàng rời", "Tracking container 24/7"],
   "van-chuyen-lcl":      ["Tính cước theo CBM", "Lịch gom hàng cố định hàng tuần", "Tiết kiệm cho lô hàng nhỏ", "Tuyến xuất & nhập khẩu"],

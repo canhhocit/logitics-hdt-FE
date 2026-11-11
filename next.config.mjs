@@ -32,6 +32,9 @@ const nextConfig = {
     return [
       { source: '/services/pickup', destination: '/services/gom-hang-le-lcl', permanent: true },
       { source: '/services/van-chuyen-lcl', destination: '/services/gom-hang-le-lcl', permanent: true },
+      { source: '/services/kho-bai', destination: '/services/dich-vu-thue-kho-bai', permanent: true },
+      { source: '/services/kho-bai-phan-phoi', destination: '/services/dich-vu-thue-kho-bai', permanent: true },
+      { source: '/services/cho-thue-kho-bai', destination: '/services/dich-vu-thue-kho-bai', permanent: true },
       { source: '/services/van-tai-hang-khong', destination: '/services/van-chuyen-duong-khong', permanent: true },
       { source: '/services/van-tai-duong-bien', destination: '/services/van-chuyen-duong-bien', permanent: true },
       { source: '/services/van-tai-duong-bo', destination: '/services/van-chuyen-duong-bo', permanent: true },

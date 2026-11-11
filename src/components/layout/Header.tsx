@@ -24,13 +24,17 @@ const NAV_FALLBACK = [
     { label: "Cơ cấu tổ chức", href: "/files/co-cau-to-chuc.pdf",  isPDF: true },
     { label: "Hồ sơ năng lực", href: "/files/ho-so-nang-luc.pdf",  isPDF: true },
   ]},
-  { label: "Tư Vấn Hải Quan", href: "/tu-van-hai-quan", children: [] },
+  { label: "Tư Vấn Hải Quan", href: "/tu-van-hai-quan", children: [
+    { label: "Khai Thuê Hải Quan",        href: "/services/khai-thue-hai-quan" },
+    { label: "Cẩm nang & Tư vấn thủ tục", href: "/tu-van-hai-quan" },
+  ]},
   { label: "Dịch Vụ",         href: "/services",        children: [
-    { label: "Khai Thuê Hải Quan",     href: "/services/khai-thue-hai-quan" },
     { label: "Vận Chuyển Đường Không", href: "/services/van-chuyen-duong-khong" },
     { label: "Vận Chuyển Đường Biển",  href: "/services/van-chuyen-duong-bien" },
-    { label: "Pickup",                 href: "/services/pickup" },
+    { label: "Gom Hàng Lẻ (LCL)",       href: "/services/gom-hang-le-lcl" },
     { label: "Vận Chuyển Đường Bộ",    href: "/services/van-chuyen-duong-bo" },
+    { label: "Dịch vụ thuê kho bãi",   href: "/services/dich-vu-thue-kho-bai" },
+    { label: "Hàng Đặc Biệt & Dự Án",  href: "/services/hang-dac-biet-du-an" },
   ]},
   { label: "Tin Tức",          href: "/news",            children: [
     { label: "Hướng dẫn và Thủ tục", href: "/news?categorySlug=huong-dan-va-thu-tuc" },
@@ -81,6 +85,13 @@ function buildNav(items: any[], settings: Record<string, string>, categories: an
       children.push({ label: "Hồ sơ công ty",  href: settings.file_ho_so_cong_ty ? resolveFileUrl(settings.file_ho_so_cong_ty) : "#", isPDF: true });
       children.push({ label: "Cơ cấu tổ chức", href: settings.file_co_cau_to_chuc ? resolveFileUrl(settings.file_co_cau_to_chuc) : "#", isPDF: true });
       children.push({ label: "Hồ sơ năng lực", href: settings.file_ho_so_nang_luc ? resolveFileUrl(settings.file_ho_so_nang_luc) : "#", isPDF: true });
+    }
+
+    // Tự động cấu hình menu con cho Tư vấn hải quan
+    if (top.url === "/tu-van-hai-quan" || top.label?.toLowerCase().includes("tư vấn hải quan")) {
+      children.length = 0;
+      children.push({ label: "Khai Thuê Hải Quan", href: "/services/khai-thue-hai-quan" });
+      children.push({ label: "Cẩm nang & Tư vấn thủ tục", href: "/tu-van-hai-quan" });
     }
 
     // Tự động đưa toàn bộ Danh mục (Categories) vào menu Tin tức
