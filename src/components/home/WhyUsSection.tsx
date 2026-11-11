@@ -44,13 +44,13 @@ export default function WhyUsSection({ settings = {} }: { settings?: Record<stri
   const offices = settings.counter_offices   || "";
   const ships   = settings.counter_shipments || "";
   return (
-    <section className="py-24 bg-white">
+    <section className="py-14 sm:py-20 lg:py-24 bg-white overflow-hidden">
       <div className="wrap">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
           {/* Left: ảnh thật */}
-          <div className="relative order-2 lg:order-1">
-            <div className="relative w-full h-[500px] rounded-2xl overflow-hidden shadow-xl">
+          <div className="relative order-2 lg:order-1 mb-6 lg:mb-0">
+            <div className="relative w-full h-[260px] sm:h-[380px] lg:h-[500px] rounded-2xl overflow-hidden shadow-xl">
               <Image
                 src="/images/hero/hero-warehouse.jpg"
                 alt="Kho bãi logistics hiện đại HDT Logistics"
@@ -63,17 +63,17 @@ export default function WhyUsSection({ settings = {} }: { settings?: Record<stri
             </div>
 
             {/* Stats overlay */}
-            <div className="absolute bottom-5 left-5 right-5">
-              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-5 shadow-xl
+            <div className="absolute bottom-3 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-5">
+              <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-xl
                               grid grid-cols-3 divide-x divide-gray-100">
                 {[
                   { n: staff,  l: "Nhân sự" },
                   { n: offices, l: "Văn phòng" },
                   { n: ships,  l: "Chuyến hàng" },
                 ].map((s) => (
-                  <div key={s.l} className="text-center px-4">
-                    <div className="text-xl font-extrabold text-navy-700">{s.n}</div>
-                    <div className="text-xs text-navy-400 mt-0.5">{s.l}</div>
+                  <div key={s.l} className="text-center px-1 sm:px-4">
+                    <div className="text-base sm:text-xl font-extrabold text-navy-700">{s.n}</div>
+                    <div className="text-[10px] sm:text-xs text-navy-400 mt-0.5">{s.l}</div>
                   </div>
                 ))}
               </div>
@@ -87,14 +87,14 @@ export default function WhyUsSection({ settings = {} }: { settings?: Record<stri
               Bốn cam kết cốt lõi<br />
               <span className="text-grad">không thỏa hiệp</span>
             </h2>
-            <p className="text-navy-500 text-sm leading-relaxed mb-10">
+            <p className="text-navy-500 text-sm leading-relaxed mb-8 sm:mb-10 text-justify sm:text-left">
               Mỗi lô hàng được quản lý với tiêu chuẩn vận hành nhất quán — từ yêu cầu đầu tiên đến giao nhận thực tế.
             </p>
 
             <div className="space-y-4">
               {pillars.map((p) => (
                 <div key={p.tag}
-                  className="flex gap-4 p-5 rounded-2xl border border-gray-100 bg-white
+                  className="flex gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl border border-gray-100 bg-white
                              shadow-card hover:shadow-card-hover hover:-translate-y-0.5
                              transition-all group">
                   <div className={`w-11 h-11 rounded-xl flex items-center justify-center
@@ -109,14 +109,14 @@ export default function WhyUsSection({ settings = {} }: { settings?: Record<stri
                                    group-hover:text-orange-500 transition-colors">
                       {p.title}
                     </h3>
-                    <p className="text-navy-500 text-xs leading-relaxed">{p.desc}</p>
+                    <p className="text-navy-500 text-xs leading-relaxed text-justify sm:text-left">{p.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
 
             <div className="mt-8">
-              <Link href="/about" className="btn-outline inline-flex">
+              <Link href="/about" className="btn-outline justify-center sm:justify-start w-full sm:w-auto">
                 Tìm Hiểu Về HDT Logistics <ArrowRight size={15} />
               </Link>
             </div>

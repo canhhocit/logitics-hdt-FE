@@ -39,11 +39,11 @@ export default function CTASection({ settings = {} }: Props) {
           </h2>
           <p className="text-white/65 text-lg leading-relaxed mb-10 max-w-xl mx-auto">{subtitle}</p>
 
-          <div className="flex flex-wrap gap-4 justify-center mb-12">
-            <Link href="/contact" className="btn-orange shadow-orange">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-12 w-full sm:w-auto">
+            <Link href="/contact" className="btn-orange justify-center shadow-orange w-full sm:w-auto">
               Nhận Báo Giá Miễn Phí <ArrowRight size={16} />
             </Link>
-            <a href={`tel:${hotlineRaw}`} className="btn-ghost-white">
+            <a href={`tel:${hotlineRaw}`} className="btn-ghost-white justify-center w-full sm:w-auto">
               <Phone size={15} /> Gọi: {hotline}
             </a>
           </div>

@@ -57,7 +57,7 @@ export default function HeroSection({ settings = {} }: { settings?: Record<strin
   const s = slides[cur];
 
   return (
-    <section className="relative min-h-[92vh] flex flex-col overflow-hidden pt-[116px]">
+    <section className="relative min-h-[92vh] flex flex-col overflow-hidden pt-[80px] lg:pt-[100px]">
 
       {/* ── Background image ── */}
       <div className="absolute inset-0 z-0">
@@ -78,56 +78,56 @@ export default function HeroSection({ settings = {} }: { settings?: Record<strin
 
       {/* ── Content ── */}
       <div className="relative z-10 flex-1 flex items-center">
-        <div className="wrap w-full py-20">
+        <div className="wrap w-full py-12 sm:py-16 md:py-20">
           <div className="max-w-3xl">
             {/* Tag */}
             <span className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/40
                              text-orange-300 text-xs font-bold tracking-[0.15em] uppercase
-                             px-4 py-1.5 rounded-full mb-7">
+                             px-3.5 py-1.5 sm:px-4 sm:py-1.5 rounded-full mb-5 sm:mb-7">
               <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
               {s.tag}
             </span>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white
-                           leading-[1.1] tracking-[-0.025em] mb-3">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white
+                           leading-[1.15] tracking-[-0.025em] mb-2 sm:mb-3">
               {s.title}
             </h1>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-orange-400
-                           leading-[1.1] tracking-[-0.025em] mb-7">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-orange-400
+                           leading-[1.15] tracking-[-0.025em] mb-5 sm:mb-7">
               {s.highlight}
             </h1>
-            <p className="text-white/70 text-lg leading-relaxed max-w-2xl mb-10">{s.sub}</p>
+            <p className="text-white/75 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mb-8 sm:mb-10 text-justify sm:text-left">{s.sub}</p>
 
             {/* CTAs */}
-            <div className="flex flex-wrap gap-4 mb-12">
-              <Link href="/contact" className="btn-orange shadow-orange">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mb-8 sm:mb-12">
+              <Link href="/contact" className="btn-orange justify-center shadow-orange">
                 Nhận Báo Giá Ngay <ArrowRight size={16} />
               </Link>
-              <Link href="/services" className="btn-ghost-white">
+              <Link href="/services" className="btn-ghost-white justify-center">
                 Khám Phá Dịch Vụ
               </Link>
             </div>
 
             {/* Tracking */}
             <div className="bg-white/10 backdrop-blur-md border border-white/20
-                            rounded-2xl p-5 max-w-xl">
-              <p className="text-white/50 text-xs font-semibold tracking-widest uppercase mb-3">
+                            rounded-2xl p-4 sm:p-5 max-w-xl w-full">
+              <p className="text-white/60 text-xs font-semibold tracking-widest uppercase mb-3">
                 Tra Cứu Vận Đơn Nhanh
               </p>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-2">
                 <input
                   type="text" value={code}
                   onChange={(e) => setCode(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && window.location.assign(`/tracking${code ? `?code=${code}` : ""}`)}
                   placeholder="Nhập mã vận đơn (VD: HDVN2026001234)..."
-                  className="flex-1 bg-white rounded-xl px-4 py-3 text-navy-800 text-sm
+                  className="w-full flex-1 bg-white rounded-xl px-4 py-3 text-navy-800 text-sm
                              font-medium outline-none focus:ring-2 focus:ring-orange-400
                              placeholder:text-gray-400"
                 />
                 <Link href={`/tracking${code ? `?code=${code}` : ""}`}
-                  className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600
-                             text-white font-semibold px-5 py-3 rounded-xl text-sm
-                             transition-colors whitespace-nowrap">
+                  className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600
+                             text-white font-semibold px-6 py-3 rounded-xl text-sm
+                             transition-colors whitespace-nowrap min-h-[44px]">
                   <Search size={15} /> Tra Cứu
                 </Link>
               </div>
