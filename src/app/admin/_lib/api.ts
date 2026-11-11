@@ -40,7 +40,13 @@ async function request<T>(
   if (res.status === 401) {
     console.warn("[Admin API] 401 Unauthorized — redirecting to login");
     localStorage.removeItem("accessToken");
-    window.location.href = "/admin/login";
+    localStorage.removeItem("adminUser");
+    if (typeof window !== "undefined") {
+      try {
+        sessionStorage.setItem("admin_session_expired", "1");
+      } catch {}
+      window.location.href = "/admin/login?expired=1";
+    }
     throw new Error("Phiên đăng nhập hết hạn");
   }
 
@@ -177,7 +183,13 @@ export async function uploadMedia(file: File) {
   if (res.status === 401) {
     console.warn("[Admin API] 401 Unauthorized — redirecting to login");
     localStorage.removeItem("accessToken");
-    window.location.href = "/admin/login";
+    localStorage.removeItem("adminUser");
+    if (typeof window !== "undefined") {
+      try {
+        sessionStorage.setItem("admin_session_expired", "1");
+      } catch {}
+      window.location.href = "/admin/login?expired=1";
+    }
     throw new Error("Phiên đăng nhập hết hạn");
   }
 

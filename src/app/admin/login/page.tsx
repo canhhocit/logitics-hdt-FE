@@ -1,23 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Loader2, User, Lock, AlertCircle, Zap } from "lucide-react";
+import { Eye, EyeOff, Loader2, User, Lock, AlertCircle, Zap, Clock } from "lucide-react";
 import { login } from "../_lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [username,     setUsername]     = useState("");
-  const [password,     setPassword]     = useState("");
-  const [showPw,       setShowPw]       = useState(false);
-  const [loading,      setLoading]      = useState(false);
-  const [quickLoading, setQuickLoading] = useState(false);
-  const [error,        setError]        = useState("");
+  const [username,       setUsername]       = useState("");
+  const [password,       setPassword]       = useState("");
+  const [showPw,         setShowPw]         = useState(false);
+  const [loading,        setLoading]        = useState(false);
+  const [quickLoading,   setQuickLoading]   = useState(false);
+  const [error,          setError]          = useState("");
+  const [sessionExpired, setSessionExpired] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const hasParam = params.get("expired") === "1" || params.get("reason") === "expired";
+        const hasStorage = sessionStorage.getItem("admin_session_expired") === "1";
+        if (hasParam || hasStorage) {
+          setSessionExpired(true);
+          sessionStorage.removeItem("admin_session_expired");
+        }
+      } catch {}
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSessionExpired(false);
     setLoading(true);
     try {
       const data = await login(username, password);
@@ -33,6 +49,7 @@ export default function LoginPage() {
 
   const handleQuickLogin = async () => {
     setError("");
+    setSessionExpired(false);
     setUsername("admin");
     setPassword("admin");
     setQuickLoading(true);
@@ -80,6 +97,20 @@ export default function LoginPage() {
           <div className="mb-5 pb-3 border-b border-slate-100">
             <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">Đăng nhập tài khoản</h2>
           </div>
+
+          {/* Session Expired Notice */}
+          {sessionExpired && !error && (
+            <div
+              role="alert"
+              className="mb-5 flex items-start gap-2.5 bg-amber-50 border border-amber-200/90 text-amber-800 text-xs px-3.5 py-3 rounded-lg leading-relaxed shadow-2xs animate-in fade-in duration-150"
+            >
+              <Clock size={16} className="flex-shrink-0 mt-0.5 text-amber-600" />
+              <div>
+                <p className="font-semibold text-amber-900">Phiên làm việc đã hết hạn</p>
+                <p className="text-amber-700 mt-0.5">Vui lòng đăng nhập lại.</p>
+              </div>
+            </div>
+          )}
 
           {error && (
             <div

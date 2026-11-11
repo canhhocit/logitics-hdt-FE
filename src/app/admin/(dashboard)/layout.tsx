@@ -140,6 +140,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     setMounted(true);
     const token = localStorage.getItem("accessToken");
     if (!token) { router.push("/admin/login"); return; }
+
+    // Proactively check JWT expiration
+    try {
+      const parts = token.split(".");
+      if (parts.length === 3) {
+        const payload = JSON.parse(atob(parts[1]));
+        if (payload.exp && payload.exp * 1000 < Date.now()) {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("adminUser");
+          if (typeof window !== "undefined") {
+            try { sessionStorage.setItem("admin_session_expired", "1"); } catch {}
+            window.location.href = "/admin/login?expired=1";
+          }
+          return;
+        }
+      }
+    } catch {}
     const stored = localStorage.getItem("adminUser");
     if (stored) {
       try { setUsername(JSON.parse(stored).fullName || JSON.parse(stored).username || "Admin"); }
@@ -204,6 +221,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("adminUser");
+    if (typeof window !== "undefined") {
+      try { sessionStorage.removeItem("admin_session_expired"); } catch {}
+    }
     router.push("/admin/login");
   };
 

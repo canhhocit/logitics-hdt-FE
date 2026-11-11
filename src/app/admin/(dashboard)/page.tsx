@@ -151,8 +151,8 @@ export default function AdminDashboard() {
         <div className="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3.5 border-b border-slate-100">
             <div>
-              <h2 className="font-semibold text-slate-900 text-sm">Khách hàng cần tư vấn mới nhất</h2>
-              <p className="text-[11px] text-slate-500 mt-0.5">Yêu cầu báo giá và tư vấn dịch vụ từ form website</p>
+              <h2 className="font-semibold text-slate-900 text-sm">Khách hàng cần tư vấn</h2>
+              <p className="text-[11px] text-slate-500 mt-0.5">Yêu cầu và tư vấn dịch vụ từ website</p>
             </div>
             <Link
               href="/admin/leads"
