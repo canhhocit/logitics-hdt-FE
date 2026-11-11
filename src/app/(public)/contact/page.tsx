@@ -18,11 +18,11 @@ export default async function ContactPage() {
     fetchSettings(),
   ]);
 
-  const hotline        = settings.hotline           || "";
-  const hotlineRaw     = settings.hotline_raw        || "";
-  const hotlineContact = settings.hotline_contact    || "";
-  const hotlineContactRaw = settings.hotline_contact_raw || "";
-  const emailSales     = settings.email_sales        || "";
+  const hotline        = settings.hotline           || "0911 188 726";
+  const hotlineRaw     = settings.hotline_raw        || "0911188726";
+  const hotlineContact = settings.hotline_contact    || "0911 188 726";
+  const hotlineContactRaw = settings.hotline_contact_raw || "0911188726";
+  const emailSales     = settings.email_sales        || "hdt.logistics.jsc@gmail.com";
 
   return (
     <div className="bg-white">

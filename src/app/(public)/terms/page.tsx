@@ -27,7 +27,7 @@ export default function TermsPage() {
     },
     {
       title: "5. Quyền sở hữu trí tuệ",
-      body: "Toàn bộ nội dung website hdtlogistics.vn thuộc quyền sở hữu của Công ty TNHH Đầu Tư Kinh Doanh Và Xây Dựng Hải Đăng. Nghiêm cấm sao chép, phân phối hoặc sử dụng nội dung vì mục đích thương mại mà không có sự đồng ý bằng văn bản.",
+      body: "Toàn bộ nội dung website hdtlogistics.vn thuộc quyền sở hữu của CÔNG TY CỔ PHẦN HDT LOGISTICS. Nghiêm cấm sao chép, phân phối hoặc sử dụng nội dung vì mục đích thương mại mà không có sự đồng ý bằng văn bản.",
     },
     {
       title: "6. Giải quyết tranh chấp",

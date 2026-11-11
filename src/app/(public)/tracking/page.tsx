@@ -97,7 +97,7 @@ export default function TrackingPage() {
               <h3 className="text-xl font-bold text-navy-800 mb-2">Không tìm thấy vận đơn</h3>
               <p className="text-navy-500 text-sm">
                 Mã "<span className="font-mono font-bold text-navy-700">{code}</span>" không tồn tại.
-                Kiểm tra lại hoặc gọi hotline <a href="tel:19001234" className="text-orange-500 font-semibold">1900 1234</a>.
+                Kiểm tra lại hoặc gọi hotline <a href="tel:0911188726" className="text-orange-500 font-semibold">0911 188 726</a>.
               </p>
             </div>
           )}
@@ -170,7 +170,7 @@ export default function TrackingPage() {
                   </div>
                 </div>
                 <p className="text-center text-navy-400 text-sm">
-                  Cần hỗ trợ? Gọi <a href="tel:19001234" className="text-orange-500 font-bold hover:text-orange-600">1900 1234</a>
+                  Cần hỗ trợ? Gọi <a href="tel:0911188726" className="text-orange-500 font-bold hover:text-orange-600">0911 188 726</a>
                 </p>
               </div>
             );
@@ -197,7 +197,7 @@ export default function TrackingPage() {
             {[
               { icon: "📦", title: "Mã vận đơn ở đâu?", desc: "Mã 14 ký tự bắt đầu bằng HDVN được gửi qua SMS/email ngay sau khi đặt dịch vụ." },
               { icon: "🔄", title: "Cập nhật bao lâu?", desc: "Trạng thái được cập nhật tự động từ hệ thống GPS và điểm trung chuyển — thường mỗi 4–6 giờ." },
-              { icon: "📞", title: "Cần hỗ trợ thêm?", desc: "Gọi hotline 1900 1234 (24/7) hoặc email tracking@hdtlogistics.vn để được hỗ trợ ngay." },
+              { icon: "📞", title: "Cần hỗ trợ thêm?", desc: "Gọi hotline 0911 188 726 (24/7) hoặc email hdt.logistics.jsc@gmail.com để được hỗ trợ ngay." },
             ].map((item) => (
               <div key={item.title} className="card p-7">
                 <div className="text-4xl mb-4">{item.icon}</div>

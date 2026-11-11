@@ -44,12 +44,12 @@ export default function PrivacyPage() {
               <h2 className="font-bold text-navy-800 mb-3">7. Liên hệ</h2>
               <p className="text-navy-500 text-sm leading-[1.85]">
                 Nếu có câu hỏi về chính sách bảo mật, vui lòng liên hệ:{" "}
-                <a href="mailto:info@hdtlogistics.vn" className="text-orange-500 font-semibold hover:underline">
-                  info@hdtlogistics.vn
+                <a href="mailto:hdt.logistics.jsc@gmail.com" className="text-orange-500 font-semibold hover:underline">
+                  hdt.logistics.jsc@gmail.com
                 </a>{" "}
                 hoặc gọi hotline{" "}
-                <a href="tel:19001234" className="text-orange-500 font-semibold hover:underline">
-                  1900 1234
+                <a href="tel:0911188726" className="text-orange-500 font-semibold hover:underline">
+                  0911 188 726
                 </a>.
               </p>
             </div>

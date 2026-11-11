@@ -112,11 +112,11 @@ export default function Header({ settings = {}, menuItems = [], categories = [],
   const nav = buildNav(menuItems, settings, categories, services);
 
   // Company info từ settings, fallback về giá trị mặc định
-  const hotline        = settings.hotline         || "";
-  const hotlineRaw     = settings.hotline_raw      || "";
-  const email          = settings.email           || "";
-  const workingHours   = settings.working_hours   || "";
-  const facebookUrl    = settings.facebook_url    || "#";
+  const hotline        = settings.hotline         || "0911 188 726";
+  const hotlineRaw     = settings.hotline_raw      || "0911188726";
+  const email          = settings.email           || "hdt.logistics.jsc@gmail.com";
+  const workingHours   = settings.working_hours   || "08:00 – 17:30 (Thứ 2 - Thứ 7)";
+  const facebookUrl    = settings.facebook_url    || "https://facebook.com";
   const instagramUrl   = settings.instagram_url   || "#";
   const twitterUrl     = settings.twitter_url     || "#";
 

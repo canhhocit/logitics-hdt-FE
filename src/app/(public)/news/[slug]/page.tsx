@@ -164,11 +164,11 @@ export default async function NewsDetailPage({ params }: { params: { slug: strin
                                text-center font-semibold py-2.5 rounded-xl text-xs transition-colors mb-2.5">
                     Nhận Tư Vấn Miễn Phí
                   </Link>
-                  <a href="tel:0983116063"
+                  <a href="tel:0911188726"
                     className="flex items-center justify-center gap-1.5 w-full border border-white/20
                                text-white/70 hover:text-white text-center py-2.5 rounded-xl text-xs
                                transition-colors font-medium">
-                    📞 0983 116 063
+                    📞 0911 188 726
                   </a>
                 </div>
 

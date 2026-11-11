@@ -18,7 +18,7 @@ export default function FloatingButtons() {
     <>
       {/* Hotline pulse */}
       <div className="fixed bottom-3.5 right-16 md:bottom-24 md:right-5 z-50">
-        <a href="tel:19001234" aria-label="Gọi hotline"
+        <a href="tel:0911188726" aria-label="Gọi hotline"
           className="relative flex items-center justify-center w-11 h-11 md:w-13 md:h-13
                      bg-green-500 hover:bg-green-600 text-white rounded-full
                      shadow-lg shadow-green-500/40 transition-all hover:scale-110">
@@ -50,7 +50,7 @@ export default function FloatingButtons() {
             </div>
             {/* Options */}
             <div className="p-4 space-y-2.5">
-              <a href="tel:19001234"
+              <a href="tel:0911188726"
                 className="flex items-center gap-3 p-3 rounded-xl
                            bg-green-50 border border-green-200
                            hover:bg-green-100 transition-colors">
@@ -59,10 +59,10 @@ export default function FloatingButtons() {
                 </div>
                 <div>
                   <p className="text-navy-700 text-xs font-bold">Gọi Hotline</p>
-                  <p className="text-green-600 font-bold">1900 1234</p>
+                  <p className="text-green-600 font-bold">0911 188 726</p>
                 </div>
               </a>
-              <a href="https://zalo.me/hdtlogistics" target="_blank" rel="noreferrer"
+              <a href="https://zalo.me/0911188726" target="_blank" rel="noreferrer"
                 className="flex items-center gap-3 p-3 rounded-xl
                            bg-blue-50 border border-blue-200
                            hover:bg-blue-100 transition-colors">
@@ -74,7 +74,7 @@ export default function FloatingButtons() {
                   <p className="text-blue-600 font-bold text-sm">Nhắn tin ngay</p>
                 </div>
               </a>
-              <a href="mailto:sales@hdtlogistics.vn"
+              <a href="mailto:hdt.logistics.jsc@gmail.com"
                 className="flex items-center gap-3 p-3 rounded-xl
                            bg-orange-50 border border-orange-200
                            hover:bg-orange-100 transition-colors">
@@ -83,7 +83,7 @@ export default function FloatingButtons() {
                 </div>
                 <div>
                   <p className="text-navy-700 text-xs font-bold">Gửi Email</p>
-                  <p className="text-orange-600 font-bold text-xs">sales@hdtlogistics.vn</p>
+                  <p className="text-orange-600 font-bold text-xs">hdt.logistics.jsc@gmail.com</p>
                 </div>
               </a>
             </div>

@@ -531,7 +531,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
               <p className="text-white/65 text-lg leading-relaxed mb-8">{svc.intro}</p>
               <div className="flex flex-wrap gap-3">
                 <Link href="/contact" className="btn-orange">Nhận Báo Giá <ArrowRight size={15} /></Link>
-                <a href="tel:0983116063" className="btn-ghost-white"><Phone size={14} /> Tư Vấn Ngay</a>
+                <a href="tel:0911188726" className="btn-ghost-white"><Phone size={14} /> Tư Vấn Ngay</a>
               </div>
             </div>
             {/* Advantages */}

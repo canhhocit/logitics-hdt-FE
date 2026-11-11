@@ -12,16 +12,32 @@ function resolveFileUrl(url?: string) {
   return url;
 }
 
-const GROUPS = [
+interface SettingKeyDef {
+  key: string;
+  label: string;
+  type: string;
+  placeholder?: string;
+}
+
+interface SettingGroupDef {
+  label: string;
+  icon: any;
+  keys: SettingKeyDef[];
+}
+
+const GROUPS: SettingGroupDef[] = [
   {
     label: "Thông tin pháp nhân & Doanh nghiệp",
     icon: Info,
     keys: [
-      { key: "company_full_name", label: "Tên đầy đủ công ty", type: "text" },
-      { key: "company_short_name", label: "Tên thương hiệu ngắn gọn", type: "text" },
-      { key: "tax_code", label: "Mã số thuế doanh nghiệp", type: "text" },
-      { key: "license_date", label: "Ngày cấp phép", type: "text" },
-      { key: "license_org", label: "Cơ quan cấp phép", type: "text" },
+      { key: "company_full_name", label: "Tên đầy đủ công ty", type: "text", placeholder: "CÔNG TY CỔ PHẦN HDT LOGISTICS" },
+      { key: "company_short_name", label: "Tên viết tắt (viết tắt pháp lý)", type: "text", placeholder: "HDT LOGISTICS., JSC" },
+      { key: "company_int_name", label: "Tên quốc tế (tiếng Anh)", type: "text", placeholder: "HDT LOGISTICS JOINT STOCK COMPANY" },
+      { key: "tax_code", label: "Mã số thuế doanh nghiệp", type: "text", placeholder: "0111638260" },
+      { key: "representative", label: "Người đại diện pháp luật", type: "text", placeholder: "TRẦN VĂN TOẢN" },
+      { key: "company_address", label: "Địa chỉ trụ sở / Địa chỉ thuế", type: "text", placeholder: "Số 46/9/11 đường An Thọ, Xã An Khánh, TP Hà Nội, Việt Nam" },
+      { key: "license_date", label: "Ngày cấp phép", type: "text", placeholder: "08/04/2024" },
+      { key: "license_org", label: "Cơ quan cấp phép", type: "text", placeholder: "Sở Kế hoạch và Đầu tư TP Hà Nội" },
     ],
   },
   {
@@ -32,18 +48,18 @@ const GROUPS = [
         key: "hotline",
         label: "Hotline hiển thị",
         type: "text",
-        placeholder: "0983 116 063",
+        placeholder: "0911 188 726",
       },
       {
         key: "hotline_raw",
         label: "Hotline raw (tel: link)",
         type: "text",
-        placeholder: "0983116063",
+        placeholder: "0911188726",
       },
-      { key: "hotline_contact", label: "Số điện thoại phụ", type: "text" },
-      { key: "hotline_contact_raw", label: "Số phụ raw (tel: link)", type: "text" },
-      { key: "email", label: "Hòm thư chính", type: "email" },
-      { key: "email_sales", label: "Hòm thư phòng kinh doanh", type: "email" },
+      { key: "hotline_contact", label: "Số điện thoại phụ", type: "text", placeholder: "0983 116 063" },
+      { key: "hotline_contact_raw", label: "Số phụ raw (tel: link)", type: "text", placeholder: "0983116063" },
+      { key: "email", label: "Hòm thư chính", type: "email", placeholder: "hdt.logistics.jsc@gmail.com" },
+      { key: "email_sales", label: "Hòm thư phòng kinh doanh", type: "email", placeholder: "hdt.logistics.jsc@gmail.com" },
       {
         key: "working_hours",
         label: "Thời gian làm việc",
