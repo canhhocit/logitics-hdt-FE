@@ -4,8 +4,8 @@
 
 export const API_URL =
   typeof window === 'undefined'
-    // Server-side (SSR/SSG): ưu tiên INTERNAL_API_URL (Docker network) → fallback http://backend:8080
-    ? process.env.INTERNAL_API_URL || 'http://backend:8080/api/v1'
+    // Server-side (SSR/SSG): ưu tiên INTERNAL_API_URL → fallback NEXT_PUBLIC_API_URL → fallback http://backend:8080
+    ? process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://backend:8080/api/v1'
     // Client-side (browser): dùng public URL
     : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
 
