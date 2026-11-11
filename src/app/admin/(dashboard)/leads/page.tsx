@@ -253,7 +253,7 @@ export default function LeadsPage() {
                 </a>
               </div>
               <div>
-                <p className="text-[11px] font-medium text-slate-400 mb-0.5">Hòm thư điện tử</p>
+                <p className="text-[11px] font-medium text-slate-400 mb-0.5">Email</p>
                 <a href={`mailto:${selected.email}`} className="font-semibold text-navy-700 hover:underline truncate block">
                   {selected.email || "—"}
                 </a>
@@ -266,14 +266,7 @@ export default function LeadsPage() {
                 <p className="text-[11px] font-medium text-slate-400 mb-0.5">Thời gian gửi</p>
                 <p className="font-mono text-slate-600">{formatDate(selected.createdAt)}</p>
               </div>
-              {selected.sourcePage && (
-                <div className="col-span-2 pt-2 border-t border-slate-200/60">
-                  <p className="text-[11px] font-medium text-slate-400 mb-0.5">Trang gửi yêu cầu (Source Page)</p>
-                  <p className="font-mono text-slate-700 text-[11px] bg-white px-2 py-1 rounded border border-slate-200">
-                    {selected.sourcePage}
-                  </p>
-                </div>
-              )}
+              
             </div>
 
             {selected.message && (
