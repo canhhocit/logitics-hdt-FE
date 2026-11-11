@@ -130,6 +130,19 @@ export const createJob        = (body: any) => api.post<any>("/admin/jobs", body
 export const updateJob        = (id: string, body: any) => api.put<any>(`/admin/jobs/${id}`, body);
 export const deleteJob        = (id: string) => api.delete<any>(`/admin/jobs/${id}`);
 
+// ── Applications (Hồ sơ ứng tuyển & CV) ───────
+export const getAdminApplications = (page = 0, size = 20, status = "", jobId = "", keyword = "") => {
+  const p = new URLSearchParams({ page: String(page), size: String(size), sort: "createdAt,desc" });
+  if (status) p.set("status", status);
+  if (jobId) p.set("jobId", jobId);
+  if (keyword) p.set("keyword", keyword);
+  return api.get<any>(`/admin/applications?${p.toString()}`);
+};
+export const getAdminApplicationById = (id: string) => api.get<any>(`/admin/applications/${id}`);
+export const updateApplicationStatus = (id: string, status: string, notes?: string) =>
+  api.patch<any>(`/admin/applications/${id}/status`, { status, notes });
+export const deleteApplication = (id: string) => api.delete<any>(`/admin/applications/${id}`);
+
 // ── Settings ──────────────────────────────────
 export const getAdminSettings = () => api.get<any[]>("/admin/settings");
 export const upsertSettings   = (body: Record<string, string>) => api.patch<any[]>("/admin/settings", body);
