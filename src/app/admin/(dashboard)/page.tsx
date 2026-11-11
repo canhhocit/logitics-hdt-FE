@@ -2,49 +2,84 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { MessageSquare, Briefcase, FileText, Settings, ArrowRight, TrendingUp, Users, Clock } from "lucide-react";
+import {
+  MessageSquare, Briefcase, FileText, Settings, ArrowRight,
+  Users, Clock, Phone, Mail, Building2, CheckCircle2, ChevronRight,
+  Shield, Inbox, Layers
+} from "lucide-react";
 import { getStats, getAdminLeads } from "../_lib/api";
 
-const STATUS_LABEL: Record<string, string> = { NEW: "Mới", CONTACTED: "Đã liên hệ", CLOSED: "Đã đóng" };
-const STATUS_COLOR: Record<string, string> = {
-  NEW:       "bg-blue-100 text-blue-700",
-  CONTACTED: "bg-amber-100 text-amber-700",
-  CLOSED:    "bg-green-100 text-green-700",
+const STATUS_CONFIG: Record<string, { label: string; dot: string; badge: string }> = {
+  NEW: {
+    label: "Chờ liên hệ",
+    dot: "bg-orange-500",
+    badge: "bg-orange-50 text-orange-700 border-orange-200/60",
+  },
+  CONTACTED: {
+    label: "Đã liên hệ",
+    dot: "bg-blue-500",
+    badge: "bg-blue-50 text-blue-700 border-blue-200/60",
+  },
+  CLOSED: {
+    label: "Đã xử lý",
+    dot: "bg-slate-400",
+    badge: "bg-slate-100 text-slate-600 border-slate-200",
+  },
 };
 
-function StatCard({ icon: Icon, label, value, color, href }: any) {
+function StatCard({ icon: Icon, label, value, sublabel, href, urgent = false }: {
+  icon: any;
+  label: string;
+  value: any;
+  sublabel?: string;
+  href: string;
+  urgent?: boolean;
+}) {
   return (
-    <Link href={href}
-      className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm
-                 hover:shadow-md hover:-translate-y-0.5 transition-all group">
-      <div className="flex items-start justify-between mb-4">
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${color}`}>
-          <Icon size={22} />
+    <Link
+      href={href}
+      className={`bg-white rounded-xl p-5 border transition-all duration-150 group relative
+        ${urgent
+          ? "border-orange-200 hover:border-orange-300 shadow-[0_1px_3px_0_rgba(249,115,22,0.06)]"
+          : "border-slate-200/80 hover:border-slate-300 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)]"}`}
+    >
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-xs font-semibold text-slate-500">{label}</span>
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors
+          ${urgent ? "bg-orange-50 text-orange-600" : "bg-slate-100 text-slate-600 group-hover:bg-navy-50 group-hover:text-navy-700"}`}>
+          <Icon size={16} />
         </div>
-        <ArrowRight size={14} className="text-gray-300 group-hover:text-gray-500 group-hover:translate-x-0.5 transition-all" />
       </div>
-      <p className="text-3xl font-extrabold text-gray-800 mb-1">{value ?? "—"}</p>
-      <p className="text-sm text-gray-500">{label}</p>
+      <div className="flex items-baseline gap-2">
+        <p className="text-2xl font-bold text-slate-900 tracking-tight">{value ?? "—"}</p>
+        {sublabel && (
+          <span className="text-[11px] font-medium text-slate-400">{sublabel}</span>
+        )}
+      </div>
+      <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-slate-400 group-hover:text-navy-700 transition-colors">
+        <span>Xem danh sách</span>
+        <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
+      </div>
     </Link>
   );
 }
 
-const QUICK = [
-  { href: "/admin/posts",        label: "Viết bài mới",       icon: FileText },
-  { href: "/admin/services",     label: "Quản lý dịch vụ",    icon: Briefcase },
-  { href: "/admin/settings",     label: "Cài đặt website",    icon: Settings },
-  { href: "/admin/jobs",         label: "Đăng tuyển dụng",    icon: Users },
+const QUICK_ACTIONS = [
+  { href: "/admin/posts",        label: "Soạn thảo bài viết mới",  icon: FileText,   desc: "Cập nhật tin tức logistics & xuất nhập khẩu" },
+  { href: "/admin/leads",        label: "Xử lý yêu cầu tư vấn",    icon: MessageSquare, desc: "Theo dõi khách hàng gửi form liên hệ" },
+  { href: "/admin/services",     label: "Quản lý dịch vụ",        icon: Briefcase,  desc: "Cước tàu, hải quan, vận tải nội địa" },
+  { href: "/admin/settings",     label: "Cài đặt hotline & website", icon: Settings, desc: "Thông tin liên hệ, mạng xã hội, thông số" },
 ];
 
 export default function AdminDashboard() {
-  const [stats,  setStats]  = useState<any>({});
-  const [leads,  setLeads]  = useState<any[]>([]);
+  const [stats,   setStats]   = useState<any>({});
+  const [leads,   setLeads]   = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
       getStats().catch(() => ({})),
-      getAdminLeads(0, 5, "NEW").catch(() => ({ content: [] })),
+      getAdminLeads(0, 6, "NEW").catch(() => ({ content: [] })),
     ]).then(([s, l]) => {
       setStats(s || {});
       setLeads((l as any).content || []);
@@ -57,87 +92,178 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div>
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-extrabold text-gray-800">Tổng quan</h1>
-        <p className="text-gray-500 text-sm mt-1">Chào mừng trở lại — đây là tóm tắt hệ thống hôm nay.</p>
+    <div className="space-y-6">
+      {/* Page Title & Intro */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-slate-200/80">
+        <div>
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Trung tâm điều hành</h1>
+          <p className="text-xs text-slate-500 mt-0.5">Tổng quan dữ liệu hoạt động và các mục cần xử lý hôm nay</p>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-slate-500">
+          <Clock size={13} className="text-slate-400" />
+          <span>Cập nhật lúc: {new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}</span>
+        </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-        <StatCard icon={MessageSquare} label="Leads mới chờ xử lý" value={loading ? "..." : stats.newLeads}
-          color="bg-blue-100 text-blue-600" href="/admin/leads" />
-        <StatCard icon={Briefcase} label="Dịch vụ đang hiển thị" value={loading ? "..." : stats.activeServices}
-          color="bg-indigo-100 text-indigo-600" href="/admin/services" />
-        <StatCard icon={TrendingUp} label="Lượt truy cập (mock)" value={loading ? "..." : stats.totalVisits}
-          color="bg-emerald-100 text-emerald-600" href="/admin" />
+      {/* Operational KPI Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard
+          icon={MessageSquare}
+          label="Leads mới cần xử lý"
+          value={loading ? "..." : (stats.newLeads ?? 0)}
+          sublabel="yêu cầu chưa gọi"
+          urgent={Boolean(stats.newLeads && stats.newLeads > 0)}
+          href="/admin/leads"
+        />
+        <StatCard
+          icon={Briefcase}
+          label="Dịch vụ logistics"
+          value={loading ? "..." : (stats.activeServices ?? 0)}
+          sublabel="đang hiển thị"
+          href="/admin/services"
+        />
+        <StatCard
+          icon={FileText}
+          label="Bài viết & Kiến thức"
+          value={loading ? "..." : (stats.totalPosts ?? "—")}
+          sublabel="nội dung xuất bản"
+          href="/admin/posts"
+        />
+        <StatCard
+          icon={Building2}
+          label="Văn phòng & Chi nhánh"
+          value={loading ? "..." : (stats.totalOffices ?? "—")}
+          sublabel="trên toàn quốc"
+          href="/admin/offices"
+        />
       </div>
 
-      <div className="grid lg:grid-cols-[1fr_320px] gap-6">
-        {/* Recent Leads */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h2 className="font-bold text-gray-800">Leads mới gần đây</h2>
-            <Link href="/admin/leads" className="text-xs text-indigo-600 hover:text-indigo-700 font-semibold flex items-center gap-1">
-              Xem tất cả <ArrowRight size={11} />
+      {/* Main Two-Column Workflow Section */}
+      <div className="grid lg:grid-cols-[1fr_360px] gap-6 items-start">
+        {/* Left Column: Recent Customer Inquiries */}
+        <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+            <div>
+              <h2 className="font-semibold text-slate-900 text-sm">Khách hàng cần tư vấn mới nhất</h2>
+              <p className="text-[11px] text-slate-500 mt-0.5">Yêu cầu báo giá và tư vấn dịch vụ từ form website</p>
+            </div>
+            <Link
+              href="/admin/leads"
+              className="text-xs text-navy-700 hover:text-navy-900 font-semibold inline-flex items-center gap-1 hover:underline"
+            >
+              <span>Xem tất cả</span>
+              <ArrowRight size={12} />
             </Link>
           </div>
+
           {loading ? (
-            <div className="p-8 text-center text-gray-400 text-sm">Đang tải...</div>
+            <div className="p-10 text-center text-slate-400 text-xs">Đang tải dữ liệu leads...</div>
           ) : leads.length === 0 ? (
-            <div className="p-8 text-center">
-              <MessageSquare size={32} className="text-gray-200 mx-auto mb-3" />
-              <p className="text-gray-400 text-sm">Chưa có lead mới nào</p>
+            <div className="p-10 text-center">
+              <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-2.5">
+                <Inbox size={20} />
+              </div>
+              <p className="text-xs font-semibold text-slate-700">Không có lead mới nào tồn đọng</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">Tất cả yêu cầu tư vấn đã được đội ngũ xử lý hoặc chưa phát sinh mới.</p>
             </div>
           ) : (
-            <div className="divide-y divide-gray-50">
-              {leads.map((lead: any) => (
-                <div key={lead.id} className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors">
-                  <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-sm flex-shrink-0">
-                    {lead.fullName?.charAt(0) || "?"}
+            <div className="divide-y divide-slate-100">
+              {leads.map((lead: any) => {
+                const conf = STATUS_CONFIG[lead.status] || STATUS_CONFIG.NEW;
+                return (
+                  <div key={lead.id} className="p-4 sm:px-5 hover:bg-slate-50/70 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="min-w-0 flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-navy-50 text-navy-700 border border-navy-100 flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
+                        {lead.fullName?.charAt(0) || "?"}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-slate-900 text-xs truncate">{lead.fullName}</p>
+                          <span className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border ${conf.badge}`}>
+                            <span className={`w-1 h-1 rounded-full ${conf.dot}`} />
+                            {conf.label}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 mt-1">
+                          <span className="flex items-center gap-1 font-mono text-slate-700">
+                            <Phone size={11} className="text-slate-400" />
+                            {lead.phone}
+                          </span>
+                          {lead.email && (
+                            <span className="flex items-center gap-1 text-slate-500">
+                              <Mail size={11} className="text-slate-400" />
+                              {lead.email}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between sm:justify-end gap-3 text-right">
+                      <span className="text-[10px] text-slate-400 font-mono">
+                        {formatDate(lead.createdAt)}
+                      </span>
+                      <Link
+                        href={`/admin/leads`}
+                        className="text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 px-2.5 py-1 rounded-md transition-colors"
+                      >
+                        Chi tiết
+                      </Link>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-800 text-sm truncate">{lead.fullName}</p>
-                    <p className="text-gray-400 text-xs truncate">{lead.phone} {lead.email ? `· ${lead.email}` : ""}</p>
-                  </div>
-                  <div className="flex-shrink-0 text-right">
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${STATUS_COLOR[lead.status] || "bg-gray-100 text-gray-500"}`}>
-                      {STATUS_LABEL[lead.status] || lead.status}
-                    </span>
-                    <p className="text-gray-300 text-[10px] mt-1 flex items-center gap-1 justify-end">
-                      <Clock size={9} />{formatDate(lead.createdAt)}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
 
-        {/* Quick actions */}
-        <div className="space-y-4">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <h2 className="font-bold text-gray-800 mb-4">Thao tác nhanh</h2>
-            <div className="space-y-2">
-              {QUICK.map(({ href, label, icon: Icon }) => (
-                <Link key={href} href={href}
-                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-indigo-50 hover:text-indigo-700
-                             text-gray-600 text-sm font-medium transition-colors group">
-                  <Icon size={15} className="text-gray-400 group-hover:text-indigo-500 transition-colors" />
-                  {label}
-                  <ArrowRight size={12} className="ml-auto text-gray-200 group-hover:text-indigo-400 transition-colors" />
+        {/* Right Column: Quick Links & System Status */}
+        <div className="space-y-5">
+          {/* Quick Actions Card */}
+          <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] p-5">
+            <h2 className="font-semibold text-slate-900 text-sm mb-3">Lối tắt tác vụ</h2>
+            <div className="space-y-1.5">
+              {QUICK_ACTIONS.map(({ href, label, desc, icon: Icon }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="flex items-center gap-3 p-2.5 rounded-lg text-slate-700 hover:text-navy-900 hover:bg-slate-50 transition-colors group border border-transparent hover:border-slate-200/60"
+                >
+                  <div className="w-7 h-7 rounded-md bg-slate-100 group-hover:bg-navy-50 group-hover:text-navy-700 text-slate-500 flex items-center justify-center flex-shrink-0 transition-colors">
+                    <Icon size={14} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold leading-tight">{label}</p>
+                    <p className="text-[10px] text-slate-400 truncate leading-tight mt-0.5">{desc}</p>
+                  </div>
+                  <ChevronRight size={13} className="text-slate-300 group-hover:text-slate-500 transition-colors" />
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* Info box */}
-          <div className="bg-indigo-600 rounded-2xl p-5 text-white">
-            <h3 className="font-bold mb-2 text-sm">💡 Mọi thay đổi là real-time</h3>
-            <p className="text-white/70 text-xs leading-relaxed">
-              Tất cả nội dung chỉnh sửa tại đây sẽ phản ánh ngay lên website client mà không cần deploy lại.
-            </p>
+          {/* Operational Environment Card (Replacing vanity purple box) */}
+          <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] p-5 text-xs">
+            <div className="flex items-center gap-2 mb-3 text-slate-900 font-semibold">
+              <Shield size={14} className="text-navy-600" />
+              <span>Thông số vận hành CMS</span>
+            </div>
+            <div className="space-y-2.5 text-slate-600">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <span className="text-slate-500 text-[11px]">Đồng bộ dữ liệu:</span>
+                <span className="font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[10px] border border-emerald-200/50">
+                  Real-time Server
+                </span>
+              </div>
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <span className="text-slate-500 text-[11px]">Phân quyền hiện tại:</span>
+                <span className="font-semibold text-slate-800">Super Administrator</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-500 text-[11px]">Hạ tầng phục vụ:</span>
+                <span className="font-mono text-slate-700 text-[11px]">HDT Next.js 14 + Spring Boot</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

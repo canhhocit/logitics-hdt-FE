@@ -1,55 +1,88 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ToastProvider } from "../_components/Toast";
 import {
   LayoutDashboard, MessageSquare, Briefcase, FileText,
   Settings, Building2, Users, BriefcaseBusiness,
-  LogOut, ChevronRight, Menu, X, Package,
-  Quote, Globe, Award, Sparkles, FolderOpen,
+  LogOut, ChevronRight, Menu, X,
+  Quote, Globe, Award, Sparkles, FolderOpen, ExternalLink,
+  ShieldCheck, Circle
 } from "lucide-react";
 
-const NAV = [
+interface NavGroupItem {
+  divider?: false;
+  href: string;
+  label: string;
+  icon: any;
+  badge?: string;
+}
+
+interface NavDividerItem {
+  divider: true;
+  label: string;
+}
+
+type NavEntry = NavGroupItem | NavDividerItem;
+
+const NAV: NavEntry[] = [
   { href: "/admin",               label: "Dashboard",            icon: LayoutDashboard },
-  { href: "/admin/leads",         label: "Leads tư vấn",         icon: MessageSquare,  badge: "new" },
-  { divider: true, label: "Nội dung" },
-  { href: "/admin/posts",         label: "Bài viết",              icon: FileText },
+  { href: "/admin/leads",         label: "Leads tư vấn",         icon: MessageSquare,  badge: "Mới" },
+  { divider: true, label: "Quản lý nội dung" },
+  { href: "/admin/posts",         label: "Bài viết & Tin tức",   icon: FileText },
   { href: "/admin/categories",    label: "Chuyên mục",            icon: FolderOpen },
-  { href: "/admin/services",      label: "Dịch vụ",               icon: Briefcase },
-  { divider: true, label: "Thông tin công ty" },
-  { href: "/admin/offices",       label: "Chi nhánh",             icon: Building2 },
-  { href: "/admin/contacts",      label: "Người phụ trách",       icon: Users },
+  { href: "/admin/services",      label: "Dịch vụ logistics",     icon: Briefcase },
+  { divider: true, label: "Thông tin doanh nghiệp" },
+  { href: "/admin/offices",       label: "Văn phòng chi nhánh",  icon: Building2 },
+  { href: "/admin/contacts",      label: "Nhân sự phụ trách",    icon: Users },
   { href: "/admin/jobs",          label: "Tuyển dụng",            icon: BriefcaseBusiness },
-  { divider: true, label: "Nội dung website" },
-  { href: "/admin/testimonials",  label: "Đánh giá KH",           icon: Quote },
+  { divider: true, label: "Truyền thông website" },
+  { href: "/admin/testimonials",  label: "Đánh giá khách hàng",  icon: Quote },
   { href: "/admin/partners",      label: "Đối tác & Hiệp hội",   icon: Globe },
-  { href: "/admin/awards",        label: "Giải thưởng",           icon: Award },
+  { href: "/admin/awards",        label: "Giải thưởng & Chứng chỉ", icon: Award },
   { href: "/admin/company-values",label: "Giá trị cốt lõi",      icon: Sparkles },
-  { divider: true, label: "Cấu hình" },
-  { href: "/admin/settings",      label: "Cài đặt website",       icon: Settings },
+  { divider: true, label: "Hệ thống" },
+  { href: "/admin/settings",      label: "Cài đặt chung",        icon: Settings },
 ];
 
-function NavItem({ item, pathname, onClick }: { item: any; pathname: string; onClick?: () => void }) {
+function NavItem({ item, pathname, onClick }: { item: NavEntry; pathname: string; onClick?: () => void }) {
   if (item.divider) {
     return (
-      <div className="pt-4 pb-1 px-3">
-        <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-slate-500">{item.label}</p>
+      <div className="pt-4 pb-1.5 px-3">
+        <p className="text-[10px] font-semibold tracking-wider uppercase text-slate-400 select-none">
+          {item.label}
+        </p>
       </div>
     );
   }
   const active = pathname === item.href;
   const Icon = item.icon;
   return (
-    <Link href={item.href} onClick={onClick}
-      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group
+    <Link
+      href={item.href}
+      onClick={onClick}
+      className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-all group relative
         ${active
-          ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
-          : "text-slate-400 hover:text-white hover:bg-white/10"}`}>
-      <Icon size={16} className="flex-shrink-0" />
-      <span className="flex-1">{item.label}</span>
-      {!active && <ChevronRight size={12} className="opacity-0 group-hover:opacity-60 transition-opacity" />}
+          ? "bg-navy-50 text-navy-800 font-semibold border border-navy-100 shadow-2xs"
+          : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"}`}
+    >
+      <Icon
+        size={15}
+        className={`flex-shrink-0 transition-colors ${active ? "text-navy-700" : "text-slate-400 group-hover:text-slate-600"}`}
+      />
+      <span className="flex-1 truncate">{item.label}</span>
+      {item.badge && (
+        <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wide
+          ${active ? "bg-navy-100 text-navy-700" : "bg-orange-50 text-orange-600 border border-orange-200"}`}>
+          {item.badge}
+        </span>
+      )}
+      {!active && !item.badge && (
+        <ChevronRight size={12} className="opacity-0 -translate-x-1 group-hover:opacity-40 group-hover:translate-x-0 transition-all text-slate-400" />
+      )}
     </Link>
   );
 }
@@ -80,48 +113,71 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (!mounted) return null;
 
+  const activeNavItem = NAV.find((n) => !n.divider && n.href === pathname) as NavGroupItem | undefined;
+  const currentTitle = activeNavItem ? activeNavItem.label : "Quản trị hệ thống";
+
   const sidebar = (
-    <aside className="w-64 bg-slate-900 h-screen flex flex-col flex-shrink-0 relative">
+    <aside className="w-64 bg-white border-r border-slate-200/90 h-screen flex flex-col flex-shrink-0 select-none">
       <style dangerouslySetInnerHTML={{__html: `
-        .dark-scrollbar::-webkit-scrollbar { width: 5px; }
-        .dark-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .dark-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
-        .dark-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+        .admin-scrollbar::-webkit-scrollbar { width: 4px; }
+        .admin-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .admin-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 8px; }
+        .admin-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
       `}} />
-      {/* Logo */}
-      <div className="px-6 py-5 border-b border-white/10 flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Package size={16} className="text-white" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-white font-bold text-sm leading-none truncate">HDT Logistics</p>
-            <p className="text-slate-500 text-[10px] mt-0.5">Admin CMS</p>
-          </div>
-        </div>
+      {/* Official Website Brand Logo */}
+      <div className="px-5 py-4 border-b border-slate-200/80 flex-shrink-0 flex items-center justify-between bg-slate-50/40">
+        <Link href="/admin" className="flex items-center">
+          <Image
+            src="/images/logo.png"
+            alt="HDT Logistics"
+            width={140}
+            height={42}
+            className="h-8 w-auto object-contain"
+            priority
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/images/logo.svg";
+            }}
+          />
+        </Link>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-0.5 dark-scrollbar">
+      {/* Nav Link List */}
+      <nav className="flex-1 px-3 py-3 overflow-y-auto space-y-0.5 admin-scrollbar">
         {NAV.map((item, i) => (
           <NavItem key={i} item={item} pathname={pathname} onClick={() => setSidebarOpen(false)} />
         ))}
       </nav>
 
-      {/* User */}
-      <div className="px-4 py-4 border-t border-white/10">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-indigo-700 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+      {/* External Link to Public Site */}
+      <div className="px-3 py-2 border-t border-slate-200/60 bg-slate-50/30">
+        <a
+          href="/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+        >
+          <ExternalLink size={13} className="text-slate-400" />
+          <span className="flex-1">Xem website client</span>
+        </a>
+      </div>
+
+      {/* User Profile Footer */}
+      <div className="px-4 py-3.5 border-t border-slate-200/80 bg-slate-50/60">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-2xs">
             {username.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-white text-xs font-semibold truncate">{username}</p>
-            <p className="text-slate-500 text-[10px]">Quản trị viên</p>
+            <p className="text-slate-800 text-xs font-semibold truncate leading-tight">{username}</p>
+            <p className="text-slate-400 text-[10px] leading-tight mt-0.5">Quản trị viên</p>
           </div>
-          <button onClick={handleLogout}
+          <button
+            onClick={handleLogout}
             title="Đăng xuất"
-            className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500
-                       hover:text-red-400 hover:bg-red-400/10 transition-colors flex-shrink-0">
+            aria-label="Đăng xuất khỏi hệ thống"
+            className="w-7 h-7 flex items-center justify-center rounded-md text-slate-400
+                       hover:text-red-600 hover:bg-red-50 transition-colors flex-shrink-0"
+          >
             <LogOut size={14} />
           </button>
         </div>
@@ -131,31 +187,58 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <ToastProvider>
-      <div className="min-h-screen bg-slate-50 flex">
+      <div className="min-h-screen bg-[#f8fafc] flex font-sans selection:bg-navy-100 selection:text-navy-900">
         {/* Desktop sidebar */}
         <div className="hidden lg:flex sticky top-0 h-screen">{sidebar}</div>
 
         {/* Mobile sidebar overlay */}
         {sidebarOpen && (
-          <div className="lg:hidden fixed inset-0 z-50 flex">
-            <div className="absolute inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
+          <div className="lg:hidden fixed inset-0 z-50 flex animate-in fade-in duration-150">
+            <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
             <div className="relative z-10 flex">{sidebar}</div>
           </div>
         )}
 
-        {/* Main */}
+        {/* Main Content Area */}
         <div className="flex-1 flex flex-col min-w-0">
-          {/* Top bar (mobile) */}
-          <header className="lg:hidden sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
-            <button onClick={() => setSidebarOpen(true)}
-              className="w-8 h-8 flex items-center justify-center text-gray-500">
-              <Menu size={20} />
-            </button>
-            <span className="font-bold text-gray-700 text-sm">HDT Admin</span>
+          {/* Top Bar Header */}
+          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setSidebarOpen(true)}
+                aria-label="Mở menu điều hướng"
+                className="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 transition-colors"
+              >
+                <Menu size={18} />
+              </button>
+              <div>
+                <nav className="flex items-center gap-1.5 text-xs text-slate-400">
+                  <span className="hover:text-slate-600 cursor-default">HDT Admin</span>
+                  <span>/</span>
+                  <span className="font-semibold text-slate-800">{currentTitle}</span>
+                </nav>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span>Hệ thống trực tuyến</span>
+              </div>
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-navy-700 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-colors"
+              >
+                <span>Xem Website</span>
+                <ExternalLink size={12} />
+              </a>
+            </div>
           </header>
 
-          {/* Page content */}
-          <main className="flex-1 p-6 lg:p-8 max-w-7xl w-full mx-auto">
+          {/* Page Content */}
+          <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
             {children}
           </main>
         </div>

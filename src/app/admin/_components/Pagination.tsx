@@ -26,32 +26,45 @@ export default function Pagination({ page, totalPages, totalElements, size, onCh
   }
 
   return (
-    <div className="flex items-center justify-between px-1 mt-4">
-      <p className="text-xs text-gray-400">
-        Hiển thị {from}–{to} / {totalElements} bản ghi
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-2 py-3 border-t border-slate-100">
+      <p className="text-xs text-slate-500 font-medium">
+        Hiển thị <span className="font-semibold text-slate-800">{from}</span>–<span className="font-semibold text-slate-800">{to}</span> trong <span className="font-semibold text-slate-800">{totalElements}</span> bản ghi
       </p>
-      <div className="flex items-center gap-1">
-        <button disabled={page === 0}
+      <div className="flex items-center gap-1.5">
+        <button
+          disabled={page === 0}
           onClick={() => onChange(page - 1)}
-          className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200
-                     text-gray-500 disabled:opacity-30 hover:bg-gray-50 transition-colors">
+          aria-label="Trang trước"
+          className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200
+                     text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-50 hover:border-slate-300 transition-colors"
+        >
           <ChevronLeft size={14} />
         </button>
         {pages.map((p, i) =>
           p === "..." ? (
-            <span key={`e${i}`} className="w-8 h-8 flex items-center justify-center text-xs text-gray-400">…</span>
+            <span key={`e${i}`} className="w-8 h-8 flex items-center justify-center text-xs text-slate-400 select-none">
+              …
+            </span>
           ) : (
-            <button key={p} onClick={() => onChange(p as number)}
-              className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-semibold transition-colors
-                ${p === page ? "bg-indigo-600 text-white" : "border border-gray-200 text-gray-600 hover:bg-gray-50"}`}>
+            <button
+              key={p}
+              onClick={() => onChange(p as number)}
+              className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-semibold transition-all
+                ${p === page
+                  ? "bg-navy-600 text-white shadow-sm font-bold"
+                  : "border border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300"}`}
+            >
               {(p as number) + 1}
             </button>
           )
         )}
-        <button disabled={page >= totalPages - 1}
+        <button
+          disabled={page >= totalPages - 1}
           onClick={() => onChange(page + 1)}
-          className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200
-                     text-gray-500 disabled:opacity-30 hover:bg-gray-50 transition-colors">
+          aria-label="Trang tiếp theo"
+          className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200
+                     text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-50 hover:border-slate-300 transition-colors"
+        >
           <ChevronRight size={14} />
         </button>
       </div>

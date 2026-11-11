@@ -7,7 +7,19 @@ import Modal from "../../_components/Modal";
 import ConfirmDialog from "../../_components/ConfirmDialog";
 import { useToast } from "../../_components/Toast";
 
-const EMPTY = { name: "", slug: "", shortDesc: "", intro: "", icon: "briefcase", color: "blue", orderNo: 0, status: "PUBLISHED", contentBlocks: { advantages: [{title: "", desc: ""}, {title: "", desc: ""}, {title: "", desc: ""}, {title: "", desc: ""}] } };
+const EMPTY = {
+  name: "",
+  slug: "",
+  shortDesc: "",
+  intro: "",
+  icon: "briefcase",
+  color: "blue",
+  orderNo: 0,
+  status: "PUBLISHED",
+  contentBlocks: {
+    advantages: [{title: "", desc: ""}, {title: "", desc: ""}, {title: "", desc: ""}, {title: "", desc: ""}]
+  }
+};
 
 const ICONS: Record<string, any> = {
   "plane": Plane, "ship": Ship, "boxes": Boxes, "truck": Truck, "file-text": FileText,
@@ -18,14 +30,14 @@ const ICON_LABELS: Record<string, string> = {
   "star": "Ngôi sao", "briefcase": "Cặp xách", "package": "Kiện hàng", "globe": "Toàn cầu", "zap": "Tốc độ"
 };
 const COLORS = [
-  { value: "blue",   label: "Xanh dương",  cls: "bg-blue-100 text-blue-600",     dotCls: "bg-blue-500" },
-  { value: "cyan",   label: "Xanh ngọc",   cls: "bg-cyan-100 text-cyan-600",     dotCls: "bg-cyan-500" },
-  { value: "teal",   label: "Teal",        cls: "bg-teal-100 text-teal-600",     dotCls: "bg-teal-500" },
-  { value: "green",  label: "Xanh lá",     cls: "bg-green-100 text-green-600",   dotCls: "bg-green-500" },
-  { value: "orange", label: "Cam",         cls: "bg-orange-100 text-orange-600", dotCls: "bg-orange-500" },
-  { value: "rose",   label: "Hồng",        cls: "bg-rose-100 text-rose-600",     dotCls: "bg-rose-500" },
-  { value: "indigo", label: "Chàm",        cls: "bg-indigo-100 text-indigo-600", dotCls: "bg-indigo-500" },
-  { value: "violet", label: "Tím",         cls: "bg-violet-100 text-violet-600", dotCls: "bg-violet-500" },
+  { value: "blue",   label: "Xanh dương",  cls: "bg-blue-50 text-blue-700 border border-blue-200",     dotCls: "bg-blue-600" },
+  { value: "cyan",   label: "Xanh ngọc",   cls: "bg-cyan-50 text-cyan-700 border border-cyan-200",     dotCls: "bg-cyan-600" },
+  { value: "teal",   label: "Teal",        cls: "bg-teal-50 text-teal-700 border border-teal-200",     dotCls: "bg-teal-600" },
+  { value: "green",  label: "Xanh lá",     cls: "bg-emerald-50 text-emerald-700 border border-emerald-200", dotCls: "bg-emerald-600" },
+  { value: "orange", label: "Cam",         cls: "bg-orange-50 text-orange-700 border border-orange-200", dotCls: "bg-orange-600" },
+  { value: "rose",   label: "Hồng",        cls: "bg-rose-50 text-rose-700 border border-rose-200",     dotCls: "bg-rose-600" },
+  { value: "indigo", label: "Chàm",        cls: "bg-slate-100 text-slate-800 border border-slate-300",  dotCls: "bg-slate-700" },
+  { value: "violet", label: "Tím",         cls: "bg-purple-50 text-purple-700 border border-purple-200", dotCls: "bg-purple-600" },
 ];
 
 function slugify(s: string) {
@@ -48,17 +60,27 @@ export default function ServicesPage() {
     try {
       const res = await getAdminServices();
       setServices((res as any).content || res || []);
-    } catch (e: any) { toast("error", e.message); }
-    finally { setLoading(false); }
-  }, []);
+    } catch (e: any) {
+      toast("error", e.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [toast]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
   const openNew = () => { setEditing(null); setForm(EMPTY); setModalOpen(true); };
   const openEdit = (s: any) => {
     setEditing(s);
-    setForm({ name: s.name, slug: s.slug, shortDesc: s.shortDesc || "", intro: s.intro || "",
-      icon: s.icon || "briefcase", color: s.color || "blue", orderNo: s.orderNo || 0, status: s.status || "PUBLISHED",
+    setForm({
+      name: s.name,
+      slug: s.slug,
+      shortDesc: s.shortDesc || "",
+      intro: s.intro || "",
+      icon: s.icon || "briefcase",
+      color: s.color || "blue",
+      orderNo: s.orderNo || 0,
+      status: s.status || "PUBLISHED",
       contentBlocks: {
         advantages: s.contentBlocks?.advantages?.length 
           ? s.contentBlocks.advantages.map((a: any) => typeof a === "string" ? { title: a, desc: "" } : { title: a?.title || "", desc: a?.desc || "" }) 
@@ -69,12 +91,13 @@ export default function ServicesPage() {
   };
 
   const handleSave = async () => {
-    if (!form.name || !form.slug) { toast("error", "Vui lòng điền tên và slug"); return; }
+    if (!form.name || !form.slug) { toast("error", "Vui lòng nhập tên dịch vụ và slug"); return; }
     
-    // Filter empty advantages
     const payload = { ...form };
     if (payload.contentBlocks?.advantages) {
-      payload.contentBlocks.advantages = payload.contentBlocks.advantages.filter((a: any) => (a.title && a.title.trim() !== "") || (a.desc && a.desc.trim() !== ""));
+      payload.contentBlocks.advantages = payload.contentBlocks.advantages.filter(
+        (a: any) => (a.title && a.title.trim() !== "") || (a.desc && a.desc.trim() !== "")
+      );
     }
 
     setSaving(true);
@@ -84,8 +107,11 @@ export default function ServicesPage() {
       toast("success", editing ? "Cập nhật dịch vụ thành công" : "Tạo dịch vụ thành công");
       setModalOpen(false);
       fetchData();
-    } catch (e: any) { toast("error", e.message); }
-    finally { setSaving(false); }
+    } catch (e: any) {
+      toast("error", e.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = async () => {
@@ -94,73 +120,116 @@ export default function ServicesPage() {
       toast("success", "Đã ẩn dịch vụ thành công");
       setDelTarget(null);
       fetchData();
-    } catch (e: any) { toast("error", e.message); }
+    } catch (e: any) {
+      toast("error", e.message);
+    }
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-5">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200/80">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-800">Dịch vụ</h1>
-          <p className="text-gray-500 text-sm mt-0.5">{services.length} dịch vụ</p>
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Dịch vụ logistics</h1>
+          <p className="text-xs text-slate-500 mt-0.5">Quản lý danh mục giải pháp vận tải, cước quốc tế và thủ tục hải quan</p>
         </div>
-        <button onClick={openNew}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white
-                     text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors shadow-sm">
-          <Plus size={15} /> Thêm dịch vụ
+        <button
+          onClick={openNew}
+          className="inline-flex items-center gap-1.5 bg-navy-600 hover:bg-navy-700 text-white
+                     text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition-all active:scale-[0.99] self-start sm:self-auto"
+        >
+          <Plus size={14} />
+          <span>Thêm dịch vụ mới</span>
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      {/* Table Card */}
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] overflow-hidden">
         {loading ? (
-          <div className="p-10 text-center text-gray-400 text-sm">Đang tải...</div>
+          <div className="p-12 text-center text-slate-400 text-xs">Đang tải danh sách dịch vụ...</div>
         ) : services.length === 0 ? (
-          <div className="p-12 text-center"><Briefcase size={36} className="text-gray-200 mx-auto mb-3" /><p className="text-gray-400">Chưa có dịch vụ nào</p></div>
+          <div className="p-12 text-center">
+            <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-2.5">
+              <Briefcase size={20} />
+            </div>
+            <p className="text-xs font-semibold text-slate-700">Chưa có dịch vụ nào</p>
+            <p className="text-[11px] text-slate-400 mt-0.5 mb-4">Nhấn nút bên dưới để tạo dịch vụ vận chuyển đầu tiên.</p>
+            <button
+              onClick={openNew}
+              className="bg-navy-600 text-white text-xs font-semibold px-3.5 py-2 rounded-lg hover:bg-navy-700 transition-colors inline-flex items-center gap-1.5"
+            >
+              <Plus size={13} />
+              <span>Tạo dịch vụ</span>
+            </button>
+          </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-100">
+            <table className="w-full text-left border-collapse">
+              <thead className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">STT ưu tiên</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Dịch vụ</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Slug</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Icon</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Trạng thái</th>
-                  <th className="px-4 py-3" />
+                  <th className="px-4 py-3 whitespace-nowrap">Thứ tự</th>
+                  <th className="px-4 py-3">Tên dịch vụ</th>
+                  <th className="px-4 py-3">Đường dẫn (Slug)</th>
+                  <th className="px-4 py-3">Biểu tượng & Màu</th>
+                  <th className="px-4 py-3">Trạng thái</th>
+                  <th className="px-4 py-3 text-right">Thao tác</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-slate-100 text-xs">
                 {services.map((s: any) => {
                   const colorObj = COLORS.find((c) => c.value === s.color) || COLORS[0];
                   return (
-                    <tr key={s.id} className="hover:bg-gray-50/70 transition-colors">
-                      <td className="px-4 py-3 text-gray-400 font-mono text-xs">{String(s.orderNo).padStart(2, "0")}</td>
-                      <td className="px-4 py-3">
-                        <p className="font-semibold text-gray-800">{s.name}</p>
-                        {s.shortDesc && <p className="text-xs text-gray-400 line-clamp-1 mt-0.5">{s.shortDesc}</p>}
+                    <tr key={s.id} className="hover:bg-slate-50/60 transition-colors group">
+                      <td className="px-4 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">
+                        {String(s.orderNo ?? 0).padStart(2, "0")}
                       </td>
-                      <td className="px-4 py-3 font-mono text-xs text-gray-400">{s.slug}</td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-2.5">
-                          <span className={`w-7 h-7 flex items-center justify-center rounded-full shadow-sm ${colorObj.cls}`}>
+                      <td className="px-4 py-3 max-w-[280px]">
+                        <p className="font-semibold text-slate-900 group-hover:text-navy-700 transition-colors">{s.name}</p>
+                        {s.shortDesc && <p className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">{s.shortDesc}</p>}
+                      </td>
+                      <td className="px-4 py-3 font-mono text-[11px] text-slate-400 max-w-[160px] truncate">{s.slug}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <span className={`w-7 h-7 flex items-center justify-center rounded-lg shadow-2xs ${colorObj.cls}`}>
                             {(() => {
                               const IconComp = s.icon && ICONS[s.icon] ? ICONS[s.icon] : Briefcase;
-                              return <IconComp size={14} />;
+                              return <IconComp size={13} />;
                             })()}
                           </span>
-                          <span className={`w-3 h-3 rounded-full shadow-sm ${colorObj.dotCls}`} title={colorObj.label} />
+                          <span className={`w-2.5 h-2.5 rounded-full ${colorObj.dotCls}`} title={colorObj.label} />
                         </div>
                       </td>
-                      <td className="px-4 py-3">
-                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold
-                          ${s.status === "PUBLISHED" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
-                          {s.status === "PUBLISHED" ? "Hiện" : s.status === "INACTIVE" ? "Đã ẩn" : "Nháp"}
-                        </span>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {s.status === "PUBLISHED" ? (
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                            Hiển thị
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                            <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                            Đã ẩn
+                          </span>
+                        )}
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 text-right whitespace-nowrap">
                         <div className="flex items-center gap-1 justify-end">
-                          <button onClick={() => openEdit(s)} className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"><Pencil size={14} /></button>
-                          <button onClick={() => setDelTarget(s)} className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"><Trash2 size={14} /></button>
+                          <button
+                            onClick={() => openEdit(s)}
+                            title="Chỉnh sửa dịch vụ"
+                            aria-label="Sửa dịch vụ"
+                            className="p-1.5 rounded-md text-slate-400 hover:text-navy-700 hover:bg-slate-100 transition-colors"
+                          >
+                            <Pencil size={13} />
+                          </button>
+                          <button
+                            onClick={() => setDelTarget(s)}
+                            title="Ẩn dịch vụ"
+                            aria-label="Ẩn dịch vụ"
+                            className="p-1.5 rounded-md text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                          >
+                            <Trash2 size={13} />
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -172,127 +241,189 @@ export default function ServicesPage() {
         )}
       </div>
 
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)}
-        title={editing ? "Sửa dịch vụ" : "Thêm dịch vụ mới"} size="lg">
-        <div className="space-y-4">
-          <div className="grid sm:grid-cols-2 gap-4">
+      {/* Service Editor Modal */}
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? "Sửa dịch vụ logistics" : "Thêm dịch vụ logistics mới"} size="lg">
+        <div className="space-y-4 text-xs">
+          <div className="grid sm:grid-cols-2 gap-3.5">
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">Tên dịch vụ *</label>
-              <input value={form.name} required
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Tên dịch vụ *</label>
+              <input
+                value={form.name}
+                required
                 onChange={(e) => setForm({ ...form, name: e.target.value, slug: editing ? form.slug : slugify(e.target.value) })}
-                className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400" />
+                placeholder="Vận tải đường biển quốc tế..."
+                className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
+              />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">Slug *</label>
-              <input value={form.slug} required onChange={(e) => setForm({ ...form, slug: e.target.value })}
-                className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm font-mono focus:outline-none focus:border-indigo-400" />
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Slug *</label>
+              <input
+                value={form.slug}
+                required
+                onChange={(e) => setForm({ ...form, slug: e.target.value })}
+                placeholder="van-tai-duong-bien"
+                className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs font-mono text-slate-800 bg-white focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
+              />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">Icon (Lucide name)</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Biểu tượng</label>
               <div className="flex gap-2">
-                <div className="w-10 flex-shrink-0 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-xl text-gray-500">
+                <div className="w-9 h-9 flex-shrink-0 flex items-center justify-center bg-slate-50 border border-slate-200 rounded-lg text-slate-600">
                   {(() => {
                     const IconComp = ICONS[form.icon] || Briefcase;
-                    return <IconComp size={18} />;
+                    return <IconComp size={16} />;
                   })()}
                 </div>
-                <select value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })}
-                  className="flex-1 border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
+                <select
+                  value={form.icon}
+                  onChange={(e) => setForm({ ...form, icon: e.target.value })}
+                  className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600"
+                >
                   {Object.keys(ICONS).map((ic) => <option key={ic} value={ic}>{ICON_LABELS[ic]} ({ic})</option>)}
                 </select>
               </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">Màu sắc</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Tông màu hiển thị</label>
               <div className="flex gap-2">
-                <div className="w-10 flex-shrink-0 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-xl">
+                <div className="w-9 h-9 flex-shrink-0 flex items-center justify-center bg-slate-50 border border-slate-200 rounded-lg">
                   {(() => {
                     const c = COLORS.find(x => x.value === form.color) || COLORS[0];
-                    return <span className={`w-4 h-4 rounded-full shadow-sm ${c.dotCls}`} />;
+                    return <span className={`w-3.5 h-3.5 rounded-full ${c.dotCls}`} />;
                   })()}
                 </div>
-                <select value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })}
-                  className="flex-1 border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
+                <select
+                  value={form.color}
+                  onChange={(e) => setForm({ ...form, color: e.target.value })}
+                  className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600"
+                >
                   {COLORS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
                 </select>
               </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">Thứ tự hiển thị</label>
-              <input type="number" min={0} value={form.orderNo} onChange={(e) => setForm({ ...form, orderNo: Number(e.target.value) })}
-                className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400" />
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Thứ tự ưu tiên hiển thị</label>
+              <input
+                type="number"
+                min={0}
+                value={form.orderNo}
+                onChange={(e) => setForm({ ...form, orderNo: Number(e.target.value) })}
+                className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600"
+              />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">Trạng thái</label>
-              <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}
-                className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
-                <option value="PUBLISHED">Xuất bản</option>
-                <option value="DRAFT">Nháp</option>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Trạng thái</label>
+              <select
+                value={form.status}
+                onChange={(e) => setForm({ ...form, status: e.target.value })}
+                className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600"
+              >
+                <option value="PUBLISHED">Xuất bản công khai</option>
+                <option value="DRAFT">Lưu nháp / Tạm ẩn</option>
               </select>
             </div>
           </div>
+
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1.5">Mô tả ngắn (hiển thị trên card dịch vụ)</label>
-            <textarea value={form.shortDesc} rows={2} onChange={(e) => setForm({ ...form, shortDesc: e.target.value })}
-              placeholder="Mô tả 1-2 dòng hiển thị trên trang danh sách dịch vụ..."
-              className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm resize-none focus:outline-none focus:border-indigo-400" />
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">Mô tả ngắn (hiển thị trên thẻ dịch vụ trang chủ)</label>
+            <textarea
+              value={form.shortDesc}
+              rows={2}
+              onChange={(e) => setForm({ ...form, shortDesc: e.target.value })}
+              placeholder="Tóm tắt 1-2 câu về giải pháp vận tải..."
+              className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white resize-none focus:outline-none focus:border-navy-600"
+            />
           </div>
-          <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
-            <div className="flex items-center justify-between mb-3">
-              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wide">Điểm nổi bật</label>
-              <button type="button" onClick={() => setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: [...(form.contentBlocks?.advantages || []), {title: "", desc: ""}] } })}
-                className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold bg-white px-2 py-1 rounded border shadow-sm">
-                + Thêm ô
+
+          {/* Advantages / Feature Blocks */}
+          <div className="bg-slate-50/70 p-3.5 rounded-lg border border-slate-200/80">
+            <div className="flex items-center justify-between mb-2.5">
+              <label className="block text-[11px] font-semibold text-slate-700 uppercase tracking-wide">Lợi thế & Điểm nổi bật</label>
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: [...(form.contentBlocks?.advantages || []), {title: "", desc: ""}] } })}
+                className="text-[11px] text-navy-700 hover:text-navy-900 font-semibold bg-white px-2 py-0.5 rounded border border-slate-200 shadow-2xs"
+              >
+                + Thêm mục
               </button>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {(form.contentBlocks?.advantages || []).map((adv: any, idx: number) => (
-                <div key={idx} className="flex gap-2 items-start bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
-                  <div className="flex-1 space-y-2">
-                    <input value={adv.title || ""} onChange={(e) => {
-                      const newAdv = [...(form.contentBlocks?.advantages || [])];
-                      newAdv[idx] = { ...adv, title: e.target.value };
-                      setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
-                    }}
-                    placeholder={`Tiêu đề ${idx + 1}...`}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-semibold focus:outline-none focus:border-indigo-400 bg-gray-50" />
-                    
-                    <textarea value={adv.desc || ""} rows={2} onChange={(e) => {
-                      const newAdv = [...(form.contentBlocks?.advantages || [])];
-                      newAdv[idx] = { ...adv, desc: e.target.value };
-                      setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
-                    }}
-                    placeholder={`Mô tả chi tiết...`}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:border-indigo-400" />
+                <div key={idx} className="flex gap-2 items-start bg-white p-2.5 rounded-lg border border-slate-200/80 shadow-2xs">
+                  <div className="flex-1 space-y-1.5">
+                    <input
+                      value={adv.title || ""}
+                      onChange={(e) => {
+                        const newAdv = [...(form.contentBlocks?.advantages || [])];
+                        newAdv[idx] = { ...adv, title: e.target.value };
+                        setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
+                      }}
+                      placeholder={`Tiêu đề lợi thế ${idx + 1}...`}
+                      className="w-full border border-slate-200 rounded-md px-2.5 py-1.5 text-xs font-medium text-slate-800 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-navy-600"
+                    />
+                    <textarea
+                      value={adv.desc || ""}
+                      rows={1}
+                      onChange={(e) => {
+                        const newAdv = [...(form.contentBlocks?.advantages || [])];
+                        newAdv[idx] = { ...adv, desc: e.target.value };
+                        setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
+                      }}
+                      placeholder="Mô tả cụ thể..."
+                      className="w-full border border-slate-200 rounded-md px-2.5 py-1 text-xs text-slate-700 bg-white resize-none focus:outline-none focus:border-navy-600"
+                    />
                   </div>
-                  <button type="button" onClick={() => {
-                    const newAdv = form.contentBlocks.advantages.filter((_: any, i: number) => i !== idx);
-                    setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
-                  }} className="text-gray-400 hover:text-red-500 bg-gray-50 border border-gray-200 rounded-lg p-2.5 flex-shrink-0 transition-colors">
-                    <Trash2 size={16} />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newAdv = form.contentBlocks.advantages.filter((_: any, i: number) => i !== idx);
+                      setForm({ ...form, contentBlocks: { ...form.contentBlocks, advantages: newAdv } });
+                    }}
+                    aria-label="Xóa mục lợi thế"
+                    className="text-slate-400 hover:text-red-500 p-1.5 rounded hover:bg-red-50 transition-colors"
+                  >
+                    <Trash2 size={14} />
                   </button>
                 </div>
               ))}
             </div>
           </div>
+
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1.5">Giới thiệu chi tiết</label>
-            <textarea value={form.intro} rows={4} onChange={(e) => setForm({ ...form, intro: e.target.value })}
-              placeholder="Nội dung giới thiệu đầy đủ về dịch vụ..."
-              className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm resize-none focus:outline-none focus:border-indigo-400" />
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">Nội dung giới thiệu chi tiết</label>
+            <textarea
+              value={form.intro}
+              rows={4}
+              onChange={(e) => setForm({ ...form, intro: e.target.value })}
+              placeholder="Giới thiệu đầy đủ năng lực cung ứng của dịch vụ..."
+              className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white resize-none focus:outline-none focus:border-navy-600"
+            />
           </div>
-          <div className="flex gap-3 justify-end pt-2 border-t border-gray-100">
-            <button onClick={() => setModalOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">Hủy</button>
-            <button onClick={handleSave} disabled={saving}
-              className="px-5 py-2 text-sm font-semibold bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 disabled:opacity-60 transition-colors">
+
+          <div className="flex gap-2.5 justify-end pt-3 border-t border-slate-100">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="px-3.5 py-2 text-xs font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+            >
+              Hủy
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="px-4 py-2 text-xs font-semibold bg-navy-600 text-white rounded-lg hover:bg-navy-700 disabled:opacity-60 transition-colors shadow-sm active:scale-[0.99]"
+            >
               {saving ? "Đang lưu..." : editing ? "Lưu thay đổi" : "Tạo dịch vụ"}
             </button>
           </div>
         </div>
       </Modal>
 
-      <ConfirmDialog open={!!delTarget} message={`Ẩn dịch vụ "${delTarget?.name}"? Dịch vụ sẽ không hiển thị trên website.`}
-        onConfirm={handleDelete} onCancel={() => setDelTarget(null)} />
+      <ConfirmDialog
+        open={Boolean(delTarget)}
+        message={`Ẩn dịch vụ "${delTarget?.name}"? Dịch vụ sẽ không còn hiển thị công khai trên website.`}
+        onConfirm={handleDelete}
+        onCancel={() => setDelTarget(null)}
+      />
     </div>
   );
 }

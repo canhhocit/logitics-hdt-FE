@@ -33,3 +33,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env
+
+# Antigravity project skills & agent configurations
+.agents/
+.agent/

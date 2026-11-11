@@ -376,8 +376,24 @@ const services: Record<string, ServiceData> = {
   },
 };
 
+// Aliases cho các slug cũ để đảm bảo tương thích và tránh 404
+services["pickup"] = services["gom-hang-le-lcl"];
+services["van-chuyen-lcl"] = services["gom-hang-le-lcl"];
+services["van-tai-hang-khong"] = services["van-chuyen-duong-khong"];
+services["van-tai-duong-bien"] = services["van-chuyen-duong-bien"];
+services["van-tai-duong-bo"] = services["van-chuyen-duong-bo"];
+services["khai-bao-hai-quan"] = services["khai-thue-hai-quan"];
+services["hang-dac-biet"] = services["hang-dac-biet-du-an"];
+
 export async function generateStaticParams() {
-  return Object.keys(services).map((slug) => ({ slug }));
+  return [
+    { slug: "van-chuyen-duong-khong" },
+    { slug: "van-chuyen-duong-bien" },
+    { slug: "gom-hang-le-lcl" },
+    { slug: "van-chuyen-duong-bo" },
+    { slug: "khai-thue-hai-quan" },
+    { slug: "hang-dac-biet-du-an" },
+  ];
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {

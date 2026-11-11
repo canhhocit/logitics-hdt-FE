@@ -31,9 +31,19 @@ const colorMap: Record<string, string> = {
 
 // Feature bullets per service — display-only UI enhancement (không phải business data từ CMS)
 const serviceFeatures: Record<string, string[]> = {
+  // Canonical Slugs (Chuẩn hóa V16)
+  "van-chuyen-duong-khong": ["Kết nối 50+ hãng hàng không", "Express & Economy linh hoạt", "Hàng lạnh / hàng DGR", "Tracking AWB real-time"],
+  "van-chuyen-duong-bien":  ["FCL & LCL – 100+ cảng biển", "Booking Yang Ming, SITC, CMA CGM...", "Container lạnh, hàng rời", "Tracking container 24/7"],
+  "gom-hang-le-lcl":        ["Tính cước theo CBM", "Lịch gom hàng cố định hàng tuần", "Tiết kiệm cho lô hàng nhỏ", "Tuyến xuất & nhập khẩu"],
+  "van-chuyen-duong-bo":    ["63 tỉnh thành nội địa", "Xuyên biên giới ASEAN, Trung Quốc", "Xe 1–40 tấn, GPS 24/7", "Door-to-door trọn gói"],
+  "khai-thue-hai-quan":     ["Khai báo VNACCS/VCIS", "Tỷ lệ thông quan lần đầu >95%", "Tư vấn HS Code, chính sách thuế", "Hồ sơ rà soát 2 cấp"],
+  "hang-dac-biet-du-an":    ["Hàng OOG, siêu trường siêu trọng", "Hàng nguy hiểm (DGR/IMO)", "Lập kế hoạch dự án chi tiết", "Xin phép lưu thông, hộ tống"],
+
+  // Backward-compatible Aliases
   "van-tai-hang-khong":  ["Kết nối 50+ hãng hàng không", "Express & Economy linh hoạt", "Hàng lạnh / hàng DGR", "Tracking AWB real-time"],
   "van-tai-duong-bien":  ["FCL & LCL – 100+ cảng biển", "Booking Yang Ming, SITC, CMA CGM...", "Container lạnh, hàng rời", "Tracking container 24/7"],
   "van-chuyen-lcl":      ["Tính cước theo CBM", "Lịch gom hàng cố định hàng tuần", "Tiết kiệm cho lô hàng nhỏ", "Tuyến xuất & nhập khẩu"],
+  "pickup":              ["Tính cước theo CBM", "Lịch gom hàng cố định hàng tuần", "Tiết kiệm cho lô hàng nhỏ", "Tuyến xuất & nhập khẩu"],
   "van-tai-duong-bo":    ["63 tỉnh thành nội địa", "Xuyên biên giới ASEAN, Trung Quốc", "Xe 1–40 tấn, GPS 24/7", "Door-to-door trọn gói"],
   "khai-bao-hai-quan":   ["Khai báo VNACCS/VCIS", "Tỷ lệ thông quan lần đầu >95%", "Tư vấn HS Code, chính sách thuế", "Hồ sơ rà soát 2 cấp"],
   "hang-dac-biet":       ["Hàng OOG, siêu trường siêu trọng", "Hàng nguy hiểm (DGR/IMO)", "Lập kế hoạch dự án chi tiết", "Xin phép lưu thông, hộ tống"],

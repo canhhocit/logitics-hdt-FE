@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Plus, Pencil, Trash2, Award } from "lucide-react";
+import { Plus, Pencil, Trash2, Award, ShieldCheck, Users, Handshake, Star, Trophy, Medal } from "lucide-react";
 import { getAdminAwards, createAward, updateAward, deleteAward } from "../../_lib/api";
 import Modal from "../../_components/Modal";
 import ConfirmDialog from "../../_components/ConfirmDialog";
 import { useToast } from "../../_components/Toast";
 
 const EMPTY = { title: "", year: "", icon: "award", orderNo: 0 };
-const ICON_OPTIONS = ["award","shield-check","users","handshake","star","trophy","medal","certificate"];
+const ICON_OPTIONS = ["award", "shield-check", "users", "handshake", "star", "trophy", "medal"];
 
 export default function AwardsPage() {
   const { toast } = useToast();
@@ -22,10 +22,14 @@ export default function AwardsPage() {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    try { setList(await getAdminAwards() as any[]); }
-    catch (e: any) { toast("error", e.message); }
-    finally { setLoading(false); }
-  }, []);
+    try {
+      setList(await getAdminAwards() as any[]);
+    } catch (e: any) {
+      toast("error", e.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [toast]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
@@ -37,101 +41,175 @@ export default function AwardsPage() {
   };
 
   const handleSave = async () => {
-    if (!form.title) { toast("error", "Vui lòng nhập tên giải thưởng"); return; }
+    if (!form.title) { toast("error", "Vui lòng nhập tên giải thưởng hoặc chứng chỉ"); return; }
     setSaving(true);
     try {
       if (editing) await updateAward(editing.id, form);
       else         await createAward(form);
-      toast("success", editing ? "Cập nhật thành công" : "Thêm giải thưởng thành công");
-      setModalOpen(false); fetchData();
-    } catch (e: any) { toast("error", e.message); }
-    finally { setSaving(false); }
+      toast("success", editing ? "Cập nhật giải thưởng thành công" : "Thêm giải thưởng thành công");
+      setModalOpen(false);
+      fetchData();
+    } catch (e: any) {
+      toast("error", e.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = async () => {
-    try { await deleteAward(delTarget.id); toast("success", "Xóa thành công"); setDelTarget(null); fetchData(); }
-    catch (e: any) { toast("error", e.message); }
+    try {
+      await deleteAward(delTarget.id);
+      toast("success", "Xóa giải thưởng thành công");
+      setDelTarget(null);
+      fetchData();
+    } catch (e: any) {
+      toast("error", e.message);
+    }
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-5">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200/80">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-800">Giải thưởng & Chứng nhận</h1>
-          <p className="text-gray-500 text-sm mt-0.5">Hiển thị trên trang Về chúng tôi</p>
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Giải thưởng & Chứng chỉ năng lực</h1>
+          <p className="text-xs text-slate-500 mt-0.5">Các danh hiệu uy tín và chứng nhận ngành logistics hiển thị trên website</p>
         </div>
-        <button onClick={openNew}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors shadow-sm">
-          <Plus size={15} /> Thêm giải thưởng
+        <button
+          onClick={openNew}
+          className="inline-flex items-center gap-1.5 bg-navy-600 hover:bg-navy-700 text-white
+                     text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition-all active:scale-[0.99] self-start sm:self-auto"
+        >
+          <Plus size={14} />
+          <span>Thêm giải thưởng</span>
         </button>
       </div>
 
       {loading ? (
-        <div className="p-10 text-center text-gray-400 text-sm">Đang tải...</div>
+        <div className="p-12 text-center text-slate-400 text-xs bg-white rounded-xl border border-slate-200/80">
+          Đang tải danh sách giải thưởng...
+        </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {list.map((a: any) => (
-            <div key={a.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 text-center hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-3 text-amber-600">
-                <Award size={22} />
+            <div
+              key={a.id}
+              className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] p-5 text-center hover:border-slate-300 transition-all group flex flex-col justify-between"
+            >
+              <div>
+                <div className="w-12 h-12 bg-amber-50 text-amber-600 border border-amber-200/80 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-2xs">
+                  <Award size={22} />
+                </div>
+                <h3 className="font-semibold text-slate-900 text-xs leading-snug group-hover:text-navy-700 transition-colors mb-1">{a.title}</h3>
+                {a.year && (
+                  <span className="inline-block bg-slate-100 text-slate-600 border border-slate-200/60 px-2 py-0.5 rounded text-[10px] font-mono font-medium">
+                    Năm {a.year}
+                  </span>
+                )}
               </div>
-              <p className="font-semibold text-gray-800 text-sm leading-snug mb-1">{a.title}</p>
-              {a.year && <p className="text-gray-400 text-xs mb-1">{a.year}</p>}
-              <p className="text-gray-300 text-xs font-mono">{a.icon}</p>
-              <div className="flex gap-2 justify-center mt-4">
-                <button onClick={() => openEdit(a)} className="px-3 py-1.5 text-xs font-semibold text-indigo-600 border border-indigo-200 rounded-lg hover:bg-indigo-50 transition-colors">Sửa</button>
-                <button onClick={() => setDelTarget(a)} className="px-3 py-1.5 text-xs font-semibold text-red-500 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">Xóa</button>
+
+              <div className="flex gap-2 justify-center mt-4 pt-3 border-t border-slate-100">
+                <button
+                  onClick={() => openEdit(a)}
+                  className="px-3 py-1 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors"
+                >
+                  Sửa
+                </button>
+                <button
+                  onClick={() => setDelTarget(a)}
+                  className="px-3 py-1 text-xs font-medium text-red-600 bg-white border border-slate-200 rounded-md hover:bg-red-50 hover:border-red-200 transition-colors"
+                >
+                  Xóa
+                </button>
               </div>
             </div>
           ))}
+
           {list.length === 0 && (
-            <div className="sm:col-span-2 lg:col-span-3 xl:col-span-4 p-12 text-center bg-white rounded-2xl border border-gray-100">
-              <Award size={36} className="text-gray-200 mx-auto mb-3" />
-              <p className="text-gray-400 mb-4">Chưa có giải thưởng nào</p>
-              <button onClick={openNew} className="bg-indigo-600 text-white text-sm px-4 py-2 rounded-xl hover:bg-indigo-500 transition-colors">Thêm giải thưởng đầu tiên</button>
+            <div className="sm:col-span-2 lg:col-span-3 xl:col-span-4 p-12 text-center bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)]">
+              <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-2.5">
+                <Award size={20} />
+              </div>
+              <p className="text-xs font-semibold text-slate-700">Chưa có giải thưởng nào</p>
+              <p className="text-[11px] text-slate-400 mt-0.5 mb-4">Thêm chứng nhận FIATA, VLA, ISO hoặc bằng khen của HDT.</p>
+              <button
+                onClick={openNew}
+                className="bg-navy-600 text-white text-xs font-semibold px-3.5 py-2 rounded-lg hover:bg-navy-700 transition-colors inline-flex items-center gap-1.5"
+              >
+                <Plus size={13} />
+                <span>Thêm giải thưởng đầu tiên</span>
+              </button>
             </div>
           )}
         </div>
       )}
 
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? "Sửa giải thưởng" : "Thêm giải thưởng"} size="sm">
-        <div className="space-y-4">
+      {/* Editor Modal */}
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? "Sửa giải thưởng / Chứng nhận" : "Thêm giải thưởng mới"} size="sm">
+        <div className="space-y-4 text-xs">
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1.5">Tên giải thưởng / chứng nhận *</label>
-            <input value={form.title} required onChange={e => setForm({...form, title: e.target.value})}
-              placeholder="VD: Top 100 DN Logistics uy tín 2024"
-              className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400" />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">Năm</label>
-              <input value={form.year} onChange={e => setForm({...form, year: e.target.value})}
-                placeholder="2024"
-                className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400" />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">Thứ tự</label>
-              <input type="number" min={0} value={form.orderNo} onChange={e => setForm({...form, orderNo: Number(e.target.value)})}
-                className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400" />
-            </div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">Tên giải thưởng / Chứng chỉ *</label>
+            <input
+              value={form.title}
+              required
+              onChange={e => setForm({ ...form, title: e.target.value })}
+              placeholder="VD: Top 10 Doanh nghiệp Logistics Uy tín..."
+              className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
+            />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1.5">Icon (Lucide React name)</label>
-            <select value={form.icon} onChange={e => setForm({...form, icon: e.target.value})}
-              className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">Năm đạt giải / Cấp chứng chỉ</label>
+            <input
+              value={form.year}
+              onChange={e => setForm({ ...form, year: e.target.value })}
+              placeholder="VD: 2024"
+              className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs font-mono text-slate-800 bg-white focus:outline-none focus:border-navy-600"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">Biểu tượng Lucide</label>
+            <select
+              value={form.icon}
+              onChange={e => setForm({ ...form, icon: e.target.value })}
+              className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600"
+            >
               {ICON_OPTIONS.map(ic => <option key={ic} value={ic}>{ic}</option>)}
             </select>
           </div>
-          <div className="flex gap-3 justify-end pt-2 border-t border-gray-100">
-            <button onClick={() => setModalOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">Hủy</button>
-            <button onClick={handleSave} disabled={saving}
-              className="px-5 py-2 text-sm font-semibold bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 disabled:opacity-60 transition-colors">
-              {saving ? "Đang lưu..." : editing ? "Lưu thay đổi" : "Thêm"}
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">Thứ tự hiển thị</label>
+            <input
+              type="number"
+              min={0}
+              value={form.orderNo}
+              onChange={e => setForm({ ...form, orderNo: Number(e.target.value) })}
+              className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600"
+            />
+          </div>
+          <div className="flex gap-2.5 justify-end pt-3 border-t border-slate-100">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="px-3.5 py-2 text-xs font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+            >
+              Hủy
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="px-4 py-2 text-xs font-semibold bg-navy-600 text-white rounded-lg hover:bg-navy-700 disabled:opacity-60 transition-colors shadow-sm active:scale-[0.99]"
+            >
+              {saving ? "Đang lưu..." : editing ? "Lưu thay đổi" : "Thêm giải thưởng"}
             </button>
           </div>
         </div>
       </Modal>
-      <ConfirmDialog open={!!delTarget} message={`Xóa giải thưởng "${delTarget?.title}"?`} onConfirm={handleDelete} onCancel={() => setDelTarget(null)} />
+
+      <ConfirmDialog
+        open={Boolean(delTarget)}
+        message={`Xóa giải thưởng "${delTarget?.title}"?`}
+        onConfirm={handleDelete}
+        onCancel={() => setDelTarget(null)}
+      />
     </div>
   );
 }

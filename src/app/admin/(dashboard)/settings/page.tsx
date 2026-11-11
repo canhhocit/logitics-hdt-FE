@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Save, Settings } from "lucide-react";
+import { Save, Settings, CheckCircle2, FileText, Globe, Phone, Info } from "lucide-react";
 import { getAdminSettings, upsertSettings, uploadMedia } from "../../_lib/api";
 import { useToast } from "../../_components/Toast";
 
@@ -14,17 +14,19 @@ function resolveFileUrl(url?: string) {
 
 const GROUPS = [
   {
-    label: "Thông tin công ty",
+    label: "Thông tin pháp nhân & Doanh nghiệp",
+    icon: Info,
     keys: [
       { key: "company_full_name", label: "Tên đầy đủ công ty", type: "text" },
-      { key: "company_short_name", label: "Tên viết tắt", type: "text" },
-      { key: "tax_code", label: "Mã số thuế", type: "text" },
+      { key: "company_short_name", label: "Tên thương hiệu ngắn gọn", type: "text" },
+      { key: "tax_code", label: "Mã số thuế doanh nghiệp", type: "text" },
       { key: "license_date", label: "Ngày cấp phép", type: "text" },
       { key: "license_org", label: "Cơ quan cấp phép", type: "text" },
     ],
   },
   {
-    label: "Liên hệ",
+    label: "Thông tin liên hệ & Đường dây nóng",
+    icon: Phone,
     keys: [
       {
         key: "hotline",
@@ -38,84 +40,90 @@ const GROUPS = [
         type: "text",
         placeholder: "0983116063",
       },
-      { key: "hotline_contact", label: "Số liên hệ phụ", type: "text" },
-      { key: "hotline_contact_raw", label: "Số liên hệ phụ raw", type: "text" },
-      { key: "email", label: "Email chính", type: "email" },
-      { key: "email_sales", label: "Email kinh doanh", type: "email" },
+      { key: "hotline_contact", label: "Số điện thoại phụ", type: "text" },
+      { key: "hotline_contact_raw", label: "Số phụ raw (tel: link)", type: "text" },
+      { key: "email", label: "Hòm thư chính", type: "email" },
+      { key: "email_sales", label: "Hòm thư phòng kinh doanh", type: "email" },
       {
         key: "working_hours",
-        label: "Giờ làm việc",
+        label: "Thời gian làm việc",
         type: "text",
-        placeholder: "06:00 – 22:00",
+        placeholder: "08:00 – 17:30 (Thứ 2 - Thứ 7)",
       },
     ],
   },
   {
-    label: "Mạng xã hội",
+    label: "Kênh mạng xã hội & Truyền thông",
+    icon: Globe,
     keys: [
-      { key: "facebook_url", label: "Facebook URL", type: "url" },
+      { key: "facebook_url", label: "Facebook Page URL", type: "url" },
       { key: "instagram_url", label: "Instagram URL", type: "url" },
-      { key: "twitter_url", label: "Twitter URL", type: "url" },
-      { key: "zalo_url", label: "Zalo URL", type: "url" },
+      { key: "twitter_url", label: "X / Twitter URL", type: "url" },
+      { key: "zalo_url", label: "Zalo Official Account URL", type: "url" },
     ],
   },
   {
-    label: "Thống kê (hiển thị trên website)",
+    label: "Chỉ số năng lực (Hiển thị trang chủ)",
+    icon: CheckCircle2,
     keys: [
       {
         key: "counter_staff",
-        label: "Số nhân sự",
+        label: "Nhân sự chuyên môn",
         type: "text",
-        placeholder: "20",
+        placeholder: "50+",
       },
       {
         key: "counter_offices",
-        label: "Số văn phòng",
+        label: "Văn phòng & Kho bãi",
         type: "text",
         placeholder: "5",
       },
       {
         key: "counter_shipments",
-        label: "Số chuyến hàng",
+        label: "Chuyến hàng thành công",
         type: "text",
-        placeholder: "1500+",
+        placeholder: "15,000+",
       },
       {
         key: "counter_experience",
-        label: "Số năm kinh nghiệm",
+        label: "Năm kinh nghiệm thực tế",
         type: "text",
         placeholder: "10+",
       },
     ],
   },
   {
-    label: "Nội dung Hero (Trang chủ)",
+    label: "Nội dung Banner Hero (Trang chủ)",
+    icon: FileText,
     keys: [
-      { key: "hero_title", label: "Hero title", type: "text" },
-      { key: "hero_subtitle", label: "Hero subtitle", type: "textarea" },
+      { key: "hero_title", label: "Tiêu đề Hero", type: "text" },
+      { key: "hero_subtitle", label: "Phụ đề mô tả Hero", type: "textarea" },
     ],
   },
   {
-    label: "Nội dung CTA",
+    label: "Thông điệp kêu gọi hành động (CTA Section)",
+    icon: FileText,
     keys: [
-      { key: "cta_title", label: "CTA title", type: "text" },
-      { key: "cta_subtitle", label: "CTA subtitle", type: "textarea" },
+      { key: "cta_title", label: "Tiêu đề CTA", type: "text" },
+      { key: "cta_subtitle", label: "Phụ đề CTA", type: "textarea" },
     ],
   },
   {
     label: "Tầm nhìn & Sứ mệnh (Trang Về chúng tôi)",
+    icon: FileText,
     keys: [
-      { key: "about_vision", label: "Tầm nhìn", type: "textarea" },
-      { key: "about_mission", label: "Sứ mệnh", type: "textarea" },
-      { key: "about_tagline", label: "Tagline", type: "text" },
+      { key: "about_vision", label: "Tầm nhìn chiến lược", type: "textarea" },
+      { key: "about_mission", label: "Sứ mệnh cốt lõi", type: "textarea" },
+      { key: "about_tagline", label: "Khẩu hiệu (Tagline)", type: "text" },
     ],
   },
   {
-    label: "Tài liệu công ty (PDF/File)",
+    label: "Tài liệu hồ sơ năng lực tải về (PDF)",
+    icon: FileText,
     keys: [
-      { key: "file_ho_so_cong_ty", label: "Hồ sơ công ty", type: "file" },
-      { key: "file_co_cau_to_chuc", label: "Cơ cấu tổ chức", type: "file" },
-      { key: "file_ho_so_nang_luc", label: "Hồ sơ năng lực", type: "file" },
+      { key: "file_ho_so_cong_ty", label: "Hồ sơ công ty (Company Profile)", type: "file" },
+      { key: "file_co_cau_to_chuc", label: "Sơ đồ cơ cấu tổ chức", type: "file" },
+      { key: "file_ho_so_nang_luc", label: "Hồ sơ năng lực vận tải", type: "file" },
     ],
   },
 ];
@@ -139,14 +147,14 @@ export default function SettingsPage() {
       })
       .catch((e: any) => toast("error", e.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [toast]);
 
   const handleSave = async () => {
     setSaving(true);
     try {
       await upsertSettings(values);
       setInitialValues(values);
-      toast("success", "Lưu cài đặt thành công");
+      toast("success", "Lưu thông tin cài đặt thành công!");
     } catch (e: any) {
       toast("error", e.message);
     } finally {
@@ -160,118 +168,149 @@ export default function SettingsPage() {
   const changedKeys = Object.keys({ ...initialValues, ...values }).filter(
     (key) => (values[key] || "") !== (initialValues[key] || "")
   );
-  console.log("hasChanges:", changedKeys.length > 0, "changedKeys:", changedKeys);
   const hasChanges = changedKeys.length > 0;
 
-  if (loading)
-    return <div className="p-10 text-center text-gray-400">Đang tải...</div>;
+  if (loading) {
+    return <div className="p-12 text-center text-slate-400 text-xs">Đang tải thông số cài đặt website...</div>;
+  }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6 pb-20">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200/80">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-800">
-            Cài đặt website
-          </h1>
-          <p className="text-gray-500 text-sm mt-0.5">
-            Mọi thay đổi được phản ánh ngay lên website
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Cài đặt website & Doanh nghiệp</h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Cấu hình hotline, thông tin liên hệ, mạng xã hội và nội dung các khối trang chủ
           </p>
         </div>
-        {/* <button onClick={handleSave} disabled={saving}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60
-                     text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors shadow-sm">
-          <Save size={15} /> {saving ? "Đang lưu..." : "Lưu tất cả"}
-        </button> */}
-      </div>
-
-      <div className="space-y-6">
-        {GROUPS.map((group) => (
-          <div
-            key={group.label}
-            className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"
-          >
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
-              <Settings size={15} className="text-indigo-500" />
-              <h2 className="font-bold text-gray-700 text-sm">{group.label}</h2>
-            </div>
-            <div className="px-6 py-5 grid sm:grid-cols-2 gap-4">
-              {group.keys.map(({ key, label, type, placeholder }) => (
-                <div
-                  key={key}
-                  className={type === "textarea" ? "sm:col-span-2" : ""}
-                >
-                  <label className="block text-xs font-semibold text-gray-500 mb-1.5">
-                    {label}
-                    <span className="ml-1.5 font-mono text-gray-300 text-[10px]">
-                      {key}
-                    </span>
-                  </label>
-                  {type === "textarea" ? (
-                    <textarea
-                      rows={3}
-                      value={values[key] || ""}
-                      onChange={(e) => set(key, e.target.value)}
-                      placeholder={placeholder}
-                      className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm resize-none focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200"
-                    />
-                  ) : type === "file" ? (
-                    <div>
-                      <input
-                        type="file"
-                        onChange={async (e) => {
-                          if (!e.target.files?.length) return;
-                          try {
-                            const res = await uploadMedia(e.target.files[0]);
-                            set(key, res.url);
-                            toast("success", "Tải file lên thành công!");
-                          } catch (err: any) {
-                            toast("error", err.message);
-                          }
-                        }}
-                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-                      />
-                      {values[key] && (
-                        <p className="text-xs mt-2 text-green-600 font-medium">
-                          File hiện tại:{" "}
-                          <a
-                            href={resolveFileUrl(values[key])}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="underline"
-                          >
-                            {values[key]}
-                          </a>
-                        </p>
-                      )}
-                    </div>
-                  ) : (
-                    <input
-                      type={type || "text"}
-                      value={values[key] || ""}
-                      onChange={(e) => set(key, e.target.value)}
-                      placeholder={placeholder}
-                      className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Sticky save footer */}
-      <div className={`fixed bottom-0 left-0 right-0 lg:left-64 z-40 bg-white/90 backdrop-blur border-t border-gray-100 p-4 flex justify-end transition-all duration-300 ease-in-out ${
-        hasChanges ? "translate-y-0 opacity-100 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]" : "translate-y-full opacity-0 pointer-events-none"
-      }`}>
         <button
           onClick={handleSave}
-          disabled={saving}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60
-                     text-white text-[13px] font-semibold px-4 py-2.5 rounded-xl transition-colors shadow-sm"
+          disabled={saving || !hasChanges}
+          className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold shadow-sm transition-all self-start sm:self-auto
+            ${hasChanges
+              ? "bg-navy-600 hover:bg-navy-700 text-white cursor-pointer active:scale-[0.99]"
+              : "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed shadow-none"}`}
         >
-          <Save size={14} /> {saving ? "Đang lưu..." : "Lưu thay đổi"}
+          <Save size={13} />
+          <span>{saving ? "Đang lưu..." : "Lưu tất cả"}</span>
         </button>
+      </div>
+
+      {/* Settings Group Cards */}
+      <div className="space-y-5">
+        {GROUPS.map((group) => {
+          const GroupIcon = group.icon || Settings;
+          return (
+            <div
+              key={group.label}
+              className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] overflow-hidden"
+            >
+              <div className="px-5 py-3.5 border-b border-slate-100 flex items-center gap-2 bg-slate-50/50">
+                <GroupIcon size={14} className="text-navy-700" />
+                <h2 className="font-semibold text-slate-800 text-xs tracking-tight">{group.label}</h2>
+              </div>
+              <div className="px-5 py-4 grid sm:grid-cols-2 gap-3.5 text-xs">
+                {group.keys.map(({ key, label, type, placeholder }) => (
+                  <div key={key} className={type === "textarea" ? "sm:col-span-2" : ""}>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="font-semibold text-slate-700 text-xs" htmlFor={`field-${key}`}>
+                        {label}
+                      </label>
+                      <span className="font-mono text-slate-300 text-[10px] select-none">
+                        {key}
+                      </span>
+                    </div>
+
+                    {type === "textarea" ? (
+                      <textarea
+                        id={`field-${key}`}
+                        rows={3}
+                        value={values[key] || ""}
+                        onChange={(e) => set(key, e.target.value)}
+                        placeholder={placeholder}
+                        className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white resize-none
+                                   focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200 placeholder:text-slate-400 transition-colors"
+                      />
+                    ) : type === "file" ? (
+                      <div>
+                        <input
+                          id={`field-${key}`}
+                          type="file"
+                          onChange={async (e) => {
+                            if (!e.target.files?.length) return;
+                            try {
+                              const res = await uploadMedia(e.target.files[0]);
+                              set(key, res.url);
+                              toast("success", "Tải tệp tin lên thành công!");
+                            } catch (err: any) {
+                              toast("error", err.message);
+                            }
+                          }}
+                          className="block w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer"
+                        />
+                        {values[key] && (
+                          <p className="text-[11px] mt-1.5 text-emerald-700 font-medium">
+                            Tệp tin hiện tại:{" "}
+                            <a
+                              href={resolveFileUrl(values[key])}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="underline font-mono"
+                            >
+                              {values[key]}
+                            </a>
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <input
+                        id={`field-${key}`}
+                        type={type || "text"}
+                        value={values[key] || ""}
+                        onChange={(e) => set(key, e.target.value)}
+                        placeholder={placeholder}
+                        className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white
+                                   focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200 placeholder:text-slate-400 transition-colors"
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Floating Save Action Bar (Shown only when changes exist) */}
+      <div
+        className={`fixed bottom-4 left-4 right-4 lg:left-72 z-40 bg-slate-900/90 text-white backdrop-blur-md border border-slate-700/80 px-4 py-3 rounded-xl flex items-center justify-between gap-4 transition-all duration-200 shadow-xl ${
+          hasChanges ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0 pointer-events-none"
+        }`}
+      >
+        <div className="flex items-center gap-2 text-xs">
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+          <span className="font-medium text-slate-200">
+            Có <strong className="text-white">{changedKeys.length}</strong> thay đổi chưa được lưu
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setValues(initialValues)}
+            disabled={saving}
+            className="text-xs text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 transition-colors"
+          >
+            Khôi phục
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="inline-flex items-center gap-1.5 bg-navy-500 hover:bg-navy-600 text-white text-xs font-semibold px-4 py-1.5 rounded-lg shadow-sm transition-all"
+          >
+            <Save size={13} />
+            <span>{saving ? "Đang lưu..." : "Lưu thay đổi"}</span>
+          </button>
+        </div>
       </div>
     </div>
   );
