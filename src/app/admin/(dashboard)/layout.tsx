@@ -39,7 +39,7 @@ const NAV: NavEntry[] = [
   { divider: true, label: "Thông tin doanh nghiệp" },
   { href: "/admin/offices",       label: "Quản lý Hệ thống chi nhánh",  icon: Building2 },
   { href: "/admin/contacts",      label: "Nhân sự phụ trách",    icon: Users },
-  { href: "/admin/jobs",          label: "Tuyển dụng",            icon: BriefcaseBusiness },
+  { href: "/admin/jobs",          label: "Quản lý Tuyển dụng",            icon: BriefcaseBusiness },
   { divider: true, label: "Truyền thông website" },
   { href: "/admin/testimonials",  label: "Phản hồi khách hàng",  icon: Quote },
   { href: "/admin/partners",      label: "Quản lý Đối tác",   icon: Globe },
