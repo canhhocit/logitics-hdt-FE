@@ -8,7 +8,7 @@ import { ToastProvider } from "../_components/Toast";
 import { getStats } from "../_lib/api";
 import {
   LayoutDashboard, MessageSquare, Briefcase, FileText,
-  Settings, Building2, Users, BriefcaseBusiness,
+  Settings, Building2, Users, BriefcaseBusiness, UserCheck,
   LogOut, ChevronRight, Menu, X,
   Quote, Globe, Award, Sparkles, FolderOpen, ExternalLink,
   Type
@@ -40,6 +40,7 @@ const NAV: NavEntry[] = [
   { href: "/admin/offices",       label: "Quản lý Hệ thống chi nhánh",  icon: Building2 },
   { href: "/admin/contacts",      label: "Nhân sự phụ trách",    icon: Users },
   { href: "/admin/jobs",          label: "Quản lý Tuyển dụng",            icon: BriefcaseBusiness },
+  { href: "/admin/applications",  label: "Hồ sơ Ứng tuyển & CV",         icon: UserCheck },
   { divider: true, label: "Truyền thông website" },
   { href: "/admin/testimonials",  label: "Phản hồi khách hàng",  icon: Quote },
   { href: "/admin/partners",      label: "Quản lý Đối tác",   icon: Globe },

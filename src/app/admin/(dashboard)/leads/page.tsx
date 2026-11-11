@@ -9,22 +9,41 @@ import { useToast } from "../../_components/Toast";
 
 const STATUS_CONFIG: Record<string, { label: string; dot: string; badge: string; selectClass: string }> = {
   NEW: {
-    label: "Mới cần xử lý",
+    label: "Mới liên hệ",
     dot: "bg-orange-500",
     badge: "bg-orange-50 text-orange-700 border-orange-200/60",
     selectClass: "bg-orange-50 text-orange-800 border-orange-200 focus:ring-orange-200",
   },
+  QUOTING: {
+    label: "Đang báo giá",
+    dot: "bg-sky-500",
+    badge: "bg-sky-50 text-sky-700 border-sky-200/60",
+    selectClass: "bg-sky-50 text-sky-800 border-sky-200 focus:ring-sky-200",
+  },
+  CLOSED_WON: {
+    label: "Đã chốt hợp đồng",
+    dot: "bg-emerald-500",
+    badge: "bg-emerald-50 text-emerald-700 border-emerald-200/60",
+    selectClass: "bg-emerald-50 text-emerald-800 border-emerald-200 focus:ring-emerald-200",
+  },
+  CLOSED_LOST: {
+    label: "Khách từ chối",
+    dot: "bg-rose-500",
+    badge: "bg-rose-50 text-rose-700 border-rose-200/60",
+    selectClass: "bg-rose-50 text-rose-800 border-rose-200 focus:ring-rose-200",
+  },
+  // Tương thích ngược dữ liệu cũ
   CONTACTED: {
     label: "Đã liên hệ",
-    dot: "bg-blue-500",
-    badge: "bg-blue-50 text-blue-700 border-blue-200/60",
-    selectClass: "bg-blue-50 text-blue-800 border-blue-200 focus:ring-blue-200",
+    dot: "bg-sky-500",
+    badge: "bg-sky-50 text-sky-700 border-sky-200/60",
+    selectClass: "bg-sky-50 text-sky-800 border-sky-200 focus:ring-sky-200",
   },
   CLOSED: {
     label: "Đã xử lý xong",
-    dot: "bg-slate-400",
-    badge: "bg-slate-100 text-slate-600 border-slate-200",
-    selectClass: "bg-slate-50 text-slate-700 border-slate-200 focus:ring-slate-200",
+    dot: "bg-emerald-500",
+    badge: "bg-emerald-50 text-emerald-700 border-emerald-200/60",
+    selectClass: "bg-emerald-50 text-emerald-800 border-emerald-200 focus:ring-emerald-200",
   },
 };
 
@@ -97,9 +116,10 @@ export default function LeadsPage() {
           <div className="bg-slate-100 p-0.5 rounded-md border border-slate-200 inline-flex flex-wrap gap-0.5">
             {[
               { value: "",          label: "Tất cả leads" },
-              { value: "NEW",       label: "Mới cần xử lý" },
-              { value: "CONTACTED", label: "Đã liên hệ" },
-              { value: "CLOSED",    label: "Đã xử lý xong" },
+              { value: "NEW",       label: "Mới liên hệ" },
+              { value: "QUOTING",   label: "Đang báo giá" },
+              { value: "CLOSED_WON", label: "Đã chốt HĐ" },
+              { value: "CLOSED_LOST", label: "Khách từ chối" },
             ].map((f) => {
               const active = filterStatus === f.value;
               return (
@@ -196,9 +216,12 @@ export default function LeadsPage() {
                             onChange={(e) => changeStatus(lead.id, e.target.value)}
                             className={`text-xs font-semibold border rounded-md px-2.5 py-1 cursor-pointer focus:outline-none focus:ring-1 transition-all ${conf.selectClass}`}
                           >
-                            <option value="NEW">Mới cần xử lý</option>
-                            <option value="CONTACTED">Đã liên hệ</option>
-                            <option value="CLOSED">Đã xử lý xong</option>
+                            <option value="NEW">Mới liên hệ</option>
+                            <option value="QUOTING">Đang báo giá</option>
+                            <option value="CLOSED_WON">Đã chốt hợp đồng</option>
+                            <option value="CLOSED_LOST">Khách từ chối</option>
+                            {lead.status === "CONTACTED" && <option value="CONTACTED">Đã liên hệ</option>}
+                            {lead.status === "CLOSED" && <option value="CLOSED">Đã xử lý xong</option>}
                           </select>
                         </td>
                         <td className="px-4 py-3 text-right whitespace-nowrap">
@@ -280,18 +303,19 @@ export default function LeadsPage() {
 
             <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-700">Cập nhật nhanh trạng thái:</span>
-              <div className="flex gap-1.5">
+              <div className="flex gap-1.5 flex-wrap">
                 {[
-                  { key: "NEW", label: "Mới" },
-                  { key: "CONTACTED", label: "Đã liên hệ" },
-                  { key: "CLOSED", label: "Đã xử lý" },
+                  { key: "NEW",         label: "Mới liên hệ" },
+                  { key: "QUOTING",     label: "Đang báo giá" },
+                  { key: "CLOSED_WON",  label: "Đã chốt HĐ" },
+                  { key: "CLOSED_LOST", label: "Từ chối" },
                 ].map((s) => (
                   <button
                     key={s.key}
                     onClick={() => changeStatus(selected.id, s.key)}
                     className={`px-3 py-1.5 rounded-md text-xs font-semibold border transition-all
                       ${selected.status === s.key
-                        ? STATUS_CONFIG[s.key].badge + " shadow-xs"
+                        ? STATUS_CONFIG[s.key]?.badge + " shadow-xs font-bold"
                         : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"}`}
                   >
                     {s.label}

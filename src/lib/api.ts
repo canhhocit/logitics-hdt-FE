@@ -168,3 +168,42 @@ export async function submitLead(data: LeadRequest): Promise<{ ok: boolean; mess
     return { ok: false, message: 'Lỗi kết nối, vui lòng thử lại' };
   }
 }
+
+// ── Job Application (Nộp hồ sơ ứng tuyển & CV) ─────────────────
+
+export interface JobApplicationSubmission {
+  fullName: string;
+  phone: string;
+  email?: string;
+  jobId?: string;
+  jobTitle?: string;
+  coverLetter?: string;
+  cvUrl?: string;
+  cvFile?: File | null;
+}
+
+export async function submitJobApplication(
+  data: JobApplicationSubmission
+): Promise<{ ok: boolean; message?: string; data?: any }> {
+  try {
+    const formData = new FormData();
+    formData.append('fullName', data.fullName);
+    formData.append('phone', data.phone);
+    if (data.email) formData.append('email', data.email);
+    if (data.jobId) formData.append('jobId', data.jobId);
+    if (data.jobTitle) formData.append('jobTitle', data.jobTitle);
+    if (data.coverLetter) formData.append('coverLetter', data.coverLetter);
+    if (data.cvUrl) formData.append('cvUrl', data.cvUrl);
+    if (data.cvFile) formData.append('cvFile', data.cvFile);
+
+    const res = await fetch(`${API_URL}/public/careers/apply`, {
+      method: 'POST',
+      body: formData,
+    });
+    const json = await res.json();
+    if (!res.ok) return { ok: false, message: json.message || 'Gửi hồ sơ thất bại' };
+    return { ok: true, message: json.message, data: json.data };
+  } catch {
+    return { ok: false, message: 'Lỗi kết nối máy chủ, vui lòng thử lại sau.' };
+  }
+}

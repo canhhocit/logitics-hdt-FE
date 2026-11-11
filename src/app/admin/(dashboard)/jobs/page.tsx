@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Plus, Pencil, Trash2, BriefcaseBusiness, MapPin, DollarSign, Calendar } from "lucide-react";
+import Link from "next/link";
+import { Plus, Pencil, Trash2, BriefcaseBusiness, MapPin, DollarSign, Calendar, UserCheck } from "lucide-react";
 import { getAdminJobs, createJob, updateJob, deleteJob } from "../../_lib/api";
 import Modal from "../../_components/Modal";
 import ConfirmDialog from "../../_components/ConfirmDialog";
@@ -193,6 +194,14 @@ export default function JobsPage() {
                   </div>
 
                   <div className="flex items-center gap-1 self-end sm:self-center flex-shrink-0">
+                    <Link
+                      href="/admin/applications"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-navy-700 bg-navy-50 hover:bg-navy-100 border border-navy-200/80 px-2.5 py-1 rounded-md transition-colors mr-1"
+                      title="Xem danh sách hồ sơ ứng viên nộp CV"
+                    >
+                      <UserCheck size={13} className="text-navy-600" />
+                      <span>Hồ sơ ứng tuyển</span>
+                    </Link>
                     <button
                       onClick={() => openEdit(j)}
                       title="Sửa tin tuyển dụng"

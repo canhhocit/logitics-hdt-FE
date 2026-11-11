@@ -5,15 +5,30 @@ import Link from "next/link";
 import {
   MessageSquare, Briefcase, FileText, Settings, ArrowRight,
   Users, Clock, Phone, Mail, Building2, CheckCircle2, ChevronRight,
-  Shield, Inbox, Layers
+  Shield, Inbox, Layers, UserCheck
 } from "lucide-react";
 import { getStats, getAdminLeads, getAdminPosts, getAdminOffices } from "../_lib/api";
 
 const STATUS_CONFIG: Record<string, { label: string; dot: string; badge: string }> = {
   NEW: {
-    label: "Chờ liên hệ",
+    label: "Mới liên hệ",
     dot: "bg-orange-500",
     badge: "bg-orange-50 text-orange-700 border-orange-200/60",
+  },
+  QUOTING: {
+    label: "Đang báo giá",
+    dot: "bg-sky-500",
+    badge: "bg-sky-50 text-sky-700 border-sky-200/60",
+  },
+  CLOSED_WON: {
+    label: "Đã chốt hợp đồng",
+    dot: "bg-emerald-500",
+    badge: "bg-emerald-50 text-emerald-700 border-emerald-200/60",
+  },
+  CLOSED_LOST: {
+    label: "Khách từ chối",
+    dot: "bg-rose-500",
+    badge: "bg-rose-50 text-rose-700 border-rose-200/60",
   },
   CONTACTED: {
     label: "Đã liên hệ",
@@ -65,10 +80,11 @@ function StatCard({ icon: Icon, label, value, sublabel, href, urgent = false }: 
 }
 
 const QUICK_ACTIONS = [
-  { href: "/admin/posts",        label: "Soạn thảo bài viết mới",  icon: FileText,   desc: "Cập nhật tin tức logistics & xuất nhập khẩu" },
+  { href: "/admin/applications", label: "Hồ sơ ứng viên & CV",     icon: UserCheck,     desc: "Tiếp nhận và duyệt CV ứng tuyển từ website" },
   { href: "/admin/leads",        label: "Xử lý yêu cầu tư vấn",    icon: MessageSquare, desc: "Theo dõi khách hàng gửi form liên hệ" },
-  { href: "/admin/services",     label: "Quản lý dịch vụ",        icon: Briefcase,  desc: "Cước tàu, hải quan, vận tải nội địa" },
-  { href: "/admin/settings",     label: "Cài đặt hotline & website", icon: Settings, desc: "Thông tin liên hệ, mạng xã hội, thông số" },
+  { href: "/admin/posts",        label: "Soạn thảo bài viết mới",  icon: FileText,      desc: "Cập nhật tin tức logistics & xuất nhập khẩu" },
+  { href: "/admin/services",     label: "Quản lý dịch vụ",        icon: Briefcase,     desc: "Cước tàu, hải quan, vận tải nội địa" },
+  { href: "/admin/settings",     label: "Cài đặt hotline & website", icon: Settings,   desc: "Thông tin liên hệ, mạng xã hội, thông số" },
 ];
 
 export default function AdminDashboard() {
@@ -113,7 +129,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Operational KPI Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
         <StatCard
           icon={MessageSquare}
           label="Leads mới cần xử lý"
@@ -121,6 +137,14 @@ export default function AdminDashboard() {
           sublabel="yêu cầu chưa gọi"
           urgent={Boolean(stats.newLeads && stats.newLeads > 0)}
           href="/admin/leads"
+        />
+        <StatCard
+          icon={UserCheck}
+          label="Hồ sơ ứng tuyển mới"
+          value={loading ? "..." : (stats.newApplications ?? 0)}
+          sublabel="chờ duyệt CV"
+          urgent={Boolean(stats.newApplications && stats.newApplications > 0)}
+          href="/admin/applications"
         />
         <StatCard
           icon={Briefcase}
@@ -131,7 +155,7 @@ export default function AdminDashboard() {
         />
         <StatCard
           icon={FileText}
-          label="Bài viết & Kiến thức"
+          label="Bài viết & Tin tức"
           value={loading ? "..." : (stats.totalPosts ?? 0)}
           sublabel="nội dung xuất bản"
           href="/admin/posts"
