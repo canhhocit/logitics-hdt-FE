@@ -126,17 +126,17 @@ export default function ServicesPage() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3.5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Dịch vụ logistics</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Dịch vụ logistics</h1>
           <p className="text-xs text-slate-500 mt-0.5">Quản lý danh mục giải pháp vận tải, cước quốc tế và thủ tục hải quan</p>
         </div>
         <button
           onClick={openNew}
           className="inline-flex items-center gap-1.5 bg-navy-600 hover:bg-navy-700 text-white
-                     text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition-all active:scale-[0.99] self-start sm:self-auto"
+                     text-xs font-semibold px-3 py-1.5 rounded-md shadow-2xs transition-all active:scale-[0.99] self-start sm:self-auto cursor-pointer"
         >
           <Plus size={14} />
           <span>Thêm dịch vụ mới</span>
@@ -144,7 +144,7 @@ export default function ServicesPage() {
       </div>
 
       {/* Table Card */}
-      <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] overflow-hidden">
+      <div className="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-slate-400 text-xs">Đang tải danh sách dịch vụ...</div>
         ) : services.length === 0 ? (
@@ -201,12 +201,12 @@ export default function ServicesPage() {
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         {s.status === "PUBLISHED" ? (
-                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/70">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                             Hiển thị
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
                             Đã ẩn
                           </span>

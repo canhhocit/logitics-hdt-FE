@@ -1,8 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Send, CheckCircle, AlertTriangle, XCircle } from "lucide-react";
-import { submitLead } from "@/lib/api";
+import { submitLead, fetchServices } from "@/lib/api";
+
+const DEFAULT_SERVICES = [
+  "Vận Chuyển Đường Không",
+  "Vận Chuyển Đường Biển",
+  "Gom Hàng Lẻ (LCL)",
+  "Vận Chuyển Đường Bộ",
+  "Khai Thuê Hải Quan",
+  "Hàng Đặc Biệt & Dự Án",
+  "Tư Vấn Hải Quan",
+];
 
 interface FormState {
   name: string;
@@ -19,9 +29,24 @@ const INITIAL: FormState = {
 
 export default function ContactForm() {
   const [form, setForm]         = useState<FormState>(INITIAL);
+  const [services, setServices] = useState<string[]>(DEFAULT_SERVICES);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchServices().then((res: any) => {
+      const list = Array.isArray(res) ? res : (res?.data || []);
+      if (Array.isArray(list) && list.length > 0) {
+        const names = list.map((s: any) => s.name).filter(Boolean);
+        if (names.length > 0) {
+          setServices(names);
+        }
+      }
+    }).catch(() => {
+      // Fallback to DEFAULT_SERVICES
+    });
+  }, []);
 
   const set = (field: keyof FormState) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -153,14 +178,9 @@ export default function ContactForm() {
             className="w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-3
                        text-navy-800 text-sm focus:outline-none focus:border-navy-500 transition-colors">
             <option value="">-- Chọn dịch vụ --</option>
-            <option>Vận Chuyển Đường Không</option>
-            <option>Vận Chuyển Đường Biển – FCL</option>
-            <option>Vận Chuyển Đường Biển – LCL</option>
-            <option>Gom Hàng Lẻ (LCL)</option>
-            <option>Vận Chuyển Đường Bộ</option>
-            <option>Khai Thuê Hải Quan</option>
-            <option>Hàng Đặc Biệt / Dự Án</option>
-            <option>Tư Vấn Hải Quan</option>
+            {services.map((name) => (
+              <option key={name} value={name}>{name}</option>
+            ))}
           </select>
         </div>
 

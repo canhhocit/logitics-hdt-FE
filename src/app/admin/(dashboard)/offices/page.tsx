@@ -77,17 +77,17 @@ export default function OfficesPage() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3.5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Văn phòng & Chi nhánh</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Văn phòng & Chi nhánh</h1>
           <p className="text-xs text-slate-500 mt-0.5">Quản lý mạng lưới chi nhánh, trung tâm điều hành và kho bãi toàn quốc</p>
         </div>
         <button
           onClick={openNew}
           className="inline-flex items-center gap-1.5 bg-navy-600 hover:bg-navy-700 text-white
-                     text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition-all active:scale-[0.99] self-start sm:self-auto"
+                     text-xs font-semibold px-3 py-1.5 rounded-md shadow-2xs transition-all active:scale-[0.99] self-start sm:self-auto cursor-pointer"
         >
           <Plus size={14} />
           <span>Thêm chi nhánh</span>
@@ -95,15 +95,15 @@ export default function OfficesPage() {
       </div>
 
       {loading ? (
-        <div className="p-12 text-center text-slate-400 text-xs bg-white rounded-xl border border-slate-200/80">
+        <div className="p-12 text-center text-slate-400 text-xs bg-white rounded-lg border border-slate-200">
           Đang tải danh sách văn phòng...
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-3.5">
           {offices.map((o: any) => (
             <div
               key={o.id}
-              className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] p-4 sm:p-5 hover:border-slate-300 transition-all group flex flex-col justify-between"
+              className="bg-white rounded-lg border border-slate-200 shadow-2xs p-4 hover:border-slate-300 transition-all group flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-start justify-between gap-3 mb-3">

@@ -43,6 +43,7 @@ export default function LeadsPage() {
   const { toast } = useToast();
   const [data,         setData]         = useState<any>({ content: [], totalPages: 0, totalElements: 0 });
   const [page,         setPage]         = useState(0);
+  const [pageSize,     setPageSize]     = useState(10);
   const [filterStatus, setFilterStatus] = useState("");
   const [loading,      setLoading]      = useState(true);
   const [selected,     setSelected]     = useState<any>(null);
@@ -50,14 +51,14 @@ export default function LeadsPage() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await getAdminLeads(page, 15, filterStatus);
+      const res = await getAdminLeads(page, pageSize, filterStatus);
       setData(res);
     } catch (e: any) {
       toast("error", e.message);
     } finally {
       setLoading(false);
     }
-  }, [page, filterStatus, toast]);
+  }, [page, pageSize, filterStatus, toast]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
@@ -66,6 +67,9 @@ export default function LeadsPage() {
       await updateLeadStatus(id, status);
       toast("success", "Cập nhật trạng thái lead thành công");
       fetchData();
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("leads-updated"));
+      }
       if (selected?.id === id) setSelected((p: any) => ({ ...p, status }));
     } catch (e: any) {
       toast("error", e.message);
@@ -75,43 +79,46 @@ export default function LeadsPage() {
   const leads: any[] = data.content || [];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3.5">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Leads tư vấn & Yêu cầu báo giá</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Leads tư vấn & Yêu cầu</h1>
           <p className="text-xs text-slate-500 mt-0.5">
             Tổng số: <span className="font-semibold text-slate-700">{data.totalElements ?? 0}</span> khách hàng đã gửi form liên hệ
           </p>
         </div>
       </div>
 
-      {/* Segmented Filter Bar */}
-      <div className="bg-slate-100 p-1 rounded-lg border border-slate-200/80 inline-flex flex-wrap gap-1">
-        {[
-          { value: "",          label: "Tất cả leads" },
-          { value: "NEW",       label: "Mới cần xử lý" },
-          { value: "CONTACTED", label: "Đã liên hệ" },
-          { value: "CLOSED",    label: "Đã xử lý xong" },
-        ].map((f) => {
-          const active = filterStatus === f.value;
-          return (
-            <button
-              key={f.value}
-              onClick={() => { setFilterStatus(f.value); setPage(0); }}
-              className={`px-3 py-1.5 rounded-md text-xs transition-all
-                ${active
-                  ? "bg-white text-slate-900 font-semibold shadow-xs"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-white/60 font-medium"}`}
-            >
-              {f.label}
-            </button>
-          );
-        })}
-      </div>
+      {/* Unified Enterprise Table Surface */}
+      <div className="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden">
+        {/* Table Control Bar (Integrated Filter Bar) */}
+        <div className="px-3.5 py-2.5 border-b border-slate-200 bg-slate-50/50 flex flex-wrap items-center justify-between gap-2.5">
+          <div className="bg-slate-100 p-0.5 rounded-md border border-slate-200 inline-flex flex-wrap gap-0.5">
+            {[
+              { value: "",          label: "Tất cả leads" },
+              { value: "NEW",       label: "Mới cần xử lý" },
+              { value: "CONTACTED", label: "Đã liên hệ" },
+              { value: "CLOSED",    label: "Đã xử lý xong" },
+            ].map((f) => {
+              const active = filterStatus === f.value;
+              return (
+                <button
+                  key={f.value}
+                  onClick={() => { setFilterStatus(f.value); setPage(0); }}
+                  className={`px-3 py-1 rounded text-xs transition-all cursor-pointer
+                    ${active
+                      ? "bg-white text-slate-900 font-semibold shadow-2xs"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-white/60 font-medium"}`}
+                >
+                  {f.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-      {/* Main Table Card */}
-      <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] overflow-hidden">
+        {/* Main Table */}
         {loading ? (
           <div className="p-12 text-center text-slate-400 text-xs">Đang tải danh sách leads...</div>
         ) : leads.length === 0 ? (
@@ -125,7 +132,7 @@ export default function LeadsPage() {
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-left border-collapse min-w-[680px]">
                 <thead className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
                   <tr>
                     <th className="px-4 py-3">Khách hàng</th>
@@ -213,10 +220,14 @@ export default function LeadsPage() {
 
             <Pagination
               page={page}
-              totalPages={data.totalPages}
-              totalElements={data.totalElements}
-              size={15}
+              totalPages={data.totalPages || Math.ceil((data.totalElements || 0) / pageSize)}
+              totalElements={data.totalElements || 0}
+              size={pageSize}
               onChange={setPage}
+              onSizeChange={(newSize) => {
+                setPageSize(newSize);
+                setPage(0);
+              }}
             />
           </>
         )}

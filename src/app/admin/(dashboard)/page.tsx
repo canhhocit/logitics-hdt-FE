@@ -7,7 +7,7 @@ import {
   Users, Clock, Phone, Mail, Building2, CheckCircle2, ChevronRight,
   Shield, Inbox, Layers
 } from "lucide-react";
-import { getStats, getAdminLeads } from "../_lib/api";
+import { getStats, getAdminLeads, getAdminPosts, getAdminOffices } from "../_lib/api";
 
 const STATUS_CONFIG: Record<string, { label: string; dot: string; badge: string }> = {
   NEW: {
@@ -38,16 +38,16 @@ function StatCard({ icon: Icon, label, value, sublabel, href, urgent = false }: 
   return (
     <Link
       href={href}
-      className={`bg-white rounded-xl p-5 border transition-all duration-150 group relative
+      className={`bg-white rounded-lg p-4 sm:p-5 border transition-all duration-150 group relative
         ${urgent
-          ? "border-orange-200 hover:border-orange-300 shadow-[0_1px_3px_0_rgba(249,115,22,0.06)]"
-          : "border-slate-200/80 hover:border-slate-300 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)]"}`}
+          ? "border-orange-200 hover:border-orange-300 shadow-2xs"
+          : "border-slate-200 hover:border-slate-300 shadow-2xs"}`}
     >
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-2.5">
         <span className="text-xs font-semibold text-slate-500">{label}</span>
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors
+        <div className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors
           ${urgent ? "bg-orange-50 text-orange-600" : "bg-slate-100 text-slate-600 group-hover:bg-navy-50 group-hover:text-navy-700"}`}>
-          <Icon size={16} />
+          <Icon size={15} />
         </div>
       </div>
       <div className="flex items-baseline gap-2">
@@ -56,7 +56,7 @@ function StatCard({ icon: Icon, label, value, sublabel, href, urgent = false }: 
           <span className="text-[11px] font-medium text-slate-400">{sublabel}</span>
         )}
       </div>
-      <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-slate-400 group-hover:text-navy-700 transition-colors">
+      <div className="mt-2.5 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-slate-400 group-hover:text-navy-700 transition-colors">
         <span>Xem danh sách</span>
         <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
       </div>
@@ -80,8 +80,15 @@ export default function AdminDashboard() {
     Promise.all([
       getStats().catch(() => ({})),
       getAdminLeads(0, 6, "NEW").catch(() => ({ content: [] })),
-    ]).then(([s, l]) => {
-      setStats(s || {});
+      getAdminPosts(0, 1).catch(() => ({ totalElements: 0 })),
+      getAdminOffices(0, 1).catch(() => ({ totalElements: 0 })),
+    ]).then(([s, l, p, o]) => {
+      const mergedStats = {
+        ...s,
+        totalPosts: (p as any)?.totalElements ?? (s as any)?.totalPosts ?? 0,
+        totalOffices: (o as any)?.totalElements ?? (Array.isArray((o as any)?.content) ? (o as any).content.length : 0) ?? 0,
+      };
+      setStats(mergedStats);
       setLeads((l as any).content || []);
     }).finally(() => setLoading(false));
   }, []);
@@ -125,24 +132,24 @@ export default function AdminDashboard() {
         <StatCard
           icon={FileText}
           label="Bài viết & Kiến thức"
-          value={loading ? "..." : (stats.totalPosts ?? "—")}
+          value={loading ? "..." : (stats.totalPosts ?? 0)}
           sublabel="nội dung xuất bản"
           href="/admin/posts"
         />
         <StatCard
           icon={Building2}
           label="Văn phòng & Chi nhánh"
-          value={loading ? "..." : (stats.totalOffices ?? "—")}
+          value={loading ? "..." : (stats.totalOffices ?? 0)}
           sublabel="trên toàn quốc"
           href="/admin/offices"
         />
       </div>
 
       {/* Main Two-Column Workflow Section */}
-      <div className="grid lg:grid-cols-[1fr_360px] gap-6 items-start">
+      <div className="grid lg:grid-cols-[1fr_360px] gap-5 items-start">
         {/* Left Column: Recent Customer Inquiries */}
-        <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+        <div className="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-3.5 border-b border-slate-100">
             <div>
               <h2 className="font-semibold text-slate-900 text-sm">Khách hàng cần tư vấn mới nhất</h2>
               <p className="text-[11px] text-slate-500 mt-0.5">Yêu cầu báo giá và tư vấn dịch vụ từ form website</p>
@@ -218,16 +225,16 @@ export default function AdminDashboard() {
         </div>
 
         {/* Right Column: Quick Links & System Status */}
-        <div className="space-y-5">
+        <div className="space-y-4">
           {/* Quick Actions Card */}
-          <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] p-5">
-            <h2 className="font-semibold text-slate-900 text-sm mb-3">Lối tắt tác vụ</h2>
-            <div className="space-y-1.5">
+          <div className="bg-white rounded-lg border border-slate-200 shadow-2xs p-4">
+            <h2 className="font-semibold text-slate-900 text-sm mb-2.5">Lối tắt tác vụ</h2>
+            <div className="space-y-1">
               {QUICK_ACTIONS.map(({ href, label, desc, icon: Icon }) => (
                 <Link
                   key={href}
                   href={href}
-                  className="flex items-center gap-3 p-2.5 rounded-lg text-slate-700 hover:text-navy-900 hover:bg-slate-50 transition-colors group border border-transparent hover:border-slate-200/60"
+                  className="flex items-center gap-2.5 p-2 rounded-md text-slate-700 hover:text-navy-900 hover:bg-slate-50 transition-colors group border border-transparent hover:border-slate-200/60"
                 >
                   <div className="w-7 h-7 rounded-md bg-slate-100 group-hover:bg-navy-50 group-hover:text-navy-700 text-slate-500 flex items-center justify-center flex-shrink-0 transition-colors">
                     <Icon size={14} />
@@ -242,29 +249,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Operational Environment Card (Replacing vanity purple box) */}
-          <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] p-5 text-xs">
-            <div className="flex items-center gap-2 mb-3 text-slate-900 font-semibold">
-              <Shield size={14} className="text-navy-600" />
-              <span>Thông số vận hành CMS</span>
-            </div>
-            <div className="space-y-2.5 text-slate-600">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <span className="text-slate-500 text-[11px]">Đồng bộ dữ liệu:</span>
-                <span className="font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[10px] border border-emerald-200/50">
-                  Real-time Server
-                </span>
-              </div>
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <span className="text-slate-500 text-[11px]">Phân quyền hiện tại:</span>
-                <span className="font-semibold text-slate-800">Super Administrator</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-500 text-[11px]">Hạ tầng phục vụ:</span>
-                <span className="font-mono text-slate-700 text-[11px]">HDT Next.js 14 + Spring Boot</span>
-              </div>
-            </div>
-          </div>
+          
         </div>
       </div>
     </div>

@@ -213,3 +213,20 @@ body {
 .article-content blockquote strong { color: #7c2d12; }
 .article-content a { color: #f97316; text-decoration: none; }
 .article-content a:hover { text-decoration: underline; }
+
+/* ── Ẩn con mắt / nút xóa mặc định của trình duyệt (Edge/IE) trên input password ── */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none !important;
+}
+
+/* ── Admin Font Scaling (Điều chỉnh font gốc an toàn, chuẩn responsive) ── */
+html.admin-font-sm {
+  font-size: 14px;
+}
+html.admin-font-md {
+  font-size: 15.5px; /* Mặc định to rõ ràng, cân đối */
+}
+html.admin-font-lg {
+  font-size: 17.5px; /* Cỡ chữ lớn rõ nét */
+}

@@ -84,9 +84,10 @@ export const updateService    = (id: string, body: any) => api.put<any>(`/admin/
 export const deleteService    = (id: string) => api.delete<any>(`/admin/services/${id}`);
 
 // ── Posts ─────────────────────────────────────
-export const getAdminPosts    = (page = 0, size = 20, keyword = "", fromDate = "", toDate = "", sortBy = "createdAt", sortDir = "desc") => {
+export const getAdminPosts    = (page = 0, size = 20, keyword = "", fromDate = "", toDate = "", sortBy = "createdAt", sortDir = "desc", categoryId = "") => {
   const p = new URLSearchParams({ page: String(page), size: String(size), sort: `${sortBy},${sortDir}` });
   if (keyword) p.set("keyword", keyword);
+  if (categoryId) p.set("categoryId", categoryId);
   if (fromDate) p.set("fromDate", fromDate + "T00:00:00");
   if (toDate) p.set("toDate", toDate + "T23:59:59");
   return api.get<any>(`/admin/posts?${p.toString()}`);

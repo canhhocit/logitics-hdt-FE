@@ -72,17 +72,17 @@ export default function CategoriesPage() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3.5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Chuyên mục bài viết</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Chuyên mục bài viết</h1>
           <p className="text-xs text-slate-500 mt-0.5">Phân loại các chủ đề tin tức, hướng dẫn xuất nhập khẩu và chính sách hải quan</p>
         </div>
         <button
           onClick={openNew}
           className="inline-flex items-center gap-1.5 bg-navy-600 hover:bg-navy-700 text-white
-                     text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition-all active:scale-[0.99] self-start sm:self-auto"
+                     text-xs font-semibold px-3 py-1.5 rounded-md shadow-2xs transition-all active:scale-[0.99] self-start sm:self-auto cursor-pointer"
         >
           <Plus size={14} />
           <span>Thêm chuyên mục</span>
@@ -90,7 +90,7 @@ export default function CategoriesPage() {
       </div>
 
       {/* Table Card */}
-      <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] overflow-hidden">
+      <div className="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-slate-400 text-xs">Đang tải danh sách chuyên mục...</div>
         ) : list.length === 0 ? (

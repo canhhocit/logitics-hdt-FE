@@ -20,6 +20,7 @@ export default function PostsPage() {
   const [data,       setData]       = useState<any>({ content: [], totalPages: 0, totalElements: 0 });
   const [categories, setCategories] = useState<any[]>([]);
   const [page,       setPage]       = useState(0);
+  const [pageSize,   setPageSize]   = useState(10);
   const [loading,    setLoading]    = useState(true);
   const [modalOpen,  setModalOpen]  = useState(false);
   const [editing,    setEditing]    = useState<any>(null);
@@ -30,6 +31,7 @@ export default function PostsPage() {
 
   // Filters
   const [keyword, setKeyword] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
@@ -39,7 +41,7 @@ export default function PostsPage() {
     setLoading(true);
     try {
       const [posts, cats] = await Promise.all([
-        getAdminPosts(page, 15, keyword, fromDate, toDate, sortBy, sortDir),
+        getAdminPosts(page, pageSize, keyword, fromDate, toDate, sortBy, sortDir, categoryId),
         getCategories(),
       ]);
       setData(posts);
@@ -49,7 +51,7 @@ export default function PostsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, keyword, fromDate, toDate, sortBy, sortDir, toast]);
+  }, [page, pageSize, keyword, fromDate, toDate, sortBy, sortDir, categoryId, toast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -60,6 +62,7 @@ export default function PostsPage() {
 
   const clearFilters = () => {
     setKeyword("");
+    setCategoryId("");
     setFromDate("");
     setToDate("");
     setSortBy("createdAt");
@@ -67,7 +70,7 @@ export default function PostsPage() {
     setPage(0);
   };
 
-  const hasFilterActive = Boolean(keyword || fromDate || toDate || sortDir !== "desc");
+  const hasFilterActive = Boolean(keyword || categoryId || fromDate || toDate || sortDir !== "desc");
 
   const openNew = () => { setEditing(null); setForm(EMPTY); setPreviewMode(false); setModalOpen(true); };
   const openEdit = (p: any) => {
@@ -113,100 +116,102 @@ export default function PostsPage() {
     }
   };
 
-  const posts: any[] = data.content || [];
+  const rawPosts: any[] = data.content || [];
+  const posts = categoryId
+    ? rawPosts.filter((p: any) => p.category?.id === categoryId)
+    : rawPosts;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3.5">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Bài viết & Tin tức</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Bài viết & Tin tức</h1>
           <p className="text-xs text-slate-500 mt-0.5">Quản lý các bài phân tích, cẩm nang xuất nhập khẩu và tin tức HDT</p>
         </div>
         <button
           onClick={openNew}
           className="inline-flex items-center gap-1.5 bg-navy-600 hover:bg-navy-700 text-white
-                     text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition-all active:scale-[0.99] whitespace-nowrap self-start sm:self-auto"
+                     text-xs font-semibold px-3 py-1.5 rounded-md shadow-2xs transition-all active:scale-[0.99] whitespace-nowrap self-start sm:self-auto cursor-pointer"
         >
           <Plus size={14} />
           <span>Thêm bài viết mới</span>
         </button>
       </div>
 
-      {/* Filter Toolbar (Precision Design) */}
-      <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.03)] flex flex-col md:flex-row flex-wrap gap-2.5 items-stretch md:items-center">
-        {/* Search */}
-        <div className="flex-1 min-w-[220px] relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-          <input
-            type="text"
-            value={keyword}
-            onChange={(e) => { setKeyword(e.target.value); setPage(0); }}
-            placeholder="Tìm theo tiêu đề, slug..."
-            className="w-full pl-9 pr-3.5 h-9 text-xs border border-slate-200 rounded-lg bg-slate-50/50 hover:bg-white focus:bg-white text-slate-800 placeholder:text-slate-400
-                       focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200 transition-colors"
-          />
-        </div>
+      {/* Unified Enterprise Table Surface */}
+      <div className="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden">
+        {/* Table Control Bar (Integrated Header) */}
+        <div className="px-3.5 py-2.5 border-b border-slate-200 bg-slate-50/50 flex flex-col md:flex-row flex-wrap gap-2.5 items-stretch md:items-center justify-between">
+          {/* Left Controls: Search, Category & Date Filters */}
+          <div className="flex flex-wrap items-center gap-2 flex-1 min-w-0">
+            {/* Search: Compact fixed width */}
+            <div className="w-full sm:w-60 lg:w-64 relative">
+              <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                value={keyword}
+                onChange={(e) => { setKeyword(e.target.value); setPage(0); }}
+                placeholder="Tìm theo tiêu đề, slug..."
+                className="w-full pl-8 pr-3 h-8 text-xs border border-slate-200 rounded-md bg-white text-slate-800 placeholder:text-slate-400
+                           focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200 transition-colors"
+              />
+            </div>
 
-        {/* Date Filters */}
-        <div className="flex gap-2 items-center">
-          <div className="relative">
-            <input
-              type={fromDate ? "date" : "text"}
-              placeholder="Từ ngày"
-              onFocus={(e) => (e.target.type = "date")}
-              onBlur={(e) => (!fromDate && (e.target.type = "text"))}
-              value={fromDate}
-              onChange={(e) => { setFromDate(e.target.value); setPage(0); }}
-              className="w-full sm:w-[130px] px-3 h-9 text-xs border border-slate-200 rounded-lg bg-slate-50/50 hover:bg-white focus:bg-white text-slate-800
-                         focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200 transition-colors"
-            />
+            {/* Category Filter Dropdown */}
+            <select
+              value={categoryId}
+              onChange={(e) => { setCategoryId(e.target.value); setPage(0); }}
+              className="w-36 sm:w-44 px-2.5 h-8 text-xs border border-slate-200 rounded-md bg-white text-slate-700 hover:border-slate-300 focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200 transition-colors cursor-pointer font-medium"
+            >
+              <option value="">Tất cả chuyên mục</option>
+              {categories.map((c: any) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+
+            {/* Date Filters */}
+            <div className="flex items-center gap-1.5">
+              <input
+                type={fromDate ? "date" : "text"}
+                placeholder="Từ ngày"
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (!fromDate && (e.target.type = "text"))}
+                value={fromDate}
+                onChange={(e) => { setFromDate(e.target.value); setPage(0); }}
+                className="w-28 sm:w-32 px-2.5 h-8 text-xs border border-slate-200 rounded-md bg-white text-slate-800
+                           focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200 transition-colors"
+              />
+              <span className="text-slate-300 text-xs">–</span>
+              <input
+                type={toDate ? "date" : "text"}
+                placeholder="Đến ngày"
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (!toDate && (e.target.type = "text"))}
+                value={toDate}
+                onChange={(e) => { setToDate(e.target.value); setPage(0); }}
+                className="w-28 sm:w-32 px-2.5 h-8 text-xs border border-slate-200 rounded-md bg-white text-slate-800
+                           focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200 transition-colors"
+              />
+            </div>
+
+            {/* Reset Button */}
+            {hasFilterActive && (
+              <button
+                onClick={clearFilters}
+                aria-label="Xóa bộ lọc"
+                className="h-8 px-2.5 text-xs font-medium rounded-md border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 hover:text-slate-900 transition-colors flex items-center gap-1 whitespace-nowrap shadow-2xs cursor-pointer"
+              >
+                <RotateCcw size={11} className="text-slate-400" />
+                <span>Xóa lọc</span>
+              </button>
+            )}
           </div>
-          <span className="text-slate-300 text-xs">–</span>
-          <div className="relative">
-            <input
-              type={toDate ? "date" : "text"}
-              placeholder="Đến ngày"
-              onFocus={(e) => (e.target.type = "date")}
-              onBlur={(e) => (!toDate && (e.target.type = "text"))}
-              value={toDate}
-              onChange={(e) => { setToDate(e.target.value); setPage(0); }}
-              className="w-full sm:w-[130px] px-3 h-9 text-xs border border-slate-200 rounded-lg bg-slate-50/50 hover:bg-white focus:bg-white text-slate-800
-                         focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200 transition-colors"
-            />
-          </div>
         </div>
 
-        {/* Sort & Reset Actions */}
-        <div className="flex gap-2 items-center">
-          <button
-            type="button"
-            onClick={() => { setSortDir(sortDir === "desc" ? "asc" : "desc"); setPage(0); }}
-            className="h-9 px-3 flex items-center gap-1.5 text-xs font-medium border border-slate-200 rounded-lg bg-slate-50/50 hover:bg-white text-slate-700 hover:border-slate-300 transition-colors"
-          >
-            <span>Ngày tạo</span>
-            {sortDir === "desc" ? <ArrowDown size={13} className="text-slate-500" /> : <ArrowUp size={13} className="text-slate-500" />}
-          </button>
-
-          {/* Clean Reset Button (Fixed yellow/red clash) */}
-          <button
-            onClick={clearFilters}
-            disabled={!hasFilterActive}
-            aria-label="Xóa bộ lọc"
-            className={`h-9 px-3 text-xs font-semibold rounded-lg border transition-colors flex items-center gap-1.5 whitespace-nowrap
-              ${hasFilterActive
-                ? "border-slate-200 text-slate-700 bg-white hover:bg-slate-100 hover:text-slate-900 cursor-pointer shadow-sm"
-                : "border-transparent text-slate-300 bg-transparent cursor-not-allowed"
-              }`}
-          >
-            <RotateCcw size={12} className={hasFilterActive ? "text-slate-500" : "text-slate-300"} />
-            <span>Xóa lọc</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Main Table Card */}
-      <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] overflow-hidden">
+        {/* Main Table */}
         {loading ? (
           <div className="p-12 text-center text-slate-400 text-xs">Đang tải danh sách bài viết...</div>
         ) : posts.length === 0 ? (
@@ -227,10 +232,25 @@ export default function PostsPage() {
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+              <table className="w-full text-left border-collapse min-w-[680px]">
+                <thead className="bg-slate-50/75 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                   <tr>
-                    <th className="px-4 py-3 whitespace-nowrap">Ngày tạo</th>
+                    <th
+                      onClick={() => { setSortDir(sortDir === "desc" ? "asc" : "desc"); setPage(0); }}
+                      className="px-4 py-3 whitespace-nowrap cursor-pointer select-none hover:bg-slate-100/90 transition-colors group"
+                      title="Nhấn để đảo chiều sắp xếp theo ngày tạo"
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <span className="group-hover:text-navy-900 transition-colors">Ngày tạo</span>
+                        <span className="inline-flex items-center text-navy-700">
+                          {sortDir === "desc" ? (
+                            <ArrowDown size={13} className="text-navy-700 stroke-[2.5]" />
+                          ) : (
+                            <ArrowUp size={13} className="text-navy-700 stroke-[2.5]" />
+                          )}
+                        </span>
+                      </div>
+                    </th>
                     <th className="px-4 py-3">Tiêu đề bài viết</th>
                     <th className="px-4 py-3">Chuyên mục</th>
                     <th className="px-4 py-3">Đường dẫn (Slug)</th>
@@ -238,32 +258,32 @@ export default function PostsPage() {
                     <th className="px-4 py-3 text-right">Thao tác</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 text-xs">
+                <tbody className="divide-y divide-slate-100 text-sm">
                   {posts.map((p: any) => (
-                    <tr key={p.id} className="hover:bg-slate-50/60 transition-colors group">
-                      <td className="px-4 py-3 text-[11px] text-slate-500 font-mono whitespace-nowrap">
+                    <tr key={p.id} className="hover:bg-slate-50/70 transition-colors group">
+                      <td className="px-4 py-3 text-xs text-slate-500 font-mono whitespace-nowrap">
                         {p.createdAt ? new Date(p.createdAt).toLocaleDateString("vi-VN", { day: '2-digit', month: '2-digit', year: 'numeric' }) : "—"}
                       </td>
-                      <td className="px-4 py-3 max-w-[320px]">
-                        <p className="font-semibold text-slate-900 line-clamp-1 group-hover:text-navy-700 transition-colors">{p.title}</p>
-                        {p.excerpt && <p className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">{p.excerpt}</p>}
+                      <td className="px-4 py-3 max-w-[340px]">
+                        <p className="font-semibold text-slate-900 text-sm line-clamp-1 group-hover:text-navy-700 transition-colors">{p.title}</p>
+                        {p.excerpt && <p className="text-xs text-slate-400 line-clamp-1 mt-0.5">{p.excerpt}</p>}
                       </td>
                       <td className="px-4 py-3 text-slate-600 whitespace-nowrap">
-                        <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px] font-medium border border-slate-200/60">
+                        <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-xs font-medium border border-slate-200/60">
                           {p.category?.name || "Chưa phân loại"}
                         </span>
                       </td>
-                      <td className="px-4 py-3 font-mono text-[11px] text-slate-400 max-w-[160px] truncate" title={p.slug}>
+                      <td className="px-4 py-3 font-mono text-xs text-slate-400 max-w-[170px] truncate" title={p.slug}>
                         {p.slug}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         {p.status === "PUBLISHED" ? (
-                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/70">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                             Xuất bản
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
                             Lưu nháp
                           </span>
@@ -275,17 +295,17 @@ export default function PostsPage() {
                             onClick={() => openEdit(p)}
                             title="Sửa bài viết"
                             aria-label="Chỉnh sửa bài viết"
-                            className="p-1.5 rounded-md text-slate-400 hover:text-navy-700 hover:bg-slate-100 transition-colors"
+                            className="p-1 rounded text-slate-400 hover:text-navy-700 hover:bg-slate-100 transition-colors"
                           >
-                            <Pencil size={13} />
+                            <Pencil size={15} />
                           </button>
                           <button
                             onClick={() => setDelTarget(p)}
                             title="Xóa bài viết"
                             aria-label="Xóa bài viết"
-                            className="p-1.5 rounded-md text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                            className="p-1 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
                           >
-                            <Trash2 size={13} />
+                            <Trash2 size={15} />
                           </button>
                         </div>
                       </td>
@@ -297,10 +317,14 @@ export default function PostsPage() {
 
             <Pagination
               page={page}
-              totalPages={data.totalPages}
-              totalElements={data.totalElements}
-              size={15}
+              totalPages={data.totalPages || Math.ceil((data.totalElements || 0) / pageSize)}
+              totalElements={data.totalElements || 0}
+              size={pageSize}
               onChange={setPage}
+              onSizeChange={(newSize) => {
+                setPageSize(newSize);
+                setPage(0);
+              }}
             />
           </>
         )}
@@ -317,7 +341,7 @@ export default function PostsPage() {
                 required
                 onChange={(e) => setForm({ ...form, title: e.target.value, slug: editing ? form.slug : slugify(e.target.value) })}
                 placeholder="Nhập tiêu đề bài viết..."
-                className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-900 bg-white placeholder:text-slate-400
+                className="w-full border border-slate-200 rounded-md px-3 py-2 text-xs text-slate-900 bg-white placeholder:text-slate-400
                            focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
               />
             </div>
@@ -328,7 +352,7 @@ export default function PostsPage() {
                 required
                 onChange={(e) => setForm({ ...form, slug: e.target.value })}
                 placeholder="tieu-de-bai-viet"
-                className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs font-mono text-slate-800 bg-white placeholder:text-slate-400
+                className="w-full border border-slate-200 rounded-md px-3 py-2 text-xs font-mono text-slate-800 bg-white placeholder:text-slate-400
                            focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
               />
             </div>
@@ -337,7 +361,7 @@ export default function PostsPage() {
               <select
                 value={form.categoryId}
                 onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-                className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
+                className="w-full border border-slate-200 rounded-md px-3 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
               >
                 <option value="">-- Chọn chuyên mục --</option>
                 {categories.map((c: any) => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -351,7 +375,7 @@ export default function PostsPage() {
                 max={60}
                 value={form.readMinutes}
                 onChange={(e) => setForm({ ...form, readMinutes: Number(e.target.value) })}
-                className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
+                className="w-full border border-slate-200 rounded-md px-3 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
               />
             </div>
             <div>
@@ -359,7 +383,7 @@ export default function PostsPage() {
               <select
                 value={form.status}
                 onChange={(e) => setForm({ ...form, status: e.target.value })}
-                className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
+                className="w-full border border-slate-200 rounded-md px-3 py-2 text-xs text-slate-800 bg-white focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
               >
                 <option value="PUBLISHED">Xuất bản công khai</option>
                 <option value="DRAFT">Lưu bản nháp</option>
@@ -374,7 +398,7 @@ export default function PostsPage() {
               rows={2}
               onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
               placeholder="Tóm tắt ngắn hiển thị trong danh sách bài viết..."
-              className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-900 bg-white resize-none placeholder:text-slate-400
+              className="w-full border border-slate-200 rounded-md px-3 py-2 text-xs text-slate-900 bg-white resize-none placeholder:text-slate-400
                          focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
             />
           </div>
@@ -433,14 +457,14 @@ export default function PostsPage() {
                   rows={9}
                   onChange={(e) => setForm({ ...form, content: e.target.value })}
                   placeholder="<p>Nhập nội dung bài viết...</p>"
-                  className="w-full border border-slate-200 rounded-lg px-3.5 py-2 text-xs font-mono text-slate-800 bg-white resize-y placeholder:text-slate-400
+                  className="w-full border border-slate-200 rounded-md px-3 py-2 text-xs font-mono text-slate-800 bg-white resize-y placeholder:text-slate-400
                              focus:outline-none focus:border-navy-600 focus:ring-1 focus:ring-navy-200"
                 />
                 <p className="text-[11px] text-slate-400 mt-1">Hỗ trợ các định dạng HTML: &lt;h2&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;strong&gt;, &lt;table&gt;...</p>
               </>
             ) : (
               <div
-                className="w-full border border-slate-200 rounded-lg px-4 py-3.5 text-xs prose max-w-none h-[220px] overflow-y-auto bg-slate-50/50"
+                className="w-full border border-slate-200 rounded-md px-4 py-3 text-xs prose max-w-none h-[220px] overflow-y-auto bg-slate-50/50"
                 dangerouslySetInnerHTML={{ __html: form.content || '<p class="text-slate-400 italic">Chưa có nội dung xem trước...</p>' }}
               />
             )}
@@ -449,14 +473,14 @@ export default function PostsPage() {
           <div className="flex gap-2.5 justify-end pt-3 border-t border-slate-100">
             <button
               onClick={() => setModalOpen(false)}
-              className="px-3.5 py-2 text-xs font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+              className="px-3.5 py-2 text-xs font-medium text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50 transition-colors"
             >
               Hủy
             </button>
             <button
               onClick={handleSave}
               disabled={saving}
-              className="px-4 py-2 text-xs font-semibold bg-navy-600 text-white rounded-lg hover:bg-navy-700 disabled:opacity-60 transition-colors inline-flex items-center gap-1.5 shadow-sm active:scale-[0.99]"
+              className="px-4 py-2 text-xs font-semibold bg-navy-600 text-white rounded-md hover:bg-navy-700 disabled:opacity-60 transition-colors inline-flex items-center gap-1.5 shadow-2xs active:scale-[0.99]"
             >
               {saving ? "Đang lưu..." : (editing ? "Lưu thay đổi" : "Xuất bản bài viết")}
             </button>
