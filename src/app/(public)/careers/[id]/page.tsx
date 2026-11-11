@@ -1,10 +1,11 @@
-"use client";
-
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { useState, useEffect } from "react";
-import { ChevronRight, MapPin, DollarSign, Briefcase, Calendar, Send, CheckCircle, ArrowLeft } from "lucide-react";
-import { fetchJobs, submitLead } from "@/lib/api";
+import { ChevronRight, MapPin, DollarSign, Briefcase, Calendar, CheckCircle, ArrowLeft, ArrowRight, Building2, ShieldCheck, Award } from "lucide-react";
+import { fetchJobById, fetchJobs } from "@/lib/api";
+import JobApplyForm from "./JobApplyForm";
+
+export const dynamic = "force-dynamic";
 
 function parseJsonArray(raw: string | null | undefined): string[] {
   if (!raw) return [];
@@ -12,186 +13,240 @@ function parseJsonArray(raw: string | null | undefined): string[] {
 }
 
 function formatDeadline(iso: string | null | undefined) {
-  if (!iso) return "";
+  if (!iso) return "Đang nhận hồ sơ";
   const d = new Date(iso);
   return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
 }
 
 const JOB_TYPE_LABEL: Record<string, string> = {
-  FULL_TIME: "Toàn thời gian", PART_TIME: "Bán thời gian",
-  INTERNSHIP: "Thực tập sinh",  CONTRACT: "Hợp đồng",
+  FULL_TIME: "Toàn thời gian",
+  PART_TIME: "Bán thời gian",
+  INTERNSHIP: "Thực tập sinh",
+  CONTRACT: "Hợp đồng",
 };
 
-export default function CareerDetailPage({ params }: { params: { id: string } }) {
-  const [job, setJob]           = useState<any>(null);
-  const [loading, setLoading]   = useState(true);
-  const [form, setForm]         = useState({ name: "", phone: "", email: "", cv: "", note: "" });
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted]   = useState(false);
-  const [error, setError]           = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchJobs().then((jobs: any[]) => {
-      const found = jobs.find((j: any) => j.id === params.id);
-      setJob(found || null);
-      setLoading(false);
-    });
-  }, [params.id]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    setError(null);
-    const result = await submitLead({
-      fullName: form.name,
-      phone: form.phone,
-      email: form.email || undefined,
-      message: `[Ứng tuyển vị trí: ${job?.title}]\n${form.note ? form.note : ""}\nCV: ${form.cv || "Không có"}`,
-      sourcePage: `/careers/${params.id}`,
-    });
-    setSubmitting(false);
-    if (result.ok) setSubmitted(true);
-    else setError(result.message || "Gửi thất bại");
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const job = await fetchJobById(params.id);
+  if (!job) {
+    return { title: "Không tìm thấy tin tuyển dụng" };
+  }
+  return {
+    title: `${job.title} – Tuyển Dụng | HDT Logistics`,
+    description: job.description || `Cơ hội nghề nghiệp ${job.title} tại HDT Logistics`,
+    openGraph: {
+      title: `${job.title} – Tuyển Dụng HDT Logistics`,
+      description: job.description || `Ứng tuyển vị trí ${job.title} tại HDT Logistics`,
+      type: "article",
+    },
   };
+}
 
-  if (loading) return (
-    <div className="bg-white min-h-screen flex items-center justify-center">
-      <div className="text-navy-400 text-sm">Đang tải...</div>
-    </div>
-  );
+export default async function CareerDetailPage({ params }: { params: { id: string } }) {
+  const [job, allJobs] = await Promise.all([
+    fetchJobById(params.id),
+    fetchJobs(),
+  ]);
 
   if (!job) notFound();
 
   const requirements = parseJsonArray(job.requirements);
-  const benefits     = parseJsonArray(job.benefits);
+  const benefits = parseJsonArray(job.benefits);
+  const otherJobs = (allJobs as any[])
+    .filter((j: any) => j.id !== params.id)
+    .slice(0, 3);
 
   return (
     <div className="bg-white">
-      {/* Hero */}
-      <section className="hero-bg pt-36 pb-16">
+      {/* Hero Banner */}
+      <section className="hero-bg pt-36 pb-16 relative overflow-hidden">
         <div className="wrap relative z-10">
-          <div className="flex items-center gap-2 text-white/40 text-xs mb-6 flex-wrap">
-            <Link href="/" className="hover:text-white">Trang Chủ</Link>
+          <nav className="flex items-center gap-2 text-white/40 text-xs mb-6 flex-wrap" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white transition-colors">Trang Chủ</Link>
             <ChevronRight size={12} />
-            <Link href="/careers" className="hover:text-white">Tuyển Dụng</Link>
+            <Link href="/careers" className="hover:text-white transition-colors">Tuyển Dụng</Link>
             <ChevronRight size={12} />
-            <span className="text-white/70">{job.title}</span>
+            <span className="text-white/80 line-clamp-1">{job.title}</span>
+          </nav>
+
+          <div className="flex flex-wrap items-center gap-2.5 mb-4">
+            <span className="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              {job.department || "Tuyển dụng"}
+            </span>
+            <span className="bg-white/15 text-white/90 text-xs font-medium px-3 py-1 rounded-full border border-white/10">
+              {JOB_TYPE_LABEL[job.jobType] || job.jobType}
+            </span>
           </div>
-          <span className="bg-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-full inline-block mb-5">
-            {job.department}
-          </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-5">{job.title}</h1>
-          <div className="flex flex-wrap gap-5 text-white/60 text-sm">
-            <span className="flex items-center gap-1.5"><MapPin size={13} />{job.location}</span>
-            {job.salary && <span className="flex items-center gap-1.5"><DollarSign size={13} />{job.salary}</span>}
-            <span className="flex items-center gap-1.5"><Briefcase size={13} />{JOB_TYPE_LABEL[job.jobType] || job.jobType}</span>
-            {job.deadline && <span className="flex items-center gap-1.5"><Calendar size={13} />HSD: {formatDeadline(job.deadline)}</span>}
+
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-snug mb-5 max-w-4xl">
+            {job.title}
+          </h1>
+
+          <div className="flex flex-wrap gap-5 text-white/70 text-sm">
+            <span className="flex items-center gap-1.5"><MapPin size={14} className="text-orange-400" />{job.location}</span>
+            {job.salary && <span className="flex items-center gap-1.5"><DollarSign size={14} className="text-orange-400" />{job.salary}</span>}
+            <span className="flex items-center gap-1.5"><Briefcase size={14} className="text-orange-400" />{JOB_TYPE_LABEL[job.jobType] || job.jobType}</span>
+            <span className="flex items-center gap-1.5"><Calendar size={14} className="text-orange-400" />Hạn nộp: {formatDeadline(job.deadline)}</span>
           </div>
         </div>
       </section>
 
-      {/* Content */}
+      {/* Main Content Area */}
       <section className="py-16">
         <div className="wrap">
-          <div className="grid lg:grid-cols-[1fr_380px] gap-10">
-            {/* Left */}
-            <div className="space-y-8">
+          <div className="grid lg:grid-cols-[1fr_400px] gap-10">
+            {/* Left Column: Job Details */}
+            <div className="space-y-10 min-w-0">
               {job.description && (
-                <div>
-                  <h2 className="font-bold text-navy-800 text-xl mb-4">Mô tả công việc</h2>
-                  <p className="text-navy-500 text-sm leading-[1.85]">{job.description}</p>
+                <div className="card p-7 sm:p-8">
+                  <h2 className="font-extrabold text-navy-900 text-xl mb-4 flex items-center gap-2">
+                    <span className="w-1.5 h-6 bg-orange-500 rounded-full inline-block" />
+                    Mô tả công việc
+                  </h2>
+                  <div className="text-slate-600 text-sm sm:text-base leading-relaxed whitespace-pre-line">
+                    {job.description}
+                  </div>
                 </div>
               )}
+
               {requirements.length > 0 && (
-                <div>
-                  <h2 className="font-bold text-navy-800 text-xl mb-4">Yêu cầu ứng viên</h2>
-                  <ul className="space-y-3">
-                    {requirements.map((r: string) => (
-                      <li key={r} className="flex items-start gap-3 text-sm text-navy-500">
-                        <CheckCircle size={15} className="text-orange-500 flex-shrink-0 mt-0.5" />{r}
+                <div className="card p-7 sm:p-8">
+                  <h2 className="font-extrabold text-navy-900 text-xl mb-4 flex items-center gap-2">
+                    <span className="w-1.5 h-6 bg-orange-500 rounded-full inline-block" />
+                    Yêu cầu ứng viên
+                  </h2>
+                  <ul className="space-y-3.5">
+                    {requirements.map((r: string, idx: number) => (
+                      <li key={idx} className="flex items-start gap-3 text-sm sm:text-base text-slate-700">
+                        <CheckCircle size={17} className="text-orange-500 flex-shrink-0 mt-0.5" />
+                        <span className="leading-relaxed">{r}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
+
               {benefits.length > 0 && (
-                <div>
-                  <h2 className="font-bold text-navy-800 text-xl mb-4">Quyền lợi</h2>
-                  <ul className="space-y-2.5">
-                    {benefits.map((b: string) => (
-                      <li key={b} className="flex items-center gap-2.5 text-sm text-navy-500">
-                        <span className="w-1.5 h-1.5 rounded-full bg-orange-500 flex-shrink-0" />{b}
+                <div className="card p-7 sm:p-8">
+                  <h2 className="font-extrabold text-navy-900 text-xl mb-4 flex items-center gap-2">
+                    <span className="w-1.5 h-6 bg-emerald-500 rounded-full inline-block" />
+                    Quyền lợi & Phúc lợi
+                  </h2>
+                  <ul className="space-y-3">
+                    {benefits.map((b: string, idx: number) => (
+                      <li key={idx} className="flex items-start gap-3 text-sm sm:text-base text-slate-700">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0 mt-2" />
+                        <span className="leading-relaxed">{b}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
-              <Link href="/careers"
-                className="inline-flex items-center gap-2 text-navy-400 hover:text-orange-500 transition-colors text-sm font-semibold">
-                <ArrowLeft size={14} /> Xem tất cả vị trí
-              </Link>
+
+              {/* Recruitment Process */}
+              <div className="card p-7 sm:p-8 bg-slate-50/70 border-slate-200/80">
+                <h2 className="font-extrabold text-navy-900 text-lg mb-5">Quy trình ứng tuyển tại HDT</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                  {[
+                    { step: "01", title: "Nộp CV", desc: "Online hoặc email" },
+                    { step: "02", title: "Sàng lọc", desc: "Phản hồi trong 2-3 ngày" },
+                    { step: "03", title: "Phỏng vấn", desc: "Trực tiếp / Online" },
+                    { step: "04", title: "Nhận việc", desc: "Onboarding chu đáo" },
+                  ].map((p) => (
+                    <div key={p.step} className="bg-white rounded-xl p-4 border border-slate-200/60 shadow-2xs">
+                      <span className="text-orange-500 font-extrabold text-base block mb-1">{p.step}</span>
+                      <p className="font-bold text-navy-900 text-xs sm:text-sm">{p.title}</p>
+                      <p className="text-[11px] text-slate-400 mt-1 leading-tight">{p.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  href="/careers"
+                  className="inline-flex items-center gap-2 text-navy-700 hover:text-orange-500 transition-colors text-sm font-semibold group"
+                >
+                  <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                  Xem tất cả vị trí tuyển dụng khác
+                </Link>
+              </div>
             </div>
 
-            {/* Right: form ứng tuyển */}
-            <div className="sticky top-28">
-              <div className="card p-7">
-                {submitted ? (
-                  <div className="text-center py-6">
-                    <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle size={28} className="text-green-500" />
-                    </div>
-                    <h3 className="font-bold text-navy-800 text-lg mb-2">Nộp hồ sơ thành công!</h3>
-                    <p className="text-navy-500 text-sm">Chúng tôi sẽ liên hệ trong 3 ngày làm việc.</p>
+            {/* Right Column: Apply Form & Company Meta */}
+            <div className="space-y-6">
+              <div className="sticky top-28 space-y-6">
+                {/* Apply Form Component */}
+                <JobApplyForm job={job} />
+
+                {/* Company trust badge */}
+                <div className="rounded-xl border border-slate-200/80 bg-slate-50/60 p-5 space-y-3 text-xs text-slate-600">
+                  <div className="flex items-center gap-2 text-navy-900 font-bold">
+                    <Building2 size={15} className="text-navy-700" />
+                    <span>Làm việc tại HDT Logistics</span>
                   </div>
-                ) : (
-                  <>
-                    <h3 className="font-bold text-navy-800 text-lg mb-1">Ứng tuyển ngay</h3>
-                    <p className="text-navy-400 text-xs mb-6 pb-4 border-b border-gray-100">{job.title}</p>
-                    {error && (
-                      <div className="mb-4 text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl p-3">{error}</div>
-                    )}
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      {[
-                        { name: "name",  label: "Họ và tên *",    placeholder: "Nguyễn Văn A",   type: "text",  req: true  },
-                        { name: "phone", label: "Điện thoại *",   placeholder: "0901 234 567",    type: "tel",   req: true  },
-                        { name: "email", label: "Email *",         placeholder: "email@example.com", type: "email", req: true },
-                        { name: "cv",    label: "Link CV",         placeholder: "https://...",     type: "url",   req: false },
-                      ].map((f) => (
-                        <div key={f.name}>
-                          <label className="block text-[10px] font-bold tracking-widest uppercase text-navy-400 mb-1.5">{f.label}</label>
-                          <input type={f.type} required={f.req} placeholder={f.placeholder}
-                            value={form[f.name as keyof typeof form]}
-                            onChange={(e) => setForm(p => ({ ...p, [f.name]: e.target.value }))}
-                            className="w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-2.5
-                                       text-navy-800 text-sm placeholder:text-gray-300
-                                       focus:outline-none focus:border-navy-500 transition-colors" />
-                        </div>
-                      ))}
-                      <div>
-                        <label className="block text-[10px] font-bold tracking-widest uppercase text-navy-400 mb-1.5">Thư xin việc</label>
-                        <textarea rows={3} placeholder="Giới thiệu ngắn về bản thân..."
-                          value={form.note} onChange={(e) => setForm(p => ({ ...p, note: e.target.value }))}
-                          className="w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-2.5
-                                     text-navy-800 text-sm placeholder:text-gray-300 resize-none
-                                     focus:outline-none focus:border-navy-500 transition-colors" />
-                      </div>
-                      <button type="submit" disabled={submitting}
-                        className="w-full btn-orange justify-center py-3.5 disabled:opacity-50">
-                        {submitting
-                          ? <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                          : <><Send size={15} />Nộp Hồ Sơ</>}
-                      </button>
-                      <p className="text-[10px] text-navy-400 text-center">
-                        Hoặc gửi trực tiếp: <a href="mailto:hr@hdtlogistics.vn" className="text-orange-500 font-semibold">hr@hdtlogistics.vn</a>
-                      </p>
-                    </form>
-                  </>
-                )}
+                  <p className="text-slate-500 leading-relaxed">
+                    Môi trường làm việc năng động, lộ trình phát triển rõ ràng, minh bạch với văn hóa High Delivery – High Discipline – High Transparency.
+                  </p>
+                  <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-400">
+                    <span className="flex items-center gap-1"><ShieldCheck size={13} className="text-emerald-500" /> Bảo hiểm đầy đủ</span>
+                    <span className="flex items-center gap-1"><Award size={13} className="text-orange-500" /> Thưởng KPI & Lễ tết</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Other Jobs Section */}
+      {otherJobs.length > 0 && (
+        <section className="py-16 bg-slate-50 border-t border-slate-200/80">
+          <div className="wrap">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+              <div>
+                <p className="text-orange-500 font-bold text-xs tracking-widest uppercase mb-1">Cơ hội việc làm</p>
+                <h3 className="h3 text-navy-900">Các vị trí đang tuyển khác</h3>
+              </div>
+              <Link href="/careers" className="text-xs sm:text-sm font-semibold text-navy-700 hover:text-orange-500 transition-colors inline-flex items-center gap-1">
+                Xem toàn bộ vị trí <ArrowRight size={14} />
+              </Link>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-5">
+              {otherJobs.map((oj: any) => (
+                <div key={oj.id} className="card p-5 hover:border-orange-200 transition-all flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className="text-[10px] font-bold uppercase tracking-wider bg-navy-100 text-navy-700 px-2.5 py-0.5 rounded-full">
+                        {oj.department}
+                      </span>
+                      <span className="text-[10px] font-medium text-slate-400">
+                        {JOB_TYPE_LABEL[oj.jobType] || oj.jobType}
+                      </span>
+                    </div>
+                    <Link href={`/careers/${oj.id}`} className="block group">
+                      <h4 className="font-bold text-navy-900 text-sm mb-2 group-hover:text-orange-500 transition-colors line-clamp-2">
+                        {oj.title}
+                      </h4>
+                    </Link>
+                    <p className="text-xs text-slate-500 line-clamp-2 mb-3">
+                      {oj.description}
+                    </p>
+                  </div>
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <span className="text-slate-400 flex items-center gap-1">
+                      <MapPin size={11} /> {oj.location}
+                    </span>
+                    <Link href={`/careers/${oj.id}`} className="font-semibold text-orange-500 hover:text-orange-600 inline-flex items-center gap-0.5">
+                      Chi tiết <ChevronRight size={12} />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

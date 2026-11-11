@@ -114,7 +114,7 @@ export default async function CareersPage() {
               {jobs.map((job: any) => {
                 const requirements = parseJsonArray(job.requirements);
                 return (
-                  <div key={job.id} className="group card p-6">
+                  <div key={job.id} className="group card p-6 hover:border-orange-200 transition-all">
                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-5">
                       <div className="flex-1">
                         <div className="flex flex-wrap gap-2 mb-3">
@@ -125,37 +125,36 @@ export default async function CareersPage() {
                             {JOB_TYPE_LABEL[job.jobType] || job.jobType}
                           </span>
                         </div>
-                        <h3 className="font-bold text-navy-800 text-lg mb-3 group-hover:text-orange-500 transition-colors">
-                          {job.title}
-                        </h3>
+                        <Link href={`/careers/${job.id}`} className="block group-hover:text-orange-500 transition-colors">
+                          <h3 className="font-bold text-navy-800 text-lg mb-2 group-hover:text-orange-500 transition-colors">
+                            {job.title}
+                          </h3>
+                        </Link>
                         <div className="flex flex-wrap gap-4 text-sm text-navy-400">
                           <span className="flex items-center gap-1.5"><MapPin size={13} />{job.location}</span>
                           {job.salary && <span className="flex items-center gap-1.5"><DollarSign size={13} />{job.salary}</span>}
                           {job.deadline && <span className="flex items-center gap-1.5"><Calendar size={13} />HSD: {formatDeadline(job.deadline)}</span>}
                         </div>
                         {job.description && (
-                          <p className="text-navy-500 text-sm mt-3 leading-relaxed">{job.description}</p>
+                          <p className="text-navy-500 text-sm mt-3 leading-relaxed line-clamp-2">{job.description}</p>
                         )}
-
-                        {requirements.length > 0 && (
-                          <details className="mt-4 group/d">
-                            <summary className="cursor-pointer text-xs font-semibold text-navy-400 hover:text-orange-500 transition-colors list-none inline-flex items-center gap-1.5">
-                              <ChevronRight size={12} className="group-open/d:rotate-90 transition-transform" />
-                              Xem yêu cầu chi tiết
-                            </summary>
-                            <ul className="mt-3 space-y-2 pl-4 border-l-2 border-orange-100">
-                              {requirements.map((r: string, i: number) => (
-                                <li key={i} className="text-xs text-navy-500 leading-relaxed">{r}</li>
-                              ))}
-                            </ul>
-                          </details>
-                        )}
+                        <div className="mt-3">
+                          <Link href={`/careers/${job.id}`} className="text-xs font-semibold text-orange-500 hover:text-orange-600 inline-flex items-center gap-1">
+                            Xem mô tả & yêu cầu đầy đủ <ChevronRight size={13} />
+                          </Link>
+                        </div>
                       </div>
 
-                      <Link href={`/contact?service=tuyen-dung&job=${job.id}`}
-                        className="flex-shrink-0 btn-orange text-sm py-2.5 px-5 self-start">
-                        Ứng Tuyển <ArrowRight size={14} />
-                      </Link>
+                      <div className="flex flex-row md:flex-col gap-2.5 flex-shrink-0 self-start w-full md:w-auto">
+                        <Link href={`/careers/${job.id}`}
+                          className="flex-1 md:flex-initial text-center border border-slate-200 hover:border-navy-600 text-navy-700 hover:text-navy-900 font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-xl transition-colors bg-white hover:bg-slate-50">
+                          Xem Chi Tiết
+                        </Link>
+                        <Link href={`/careers/${job.id}#apply`}
+                          className="flex-1 md:flex-initial text-center btn-orange text-xs sm:text-sm py-2.5 px-4 rounded-xl inline-flex items-center justify-center gap-1.5">
+                          Ứng Tuyển <ArrowRight size={14} />
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 );

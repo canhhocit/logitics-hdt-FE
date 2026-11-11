@@ -120,6 +120,16 @@ export async function fetchJobs() {
   return get('/public/jobs', []);
 }
 
+export async function fetchJobById(id: string) {
+  try {
+    const job = await get<any>(`/public/jobs/${id}`, null);
+    if (job) return job;
+  } catch {}
+  // Fallback find in all jobs
+  const jobs = await fetchJobs();
+  return jobs.find((j: any) => j.id === id) || null;
+}
+
 // ── Site Awards ───────────────────────────────────────────────
 
 export async function fetchAwards() {
