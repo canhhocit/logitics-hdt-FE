@@ -20,6 +20,7 @@ interface NavGroupItem {
   label: string;
   icon: any;
   badge?: string;
+  desc?: string;
 }
 
 interface NavDividerItem {
@@ -30,24 +31,24 @@ interface NavDividerItem {
 type NavEntry = NavGroupItem | NavDividerItem;
 
 const NAV: NavEntry[] = [
-  { href: "/admin",               label: "Bảng tin (Dashboard)",            icon: LayoutDashboard },
-  { href: "/admin/leads",         label: "Quản lý Liên hệ (Leads)",         icon: MessageSquare },
+  { href: "/admin",               label: "Bảng tin (Dashboard)",            icon: LayoutDashboard,   desc: "Tổng quan dữ liệu điều hành và chỉ số hoạt động website" },
+  { href: "/admin/leads",         label: "Quản lý Liên hệ (Leads)",         icon: MessageSquare,     desc: "Theo dõi và xử lý khách hàng gửi form yêu cầu tư vấn" },
   { divider: true, label: "Quản lý nội dung" },
-  { href: "/admin/posts",         label: "Quản lý Tin tức",   icon: FileText },
-  { href: "/admin/categories",    label: "Quản lý Chuyên mục",            icon: FolderOpen },
-  { href: "/admin/services",      label: "Quản lý Dịch vụ",     icon: Briefcase },
+  { href: "/admin/posts",         label: "Quản lý Tin tức",                 icon: FileText,          desc: "Soạn thảo bài viết, tin ngành logistics & xuất nhập khẩu" },
+  { href: "/admin/categories",    label: "Quản lý Chuyên mục",              icon: FolderOpen,        desc: "Phân loại chuyên mục tin tức và cẩm nang xuất nhập khẩu" },
+  { href: "/admin/services",      label: "Quản lý Dịch vụ",                 icon: Briefcase,         desc: "Cấu hình 6 dịch vụ cốt lõi: Cước biển, cước bay, kho bãi..." },
   { divider: true, label: "Thông tin doanh nghiệp" },
-  { href: "/admin/offices",       label: "Quản lý Hệ thống chi nhánh",  icon: Building2 },
-  { href: "/admin/contacts",      label: "Nhân sự phụ trách",    icon: Users },
-  { href: "/admin/jobs",          label: "Quản lý Tuyển dụng",            icon: BriefcaseBusiness },
-  { href: "/admin/applications",  label: "Hồ sơ Ứng tuyển & CV",         icon: UserCheck },
+  { href: "/admin/offices",       label: "Quản lý Hệ thống chi nhánh",      icon: Building2,         desc: "Trụ sở chính, chi nhánh và kho bãi tại Hà Nội, Hải Phòng, TP.HCM" },
+  { href: "/admin/contacts",      label: "Nhân sự phụ trách",               icon: Users,             desc: "Danh bạ nhân viên phụ trách tư vấn các mảng nghiệp vụ" },
+  { href: "/admin/jobs",          label: "Quản lý Tuyển dụng",              icon: BriefcaseBusiness, desc: "Đăng tin tuyển dụng và tìm kiếm nhân tài logistics" },
+  { href: "/admin/applications",  label: "Hồ sơ Ứng tuyển & CV",           icon: UserCheck,         desc: "Tiếp nhận hồ sơ ứng viên và xem/tải trực tiếp file CV" },
   { divider: true, label: "Truyền thông website" },
-  { href: "/admin/testimonials",  label: "Phản hồi khách hàng",  icon: Quote },
-  { href: "/admin/partners",      label: "Quản lý Đối tác",   icon: Globe },
-  { href: "/admin/awards",        label: "Giải thưởng & Chứng nhận", icon: Award },
-  { href: "/admin/company-values",label: "Giá trị cốt lõi",      icon: Sparkles },
+  { href: "/admin/testimonials",  label: "Phản hồi khách hàng",             icon: Quote,             desc: "Đánh giá, nhận xét thực tế từ khách hàng và đối tác" },
+  { href: "/admin/partners",      label: "Quản lý Đối tác",                 icon: Globe,             desc: "Danh sách hãng tàu biển, hãng hàng không và đối tác vận tải" },
+  { href: "/admin/awards",        label: "Giải thưởng & Chứng nhận",        icon: Award,             desc: "Chứng chỉ WCA, IATA, FIATA và các chứng nhận năng lực" },
+  { href: "/admin/company-values",label: "Giá trị cốt lõi",                icon: Sparkles,          desc: "Tầm nhìn, sứ mệnh và văn hóa doanh nghiệp HDT Logistics" },
   { divider: true, label: "Hệ thống" },
-  { href: "/admin/settings",      label: "Cài đặt chung",        icon: Settings },
+  { href: "/admin/settings",      label: "Cài đặt chung",                   icon: Settings,          desc: "Hotline, mã số thuế, địa chỉ pháp lý và mạng xã hội" },
 ];
 
 function NavItem({
@@ -55,11 +56,15 @@ function NavItem({
   pathname,
   collapsed,
   onClick,
+  onMouseEnter,
+  onMouseLeave,
 }: {
   item: NavEntry;
   pathname: string;
   collapsed?: boolean;
   onClick?: () => void;
+  onMouseEnter?: (e: React.MouseEvent<HTMLElement>) => void;
+  onMouseLeave?: () => void;
 }) {
   if (item.divider) {
     if (collapsed) {
@@ -76,13 +81,16 @@ function NavItem({
 
   const active = pathname === item.href;
   const Icon = item.icon;
+  const tooltipText = item.desc ? `${item.label} — ${item.desc}` : item.label;
 
   if (collapsed) {
     return (
       <Link
         href={item.href}
         onClick={onClick}
-        title={item.label}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        title={tooltipText}
         className={`flex items-center justify-center w-10 h-10 mx-auto rounded-lg text-sm font-medium transition-all group relative
           ${active
             ? "bg-navy-50 text-navy-800 font-semibold border border-navy-100 shadow-2xs"
@@ -103,6 +111,9 @@ function NavItem({
     <Link
       href={item.href}
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      title={tooltipText}
       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all group relative
         ${active
           ? "bg-navy-50 text-navy-800 font-semibold border border-navy-100 shadow-2xs"
@@ -114,13 +125,13 @@ function NavItem({
       />
       <span className="flex-1 truncate">{item.label}</span>
       {item.badge && (
-        <span className={`text-xs px-2 py-0.5 rounded-full font-bold tabular-nums min-w-[20px] text-center
+        <span className={`text-xs px-2 py-0.5 rounded-full font-bold tabular-nums min-w-[20px] text-center flex-shrink-0
           ${active ? "bg-navy-100 text-navy-800" : "bg-orange-50 text-orange-600 border border-orange-200/80"}`}>
           {item.badge}
         </span>
       )}
       {!active && !item.badge && (
-        <ChevronRight size={14} className="opacity-0 -translate-x-1 group-hover:opacity-40 group-hover:translate-x-0 transition-all text-slate-400" />
+        <ChevronRight size={14} className="opacity-0 -translate-x-1 group-hover:opacity-40 group-hover:translate-x-0 transition-all text-slate-400 flex-shrink-0" />
       )}
     </Link>
   );
@@ -135,6 +146,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [fontSize,         setFontSize]         = useState<"sm" | "md" | "lg">("md");
   const [newLeadsCount,    setNewLeadsCount]    = useState<number>(0);
   const [username,         setUsername]         = useState("Admin");
+  const [hoveredNav,       setHoveredNav]       = useState<{ label: string; desc?: string; top: number; right: number } | null>(null);
 
   // Authentication & Initial Preferences
   useEffect(() => {
@@ -236,7 +248,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const renderSidebar = (collapsed: boolean, onNavClick?: () => void) => (
     <aside
       className={`h-full flex flex-col flex-shrink-0 bg-white border-r border-slate-200/90 select-none transition-[width] duration-200 ease-in-out ${
-        collapsed ? "w-[68px]" : "w-64"
+        collapsed ? "w-[68px]" : "w-[280px]"
       }`}
     >
       <style dangerouslySetInnerHTML={{__html: `
@@ -302,6 +314,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               pathname={pathname}
               collapsed={collapsed}
               onClick={onNavClick}
+              onMouseEnter={(e) => {
+                if (dynamicItem.divider) return;
+                const rect = e.currentTarget.getBoundingClientRect();
+                setHoveredNav({
+                  label: dynamicItem.label,
+                  desc: dynamicItem.desc,
+                  top: rect.top + rect.height / 2,
+                  right: rect.right,
+                });
+              }}
+              onMouseLeave={() => setHoveredNav(null)}
             />
           );
         })}
@@ -462,6 +485,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
           </main>
         </div>
+
+        {/* Floating Tooltip with Description on Hover */}
+        {hoveredNav && !mobileOpen && (
+          <div
+            style={{ top: hoveredNav.top, left: hoveredNav.right + 10 }}
+            className="fixed z-50 -translate-y-1/2 pointer-events-none hidden md:block animate-in fade-in zoom-in-95 duration-100"
+          >
+            <div className="relative bg-slate-900/95 backdrop-blur-md text-white rounded-lg px-3 py-2 shadow-2xl border border-slate-700/80 max-w-[270px] text-left">
+              <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-slate-900 rotate-45 border-l border-b border-slate-700/80" />
+              <p className="font-bold text-xs text-white relative z-10">{hoveredNav.label}</p>
+              {hoveredNav.desc && (
+                <p className="text-[11px] text-slate-300 mt-0.5 leading-snug relative z-10">{hoveredNav.desc}</p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </ToastProvider>
   );
